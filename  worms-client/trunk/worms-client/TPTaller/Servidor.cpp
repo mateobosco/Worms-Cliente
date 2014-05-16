@@ -27,7 +27,7 @@ Servidor::~Servidor() {
 }
 
 Socket* Servidor::getSocket(){
-	return listener;
+	return this->listener;
 }
 
 void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
@@ -120,29 +120,24 @@ int Servidor::aceptarConexiones(){
 int Servidor::runEnviarInfo(Cliente* cliente){
 
 	while(true){
-		SDL_Delay(5000);
 		char envio[MAX_PACK];
 		SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
 		SDL_UnlockMutex(this->mutex);
 		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
 		if(enviados > 0){
-			//SDL_Delay(5000);
 			printf("Actualizar paquete \n");
-			this->actualizarPaquete("nahueeeeee\n");//todo
-		}
-		else if(enviados == -1){
+			this->actualizarPaquete("nahueeeeee\n");//todo		
+		}else if(enviados == -1){
 			printf("Error del servidor al enviar al cliente\n");
-			break;
 		}
+		SDL_Delay(5000); // todo
 	}
 	return EXIT_SUCCESS;
 }
 
-
 int Servidor::runRecibirInfo(void* cliente){
 	while(true){
-		SDL_Delay(2000);
 		SDL_LockMutex(this->mutex);
 		Cliente* client = (Cliente*) cliente;
 		char paquete[MAX_PACK];
@@ -153,7 +148,6 @@ int Servidor::runRecibirInfo(void* cliente){
 			void* novedad = malloc (sizeof (structEventos));
 			memcpy(novedad, paquete, sizeof (structEventos)); //todo ver como determinar el tamaño del paquete
 			this->paquetesRecibir.push(novedad);
-			printf("Recibí: %s del cliente \n",paquete);
 		}
 		else if(cantidad ==0){
 			printf("Cliente desconectado\n");
@@ -163,17 +157,16 @@ int Servidor::runRecibirInfo(void* cliente){
 			printf("Error al recibir información del cliente\n");
 			break;
 		}
+		SDL_Delay(5000); // todo
 		SDL_UnlockMutex(this->mutex);
 	}
 	return EXIT_SUCCESS;
 }
 
-
 int Servidor::runEscucharConexiones(){
 	int conexiones;
 	try{
 		conexiones = this->getSocket()->EnlazarYEscuchar(this->cantidadMaxConexiones);
-
 	}catch(exception &e){
 		close(this->listener->getFD());
 		return EXIT_FAILURE;
@@ -181,14 +174,14 @@ int Servidor::runEscucharConexiones(){
 	}
 	while(true){
 		while((this->cantClientes < this->cantidadMaxConexiones)){
+
 			conexiones = this->escucharConexiones();
 			if (conexiones == -1){
 				printf("Error al escuchar conexiones \n");
-				return EXIT_FAILURE;
+			return EXIT_FAILURE;
 			}
-
 		}
-		if(this->cantClientes == this->cantidadMaxConexiones){
+		if(this->cantClientes > this->cantidadMaxConexiones){
 			printf("break\n");
 			break;
 		}

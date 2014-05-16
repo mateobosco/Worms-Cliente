@@ -7,8 +7,6 @@
 
 #include "Socket.h"
 
-
-
 // Para Servidor debe pasarse el IP como NULL, Que luego se cargará la ip propia del servidor,
 // al cargar el flag AI_PASSIVE.
 // Para cliente debe pasarse la IP del servidor al que se desea conectar.
@@ -34,16 +32,6 @@ Socket::Socket(const char *ip, const char *puerto) {
 }
 Socket::Socket(const char* puerto, int sockfd) {
 	this->puerto = puerto;
-//	struct addrinfo hints;
-//	memset(&hints,0,sizeof hints);
-//	hints.ai_family = AF_INET;
-//	hints.ai_socktype = SOCK_STREAM;
-//	hints.ai_flags = AI_PASSIVE;
-//	int estado = getaddrinfo(NULL,this->puerto,&hints,&this->info);
-//	if(estado !=0){
-//		//loguear error
-//		exit(1);
-//	}
 	this->sockFD = sockfd;
 	this->activo = true;
 }
@@ -51,7 +39,6 @@ Socket::Socket(const char* puerto, int sockfd) {
 Socket::~Socket() {
 	freeaddrinfo(this->info);
 	close(this->sockFD);
-
 }
 
 int Socket::conectar(){
@@ -65,15 +52,13 @@ int Socket::conectar(){
 int Socket::EnlazarYEscuchar(int cantMaxCon){
 	int yes = 1;
 	setsockopt(this->sockFD, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
-		//log errot todo
+				//log errot todo
 	if (bind(this->sockFD, this->info->ai_addr, this->info->ai_addrlen) == -1) {
 		//log error
 		close(this->sockFD);
 		perror("bind");
 	}
 	return this->escuchar(cantMaxCon);
-
-
 }
 
 int Socket::escuchar(int cantMaxCon){
@@ -119,8 +104,10 @@ int Socket::enviar(const void* dato, size_t longDato){
 	int bytesTotal = 0;
 	int bytesRestantes = longDato;
 	int n;
+	char buffer[longDato];
+	memcpy(buffer, (char*) dato, longDato);
 	while(bytesRestantes > 0) {
-		n = send(this->sockFD, (char *) dato + bytesTotal, bytesRestantes, 0);
+		n = send(this->sockFD, buffer + bytesTotal, bytesRestantes, 0);
 		if(n == -1)	break;
 		bytesTotal += n; // Incrementamos la cantidad de bytes ya enviados
 		bytesRestantes -= n;   // Decrementamos cantidad de bytes restantes
@@ -131,7 +118,6 @@ int Socket::enviar(const void* dato, size_t longDato){
 }
 
 int Socket::recibir(char* buffer, int longBuffer){
-	//memset(buffer, 0, longBuffer);
 	int bytes_enviados = recv(this->sockFD, buffer, longBuffer, 0);
 	return bytes_enviados;
 }

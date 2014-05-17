@@ -1,0 +1,2 @@
+Log File. Ejecución Worms
+   Fecha  | Hora |  Gravedad  | 	 Mensaje 

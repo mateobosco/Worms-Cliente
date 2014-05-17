@@ -120,7 +120,8 @@ Agua* Cargador::loadAgua(Node nodo,string pathAgua ){
 		nivelAgua = 40;
 	}
 	Agua* agua = new Agua(nivelAgua,pathAgua); //ver delete todo
-	datos->agua = pathAgua;
+	//datos->agua = pathAgua.c_str();
+	strcpy(datos->agua,pathAgua.c_str());
 	datos->nivel_agua = nivelAgua;
 	return agua;
 }
@@ -224,6 +225,8 @@ Escalador* Cargador::loadEscalador(Node nodo){
 	datos->alto_unidades = altoUn;
 	datos->ancho_ventana = (int) anchoPx;
 	datos->alto_ventana = (int) altoPx;
+	datos->ancho_escenario = (int) ancho_esc;
+	datos->alto_escenario = (int) alto_esc;
 
 	return escalador; //ver delete todo
 
@@ -235,9 +238,11 @@ bool Cargador::loadPath(Node nodo,const char* clave,string &resultado){
 		path = nodo[clave].as<string>();
 		resultado = path;
 		if(strcmp(clave, "tierra") == 0){
-			datos->tierra = path;
+			strcpy(datos->tierra,path.c_str());
+			//datos->tierra = path.c_str();
 		} else{
-			datos->cielo = path;
+			strcpy(datos->cielo,path.c_str());
+			//datos->cielo = path.c_str();
 		}
 		return true;
 	}catch(Exception &e){

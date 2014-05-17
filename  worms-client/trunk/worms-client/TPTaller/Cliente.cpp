@@ -1,40 +1,35 @@
 #include "Cliente.h"
 
-// Constructor de main_server()
+int Cliente::cant_clientes = 0;
+
 Cliente::Cliente(int fd){
 	this->name_client = NULL;
 	this->socket_cl = new Socket(PUERTO,fd);
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
+	strcpy(this->paquete_enviar, "socket tu chinga y puta madre\n");
 	this->mutex = SDL_CreateMutex();
-	//id = cant_clientes;
-	//cant_clientes++;
-	paqueteInicial = NULL;
-	comenzar = false;
+	id = Cliente::cant_clientes;
+	Cliente::cant_clientes++;
+	this->paqueteInicial = NULL;
 //	this->id = 1;// VER COMO GENERAR EL ID
-
 }
 
-// Constructor de main_client()
 Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->name_client = name;
 	this->socket_cl = new Socket(ip_sv, puerto);
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
+	strcpy(this->paquete_enviar, "socket tu chinga y puta madre\n");
 	this->mutex = SDL_CreateMutex();
-	paqueteInicial = new structInicial;
-	comenzar = false;
-
-
+	id = Cliente::cant_clientes;
+	Cliente::cant_clientes++;
+	this->paqueteInicial = NULL;
 }
 
 Cliente::~Cliente(){
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
-	if (!paqueteInicial){
-		delete paqueteInicial;
-
-	}
 }
 
 Socket* Cliente::getSocket(){
@@ -42,8 +37,8 @@ Socket* Cliente::getSocket(){
 }
 
 int runSendInfoCliente(void* cliente){
-	Cliente* client = (Cliente*) cliente;
-	client->runEnviarInfo();
+	Cliente* clien = (Cliente*) cliente;
+	clien->runEnviarInfo();
 	return EXIT_SUCCESS;
 }
 
@@ -58,6 +53,7 @@ int Cliente::conectar(){
 		//loguear error todo
 		return EXIT_FAILURE;
 	}
+	printf("Conecte cliente %s con servidor. num de fd es: %d\n", this->name_client,this->socket_cl->getFD());
 	SDL_Thread* recibirDelServidor = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
 	if(recibirDelServidor == NULL){
 		//ver que hacer
@@ -76,40 +72,50 @@ int Cliente::conectar(){
 int Cliente::runEnviarInfo(){
 	while(true){
 		//se bloquea mutex
+		SDL_Delay(2000);
 		char buffer[MAX_PACK];
 		SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
-		int enviados = this->getSocket()->enviar(buffer, MAX_PACK); //todo
-		if (enviados >= 0) printf("Voy a enviar: %s al servidor\n",buffer);
+		int enviados = this->enviar(buffer, MAX_PACK); //todo
+		if (enviados >= 0) /*printf("Voy a enviar: %s al servidor\n",buffer)*/;
 		else if(enviados == -1){
 			printf("Error al enviar info cliente a servidor\n");
 			break;
 		}
-		SDL_Delay(5000);
+		//Se desbloquea
 		SDL_UnlockMutex(this->mutex);
 	}
 	return EXIT_SUCCESS;
 }
 
+
+//solo envia info al servidos a través del thread
+int Cliente::enviar(char* mensaje, size_t longData){
+	return this->socket_cl->enviar(mensaje, longData);
+}
+
+
 int Cliente::runRecibirInfo(){
-	//structInicial* paqueteInicialRecibido = new structInicial;
-	SDL_LockMutex(this->mutex);
-	int recibidoprimerpaquete = this->socket_cl->recibir(paqueteInicial, MAX_PACK);
-	comenzar=true;
-	printf (" EL NIVEL DEL AGUA ES %f \n", paqueteInicial->nivel_agua );
-	printf (" EL NIVEL DEL ANCHO DEL MAPA ES %f \n", paqueteInicial->ancho_escenario );
-	//SDL_Delay(60000);
-	SDL_UnlockMutex(this->mutex);
+	int contador = 0;
 	while(true){
 		char buffer[MAX_PACK];
-		//char *buffer = new char[MAX_PACK];
-
-		memset(buffer, 0, MAX_PACK);
+		//char* buffer = (char*) malloc(sizeof(char) * MAX_PACK);
+		//memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
+		printf("recibi %d bytes", recibidos);
 		if (recibidos > 0){
-			SDL_LockMutex(this->mutex);
+			contador++;
+			SDL_Delay(2000);
+			//SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
-			SDL_UnlockMutex(this->mutex);
+
+			//SDL_UnlockMutex(this->mutex);
+			if (contador == 1){
+				structInicial* buffer2 = (structInicial*) buffer;
+				paqueteInicial  = buffer2;
+				printf("nivel del agua en recibir info es %f \n", buffer2->nivel_agua);
+				printf("path de paquetito %s  \n", buffer2->cielo);
+			}
 		}
 		else if(recibidos ==0){
 			printf("Servidor desconectado \n");
@@ -118,8 +124,6 @@ int Cliente::runRecibirInfo(){
 		else if (recibidos == -1){
 			printf("Error\n");
 		}
-		SDL_Delay(5000);
-		//delete[] buffer;
 	}
 	return EXIT_SUCCESS;
 }
@@ -142,10 +146,5 @@ const char* Cliente::getNombre(){
 }
 
 structInicial* Cliente::getPaqueteInicial(){
-	return paqueteInicial;
+	return this->paqueteInicial;
 }
-
-bool Cliente::getComenzar(){
-	return comenzar;
-}
-

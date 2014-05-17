@@ -6,6 +6,7 @@
 #include "Cliente.h"
 #include "Constantes.h"
 #include "Paquete.h"
+#include <string>
 
 structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente);// sino me tira error de que no esta definida aunque este el include
 
@@ -31,33 +32,37 @@ int mainCliente(int argc, char* argv[]){
 		return EXIT_FAILURE;
 	}
 
-	while (!cliente->getComenzar()){
-		printf(" Todavia no cmienza \n");
+	while (!cliente->getPaqueteInicial()){
 	}
 
-
-
-	//char mensaje[sizeof(structInicial)];
-	//cliente.recibir(mensaje, sizeof(mensaje) );
-	//structInicial* paqueteInicial = new structInicial;
-	//memcpy(paqueteInicial, mensaje, sizeof(structInicial));
-	structInicial* paqueteInicial = cliente->getPaqueteInicial();
-	printf (" EL ANCHO DEL ESCENARIO1 ES :  %f \n", paqueteInicial->ancho_escenario );
+	structInicial* paqueteInicial = (structInicial*) cliente->getPaquete();
+	printf("nivel del agua es %f \n", paqueteInicial->nivel_agua);
+	//SDL_Delay(60000);
 
 	Escalador* escalador = new Escalador(paqueteInicial->ancho_ventana , paqueteInicial->alto_ventana,
 			paqueteInicial->ancho_unidades, paqueteInicial->alto_unidades,
 			paqueteInicial->ancho_escenario,paqueteInicial->alto_escenario);
 	crearVentana(escalador);
-	/*
 	Dibujador* dibujador = new Dibujador(gRenderer, escalador);
-
 	SDL_Event event;
 	for(int i = 0; i < 322; i++) { // inicializa todas en falso
 	   KEYS[i] = false;
 	}
-	Agua* agua = new Agua(paqueteInicial->nivel_agua, paqueteInicial->agua);
-	dibujador->iniciarFondo(agua, paqueteInicial->cielo, paqueteInicial->tierra);
-	delete paqueteInicial;
+	string pathAgua = string(paqueteInicial->agua);
+	string pathTierra = string(paqueteInicial->tierra);
+	string pathCielo = string(paqueteInicial->cielo);
+	printf("path tierra %s \n",pathTierra.c_str());
+	printf("path agua JUAN MANUEL HIJO DE UNA GRAN PUTA %s \n",pathAgua.c_str());
+	printf("path cielo %s \n",pathCielo.c_str());
+	Agua* agua = new Agua(paqueteInicial->nivel_agua, pathAgua);
+
+
+	dibujador->iniciarFondo(agua, pathCielo, pathTierra);
+
+	//SDL_Delay(20000);
+
+
+	//delete paqueteInicial;
 
 	int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
 	int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*2);
@@ -66,16 +71,18 @@ int mainCliente(int argc, char* argv[]){
 	posicion_mouse_click[1] = -1;
 
 	structPaquete* paquete = new structPaquete;
-	int id_cliente=1;
+
 	while (KEYS[SDLK_ESCAPE] == false){
 		//structPaquete = cliente.recibir(sizeof(structPaquete),paquete);
-		dibujador->dibujarPaquete(paquete);
+		//dibujador->dibujarPaquete(paquete);
 		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
 		escalador->moverVentana(posicion_mouse_movimiento);
 		escalador->hacerZoom(posicion_mouse_scroll);
-		structEvento* evento = crearPaqueteClick(posicion_mouse_click, escalador, id_cliente);
+		//structEvento* evento = crearPaqueteClick(posicion_mouse_click, escalador, id_cliente);
 		//cliente.enviar(evento, sizeof(structEvento));
 		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
+		dibujador->dibujarFondo(agua);
+		filledEllipseRGBA( gRenderer, 90 , 90,5, 5, 0, 0, 0, CIRC_OPACIDAD);
 	}
 	//cliente.desconectar()
 	delete agua;
@@ -85,12 +92,7 @@ int mainCliente(int argc, char* argv[]){
 	free(posicion_mouse_click);
 	free(posicion_mouse_scroll);
 	free(posicion_mouse_movimiento);
-
-
 	close();
-
-*/
-	SDL_Delay(10000);
 
 	//delete cliente;
 	return 0;

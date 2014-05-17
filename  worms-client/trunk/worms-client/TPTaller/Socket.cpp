@@ -34,6 +34,16 @@ Socket::Socket(const char *ip, const char *puerto) {
 }
 Socket::Socket(const char* puerto, int sockfd) {
 	this->puerto = puerto;
+//	struct addrinfo hints;
+//	memset(&hints,0,sizeof hints);
+//	hints.ai_family = AF_INET;
+//	hints.ai_socktype = SOCK_STREAM;
+//	hints.ai_flags = AI_PASSIVE;
+//	int estado = getaddrinfo(NULL,this->puerto,&hints,&this->info);
+//	if(estado !=0){
+//		//loguear error
+//		exit(1);
+//	}
 	this->sockFD = sockfd;
 	this->activo = true;
 }
@@ -109,10 +119,8 @@ int Socket::enviar(const void* dato, size_t longDato){
 	int bytesTotal = 0;
 	int bytesRestantes = longDato;
 	int n;
-	char buffer[longDato];
-	memcpy(buffer, (char*) dato, longDato);
 	while(bytesRestantes > 0) {
-		n = send(this->sockFD,  buffer + bytesTotal, bytesRestantes, 0);
+		n = send(this->sockFD, (char *) dato + bytesTotal, bytesRestantes, 0);
 		if(n == -1)	break;
 		bytesTotal += n; // Incrementamos la cantidad de bytes ya enviados
 		bytesRestantes -= n;   // Decrementamos cantidad de bytes restantes
@@ -122,7 +130,8 @@ int Socket::enviar(const void* dato, size_t longDato){
 	return 0;
 }
 
-int Socket::recibir(void* buffer, int longBuffer){
+int Socket::recibir(char* buffer, int longBuffer){
+	//memset(buffer, 0, longBuffer);
 	int bytes_enviados = recv(this->sockFD, buffer, longBuffer, 0);
 	return bytes_enviados;
 }

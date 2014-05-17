@@ -7,6 +7,12 @@ Cliente::Cliente(int fd){
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
 	this->mutex = SDL_CreateMutex();
+	//id = cant_clientes;
+	//cant_clientes++;
+	paqueteInicial = NULL;
+	comenzar = false;
+//	this->id = 1;// VER COMO GENERAR EL ID
+
 }
 
 // Constructor de main_client()
@@ -16,11 +22,19 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
 	this->mutex = SDL_CreateMutex();
+	paqueteInicial = new structInicial;
+	comenzar = false;
+
+
 }
 
 Cliente::~Cliente(){
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
+	if (!paqueteInicial){
+		delete paqueteInicial;
+
+	}
 }
 
 Socket* Cliente::getSocket(){
@@ -78,9 +92,18 @@ int Cliente::runEnviarInfo(){
 }
 
 int Cliente::runRecibirInfo(){
+	//structInicial* paqueteInicialRecibido = new structInicial;
+	SDL_LockMutex(this->mutex);
+	int recibidoprimerpaquete = this->socket_cl->recibir(paqueteInicial, MAX_PACK);
+	comenzar=true;
+	printf (" EL NIVEL DEL AGUA ES %f \n", paqueteInicial->nivel_agua );
+	printf (" EL NIVEL DEL ANCHO DEL MAPA ES %f \n", paqueteInicial->ancho_escenario );
+	//SDL_Delay(60000);
+	SDL_UnlockMutex(this->mutex);
 	while(true){
 		char buffer[MAX_PACK];
 		//char *buffer = new char[MAX_PACK];
+
 		memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 		if (recibidos > 0){
@@ -117,3 +140,12 @@ char* Cliente::getPaquete(){
 const char* Cliente::getNombre(){
 	return this->name_client;
 }
+
+structInicial* Cliente::getPaqueteInicial(){
+	return paqueteInicial;
+}
+
+bool Cliente::getComenzar(){
+	return comenzar;
+}
+

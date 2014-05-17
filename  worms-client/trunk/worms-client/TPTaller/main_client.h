@@ -9,9 +9,7 @@
 
 structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente);// sino me tira error de que no esta definida aunque este el include
 
-SDL_Window* gWindowClient = NULL;
-SDL_Renderer* gRendererClient = NULL;
-bool KEYSClient[322];
+
 
 // argv[n]:
 // 			n=0: Nombre del programa
@@ -33,18 +31,26 @@ int mainCliente(int argc, char* argv[]){
 		return EXIT_FAILURE;
 	}
 
-	SDL_Delay(60000);
-/*
-	char mensaje[sizeof(structInicial)];
-	cliente.recibir(mensaje, sizeof(mensaje) );
-	structInicial* paqueteInicial = new structInicial;
-	memcpy(paqueteInicial, mensaje, sizeof(structInicial));
+	while (!cliente->getComenzar()){
+		printf(" Todavia no cmienza \n");
+	}
+
+
+
+	//char mensaje[sizeof(structInicial)];
+	//cliente.recibir(mensaje, sizeof(mensaje) );
+	//structInicial* paqueteInicial = new structInicial;
+	//memcpy(paqueteInicial, mensaje, sizeof(structInicial));
+	structInicial* paqueteInicial = cliente->getPaqueteInicial();
+	printf (" EL ANCHO DEL ESCENARIO1 ES :  %f \n", paqueteInicial->ancho_escenario );
 
 	Escalador* escalador = new Escalador(paqueteInicial->ancho_ventana , paqueteInicial->alto_ventana,
 			paqueteInicial->ancho_unidades, paqueteInicial->alto_unidades,
 			paqueteInicial->ancho_escenario,paqueteInicial->alto_escenario);
 	crearVentana(escalador);
-	Dibujador* dibujador = new Dibujador(gRendererClient, escalador);
+	/*
+	Dibujador* dibujador = new Dibujador(gRenderer, escalador);
+
 	SDL_Event event;
 	for(int i = 0; i < 322; i++) { // inicializa todas en falso
 	   KEYS[i] = false;
@@ -79,9 +85,14 @@ int mainCliente(int argc, char* argv[]){
 	free(posicion_mouse_click);
 	free(posicion_mouse_scroll);
 	free(posicion_mouse_movimiento);
+
+
 	close();
+
 */
-	delete cliente;
+	SDL_Delay(10000);
+
+	//delete cliente;
 	return 0;
 }
 

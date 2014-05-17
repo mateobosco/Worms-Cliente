@@ -122,7 +122,7 @@ int Socket::enviar(const void* dato, size_t longDato){
 	return 0;
 }
 
-int Socket::recibir(char* buffer, int longBuffer){
+int Socket::recibir(void* buffer, int longBuffer){
 	int bytes_enviados = recv(this->sockFD, buffer, longBuffer, 0);
 	return bytes_enviados;
 }

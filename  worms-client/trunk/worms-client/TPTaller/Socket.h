@@ -51,7 +51,7 @@ public:
 	// Recibe datos a través del socket.
 	// Devuelve el número de bytes que han sido leidos o 0 (cero) si el
 	// host remoto a cerrado la conexión.
-	int recibir(char* buffer, int longBuffer);
+	int recibir(void* buffer, int longBuffer);
 
 	// Cierra el socket.
 	int cerrar();

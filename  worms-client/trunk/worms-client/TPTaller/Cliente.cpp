@@ -80,7 +80,7 @@ int Cliente::runEnviarInfo(){
 int Cliente::runRecibirInfo(){
 	while(true){
 		char buffer[MAX_PACK];
-//		char *buffer = new char[MAX_PACK];
+		//char *buffer = new char[MAX_PACK];
 		memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 		if (recibidos > 0){
@@ -88,13 +88,15 @@ int Cliente::runRecibirInfo(){
 			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
 			SDL_UnlockMutex(this->mutex);
 		}
-		else if(recibidos == 0){
-			printf("Cliente: No recibe datos \n");
-			//break;
-		}else if (recibidos == -1){
+		else if(recibidos ==0){
+			printf("Servidor desconectado \n");
+			break;
+		}
+		else if (recibidos == -1){
 			printf("Error\n");
 		}
 		SDL_Delay(5000);
+		//delete[] buffer;
 	}
 	return EXIT_SUCCESS;
 }

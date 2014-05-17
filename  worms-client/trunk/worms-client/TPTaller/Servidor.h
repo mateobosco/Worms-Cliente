@@ -42,6 +42,7 @@ public:
 	int aceptarConexiones();
 
 	int runEnviarInfo(Cliente* cliente);
+
 	int runRecibirInfo(void* paquete);
 
 	int iniciarServidor();
@@ -61,6 +62,7 @@ private:
 	int maxFD;
 	const char* puerto;
 	int vector_clientes[4];
+
 
 };
 

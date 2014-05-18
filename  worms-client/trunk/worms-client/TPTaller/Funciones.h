@@ -193,8 +193,8 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 			break;
 			//printf("LA posicion detectada fue (%d, %d),%d, %d  \n ", a,b,c,d);
 
-		//default:
-			//break;
+//		default:
+//			break;
 		}
    }
 }

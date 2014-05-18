@@ -88,6 +88,7 @@ int mainCliente(int argc, char* argv[]){
 
 		dibujador.dibujarPaquete(paquete);
 		dibujador.actualizar();
+		posicion_mouse_scroll[2]=0;
 	}
 
 	delete agua;

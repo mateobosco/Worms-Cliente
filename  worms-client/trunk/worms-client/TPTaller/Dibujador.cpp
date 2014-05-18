@@ -282,9 +282,9 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 }
 
 void Dibujador::dibujarFondo(Agua* agua){
-	this->renderTexture2(textureCielo, renderizador,0 , 0, escalador->getPixelX(), escalador->getPixelY() );
-	this->renderTexture2(textureAgua, renderizador, 0, agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()) , escalador->getPixelX(), escalador->getPixelY());
-	this->renderTexture2(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
+	this->renderTexture(textureCielo, renderizador,0 , 0, escalador->getPixelX(), escalador->getPixelY() );
+	this->renderTexture(textureAgua, renderizador, 0, agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()) , escalador->getPixelX(), escalador->getPixelY());
+	this->renderTexture(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
 }
 
 

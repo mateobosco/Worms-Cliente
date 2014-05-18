@@ -68,25 +68,15 @@ int mainCliente(int argc, char* argv[]){
 	posicion_mouse_click[1] = -1;
 
 	structPaquete* paquete = new structPaquete;
-/*
-	while (KEYS[SDLK_ESCAPE] == false){
-		//structPaquete = cliente.recibir(sizeof(structPaquete),paquete);
-		//dibujador->dibujarPaquete(paquete);
-		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
-		//escalador->moverVentana(posicion_mouse_movimiento);
-		//escalador->hacerZoom(posicion_mouse_scroll);
-		//structEvento* evento = crearPaqueteClick(posicion_mouse_click, escalador, id_cliente);
-		//cliente.enviar(evento, sizeof(structEvento));
-		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
-		dibujador->dibujarFondo(agua);
-		//filledEllipseRGBA( gRenderer, 90 , 90,5, 5, 0, 0, 0, CIRC_OPACIDAD);
-*/
 
 	while(KEYS[SDLK_ESCAPE] == false){
 
 		dibujador.dibujarFondo(agua);
 		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
 
+
+		escalador->moverVentana(posicion_mouse_movimiento);
+		escalador->hacerZoom(posicion_mouse_scroll);
 		paquete = (structPaquete*) cliente->getPaquete();
 		structFigura* vector = paquete->vector_figuras;
 		int cantidad = paquete->cantidad_figuras;
@@ -94,19 +84,18 @@ int mainCliente(int argc, char* argv[]){
 		structFigura paqueteFigura = vector[0];
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
 		printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
+		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
 
 		dibujador.dibujarPaquete(paquete);
 		dibujador.actualizar();
-
-		SDL_Delay(50);
 	}
-\
+
 	delete agua;
 	delete escalador;
 	delete paquete;
-/*	free(posicion_mouse_click);
+	free(posicion_mouse_click);
 	free(posicion_mouse_scroll);
-	free(posicion_mouse_movimiento);*/
+	free(posicion_mouse_movimiento);
 	dibujador.close();
 
 	//delete cliente;

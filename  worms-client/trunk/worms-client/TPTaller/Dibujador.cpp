@@ -341,3 +341,51 @@ void Dibujador::dibujarPaquete(structPaquete* paquete){
 		this->dibujarPaquetePersonaje(vector1[j]);
 	}
 }
+
+bool Dibujador::init(){
+	bool success = true;
+	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	{
+		loguear();
+		logFile << "    Error   " << "\t  SDL No pudo inicializar! SDL Error: " <<  SDL_GetError()<< endl;
+		success = false;
+	}
+	else{
+		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) ){
+			loguear();
+			logFile << "    Warning " << "\t  Linear texture filtering no habilitado! " <<  endl;
+			success = false;
+		}
+		this->window = SDL_CreateWindow( "WORMS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, escalador->getVentanaX() , escalador->getVentanaY(), SDL_WINDOW_SHOWN );
+		if( this->window == NULL ){
+			loguear();
+			logFile << "    Error   " << "\t  La ventana no pudo ser creada! SDL Error: " <<  SDL_GetError()<< endl;
+			success = false;
+		}
+		else{
+			this->renderizador = SDL_CreateRenderer( this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+			if( this->renderizador == NULL )	{
+				loguear();
+				logFile << "    Error   " << "\t  Renderer no pudo ser creado! SDL Error: " <<  SDL_GetError()<< endl;
+				success = false;
+			}
+			else{
+				SDL_SetRenderDrawColor( this->renderizador, 0xFF, 0xFF, 0xFF, 0xFF );
+				int imgFlags = (IMG_INIT_PNG |IMG_INIT_JPG ); //
+				int iniciadas = IMG_Init( imgFlags );
+				if((iniciadas & imgFlags) != imgFlags ){
+					loguear();
+					logFile << "    Error   " << "\t  SDL_image no puedo ser inicializado! SDL_image Error: " <<  SDL_GetError()<< endl;
+					success = false;
+				}
+			}
+		}
+	}
+	return success;
+}
+
+void Dibujador::close(){
+	SDL_DestroyRenderer(renderizador);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+}

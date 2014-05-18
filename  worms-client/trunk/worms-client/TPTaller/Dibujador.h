@@ -48,7 +48,9 @@ public:
 	int dibujarPaqueteFigura(structFigura paquete);
 	int dibujarPaquetePersonaje(structPersonaje paquete);
 	SDL_Texture* RenderText(std::string message, std::string fontFile,  SDL_Color color, int fontSize);
-
+	bool init();
+	void close();
+	void actualizar();
 	void dibujarPaquete(structPaquete* paquete);
 
 
@@ -58,11 +60,12 @@ protected:
 	float32 escalado_x, escalado_y;
 
 private:
-	void actualizar();
+
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 	SDL_Texture* textureCielo;
 	SDL_Texture* textureAgua;
 	SDL_Texture* textureTierra;
+	SDL_Window* window;
 };
 
 

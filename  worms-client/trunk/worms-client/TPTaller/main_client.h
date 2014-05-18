@@ -61,11 +61,11 @@ int mainCliente(int argc, char* argv[]){
 
 	//delete paqueteInicial;
 
-/*	int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
+	int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
 	int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*2);
 	int* posicion_mouse_movimiento = (int*)malloc (sizeof(int)*2);
 	posicion_mouse_click[0] = -1;
-	posicion_mouse_click[1] = -1;*/
+	posicion_mouse_click[1] = -1;
 
 	structPaquete* paquete = new structPaquete;
 /*
@@ -82,10 +82,10 @@ int mainCliente(int argc, char* argv[]){
 		//filledEllipseRGBA( gRenderer, 90 , 90,5, 5, 0, 0, 0, CIRC_OPACIDAD);
 */
 
-	while(true){
-		dibujador.actualizar();
-		dibujador.dibujarFondo(agua);
+	while(KEYS[SDLK_ESCAPE] == false){
 
+		dibujador.dibujarFondo(agua);
+		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
 
 		paquete = (structPaquete*) cliente->getPaquete();
 		structFigura* vector = paquete->vector_figuras;
@@ -96,6 +96,7 @@ int mainCliente(int argc, char* argv[]){
 		printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
 
 		dibujador.dibujarPaquete(paquete);
+		dibujador.actualizar();
 
 		//SDL_Delay(50);
 	}

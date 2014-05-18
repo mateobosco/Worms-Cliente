@@ -97,7 +97,7 @@ int mainCliente(int argc, char* argv[]){
 
 		dibujador.dibujarPaquete(paquete);
 
-		SDL_Delay(50);
+		//SDL_Delay(50);
 	}
 \
 	delete agua;

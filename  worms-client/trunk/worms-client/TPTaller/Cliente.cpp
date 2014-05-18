@@ -105,7 +105,7 @@ int Cliente::runRecibirInfo(){
 		printf("recibi %d bytes", recibidos);
 		if (recibidos > 0){
 			contador++;
-			SDL_Delay(2000);
+			//SDL_Delay(2000);
 			//SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
 

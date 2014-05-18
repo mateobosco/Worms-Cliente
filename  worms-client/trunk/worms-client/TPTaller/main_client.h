@@ -40,6 +40,7 @@ int mainCliente(int argc, char* argv[]){
 	Escalador* escalador = new Escalador(paqueteInicial->ancho_ventana , paqueteInicial->alto_ventana,
 			paqueteInicial->ancho_unidades, paqueteInicial->alto_unidades,
 			paqueteInicial->ancho_escenario,paqueteInicial->alto_escenario);
+
 	Dibujador dibujador = Dibujador(NULL, escalador);
 	dibujador.init();
 	SDL_Event event;
@@ -53,8 +54,9 @@ int mainCliente(int argc, char* argv[]){
 
 
 	dibujador.iniciarFondo(agua, pathCielo, pathTierra);
+	dibujador.dibujarFondo(agua);
 
-	//SDL_Delay(20000);
+	SDL_Delay(5000);
 
 
 	//delete paqueteInicial;
@@ -66,7 +68,19 @@ int mainCliente(int argc, char* argv[]){
 	posicion_mouse_click[1] = -1;*/
 
 	structPaquete* paquete = new structPaquete;
-
+/*
+	while (KEYS[SDLK_ESCAPE] == false){
+		//structPaquete = cliente.recibir(sizeof(structPaquete),paquete);
+		//dibujador->dibujarPaquete(paquete);
+		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
+		//escalador->moverVentana(posicion_mouse_movimiento);
+		//escalador->hacerZoom(posicion_mouse_scroll);
+		//structEvento* evento = crearPaqueteClick(posicion_mouse_click, escalador, id_cliente);
+		//cliente.enviar(evento, sizeof(structEvento));
+		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
+		dibujador->dibujarFondo(agua);
+		//filledEllipseRGBA( gRenderer, 90 , 90,5, 5, 0, 0, 0, CIRC_OPACIDAD);
+*/
 
 	while(true){
 		dibujador.actualizar();
@@ -85,6 +99,7 @@ int mainCliente(int argc, char* argv[]){
 
 		SDL_Delay(50);
 	}
+\
 	delete agua;
 	delete escalador;
 	delete paquete;

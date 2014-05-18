@@ -242,13 +242,36 @@ void Dibujador::actualizar(){
 	SDL_RenderPresent(this->renderizador);
 }
 
-SDL_Texture* Dibujador::loadTexture(const std::string &file, SDL_Renderer *ren){
-	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
-	if(texture == NULL) {
-		loguear();
-		logFile << "    Error    " <<"\t No se pudo cargar textura del file: " <<file<< endl;
-	}
-	return texture;
+SDL_Texture* Dibujador::loadTexture(const std::string &path, SDL_Renderer *ren){
+	//SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
+	//if(texture == NULL) {
+	//	loguear();
+	//	logFile << "    Error    " <<"\t No se pudo cargar textura del file: " <<file<< endl;
+	//}
+    //The final texture
+    SDL_Texture* newTexture = NULL;
+
+    //Load image at specified path
+    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
+    if( loadedSurface == NULL )
+    {
+        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+    }
+    else
+    {
+        //Create texture from surface pixels
+        newTexture = SDL_CreateTextureFromSurface( ren, loadedSurface );
+        if( newTexture == NULL )
+        {
+            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+        }
+
+        //Get rid of old loaded surface
+        SDL_FreeSurface( loadedSurface );
+    }
+
+    return newTexture;
+	//return texture;
 }
 
 void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra){
@@ -259,9 +282,9 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 }
 
 void Dibujador::dibujarFondo(Agua* agua){
-	this->renderTexture(textureCielo, renderizador,0 , 0, escalador->getPixelX(), escalador->getPixelY() );
-	this->renderTexture(textureAgua, renderizador, 0, agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()) , escalador->getPixelX(), escalador->getPixelY());
-	this->renderTexture(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
+	this->renderTexture2(textureCielo, renderizador,0 , 0, escalador->getPixelX(), escalador->getPixelY() );
+	this->renderTexture2(textureAgua, renderizador, 0, agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()) , escalador->getPixelX(), escalador->getPixelY());
+	this->renderTexture2(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
 }
 
 

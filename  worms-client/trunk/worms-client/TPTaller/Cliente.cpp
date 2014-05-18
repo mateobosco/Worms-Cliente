@@ -109,6 +109,21 @@ int Cliente::runRecibirInfo(){
 			//SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
 
+			if (contador > 2){
+				printf(" --------- ENTRA EN RECIBIR CLIENTE ------------ \n");
+				//structPaquete* paquete = new structPaquete;
+				structPaquete* paquete = (structPaquete*) buffer;
+				structFigura* vector = paquete->vector_figuras;
+				int cantidad = paquete->cantidad_figuras;
+				//printf("CANTIDAD DE FIGURAS %d \n",cantidad);
+				structFigura paqueteFigura = vector[0];
+				b2Vec2 posicion = paqueteFigura.vector_vertices[2];
+				printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
+				printf(" --------- SALE DE RECIBIR CLIENTE ------------ \n");
+
+			}
+
+
 			//SDL_UnlockMutex(this->mutex);
 			if (contador == 1){
 				structInicial* buffer2 = (structInicial*) buffer;

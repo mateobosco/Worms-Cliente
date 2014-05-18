@@ -72,9 +72,25 @@ int mainCliente(int argc, char* argv[]){
 
 	structPaquete* paquete = new structPaquete;
 
+
+	while(true){
+		paquete = (structPaquete*) cliente->getPaquete();
+		structFigura* vector = paquete->vector_figuras;
+/*		int cantidad = paquete->cantidad_figuras;
+		printf("CANTIDAD DE FIGURAS %d \n",cantidad);
+		structFigura paqueteFigura = vector[0];
+		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
+		printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);*/
+		dibujador->dibujarFondo(agua);
+		dibujador->dibujarPaquete(paquete);
+		SDL_Delay(500);
+	}
+
+/*
+
 	while (KEYS[SDLK_ESCAPE] == false){
 		//structPaquete = cliente.recibir(sizeof(structPaquete),paquete);
-		//dibujador->dibujarPaquete(paquete);
+		//
 		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
 		escalador->moverVentana(posicion_mouse_movimiento);
 		escalador->hacerZoom(posicion_mouse_scroll);
@@ -85,6 +101,7 @@ int mainCliente(int argc, char* argv[]){
 		filledEllipseRGBA( gRenderer, 90 , 90,5, 5, 0, 0, 0, CIRC_OPACIDAD);
 	}
 	//cliente.desconectar()
+*/
 	delete agua;
 	delete escalador;
 	delete dibujador;

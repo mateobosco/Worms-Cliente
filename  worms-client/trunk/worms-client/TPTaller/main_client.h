@@ -84,6 +84,16 @@ int mainCliente(int argc, char* argv[]){
 		structFigura paqueteFigura = vector[0];
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
 		printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
+
+
+		printf("CANTIDAD DE PERSONAJES %d \n",paquete->cantidad_personajes);
+		structPersonaje* vector_personajes = paquete->vector_personajes;
+		//structPersonaje vector_personajes = vector_personajes[0];
+		b2Vec2 posicion2 = paqueteFigura.vector_vertices[2];
+		printf("posicion del gusanito 1 es  : (%f,%f) \n",posicion2.x,posicion2.y);
+
+
+
 		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
 
 		dibujador.dibujarPaquete(paquete);

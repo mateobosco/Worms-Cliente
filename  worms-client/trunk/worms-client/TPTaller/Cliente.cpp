@@ -72,7 +72,7 @@ int Cliente::conectar(){
 int Cliente::runEnviarInfo(){
 	while(true){
 		//se bloquea mutex
-		SDL_Delay(2000);
+		SDL_Delay(25);
 		char buffer[MAX_PACK];
 		SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
@@ -98,6 +98,7 @@ int Cliente::enviar(char* mensaje, size_t longData){
 int Cliente::runRecibirInfo(){
 	int contador = 0;
 	while(true){
+		SDL_Delay(25);
 		char buffer[MAX_PACK];
 		//char* buffer = (char*) malloc(sizeof(char) * MAX_PACK);
 		//memset(buffer, 0, MAX_PACK);

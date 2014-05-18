@@ -120,7 +120,7 @@ int Servidor::aceptarConexiones(){
 int Servidor::runEnviarInfo(Cliente* cliente){
 
 	while(true){
-		SDL_Delay(5000);
+		SDL_Delay(50);
 		char envio[MAX_PACK];
 		SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
@@ -142,7 +142,8 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 
 int Servidor::runRecibirInfo(void* cliente){
 	while(true){
-		SDL_Delay(2000);
+		//SDL_Delay(2000);
+		SDL_Delay(50);
 		SDL_LockMutex(this->mutex);
 		Cliente* client = (Cliente*) cliente;
 		char paquete[MAX_PACK];

@@ -120,6 +120,11 @@ int Cliente::runRecibirInfo(){
 				structFigura paqueteFigura = vector[0];
 				b2Vec2 posicion = paqueteFigura.vector_vertices[2];
 				printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
+				structPersonaje* vector2 = paquete->vector_personajes;
+				structPersonaje paquetitox = vector2[0];
+				//if (paquetitox.conectado == 1){
+				//	printf ( " RECIBIO CONECTADO = TRUEEE \n");
+				//}
 				printf(" --------- SALE DE RECIBIR CLIENTE ------------ \n");
 
 			}

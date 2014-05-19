@@ -65,7 +65,7 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador) {
 	for (int i = 0 ; i<4; i++){
 		seleccionado[i] = false;
 	}
-
+	this->conectado = true;
 }
 
 Personaje::~Personaje() {
@@ -213,6 +213,12 @@ bool Personaje::getMuerto(){
 	return muerto;
 }
 
+int Personaje::getConectado(){
+	return conectado;
+}
 
+void Personaje::setConectado(int estado){
+	conectado = estado;
+}
 
 

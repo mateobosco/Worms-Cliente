@@ -49,6 +49,7 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	paquete->posicion = pos;
 	paquete->tamano.x = personaje->getAncho();
 	paquete->tamano.y = personaje->getAlto();
+	//paquete->conectado = personaje->getConectado();
 	return paquete;
 }
 

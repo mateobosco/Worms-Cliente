@@ -107,7 +107,7 @@ int mainCliente(int argc, char* argv[]){
 	free(posicion_mouse_click);
 	free(posicion_mouse_scroll);
 	free(posicion_mouse_movimiento);
-	dibujador.close();
+	//dibujador.close();
 
 	//delete cliente;
 	return 0;

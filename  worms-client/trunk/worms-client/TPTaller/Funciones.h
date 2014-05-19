@@ -121,6 +121,7 @@ void close(){
 
 void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mouse_click, int* posicion_mouse_wheel) {
 	int numero;
+
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
@@ -147,6 +148,8 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				//printf("ENTRA ACAAAA 4 \n");
 				KEYS[numero] = true;
 			}
+			posicion_mouse_click[0]=-1;
+			posicion_mouse_click[1]=-1;
 			break;
 		case SDL_KEYUP:
            if (event.key.keysym.sym == SDLK_RIGHT){
@@ -181,6 +184,8 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 			posicion_mouse_movimiento[0] = w;
 			posicion_mouse_movimiento[1] = z;
 			//printf("LA posicion detectada fue %d, %d \n ", w,z);
+			posicion_mouse_click[0]=-1;
+			posicion_mouse_click[1]=-1;
 			break;
 		case SDL_MOUSEWHEEL:
 			int a, b,d;
@@ -190,6 +195,8 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 			posicion_mouse_wheel[0] = a;
 			posicion_mouse_wheel[1] = b;
 			posicion_mouse_wheel[2] = d;
+			posicion_mouse_click[0]=-1;
+			posicion_mouse_click[1]=-1;
 			break;
 			//printf("LA posicion detectada fue (%d, %d),%d, %d  \n ", a,b,c,d);
 

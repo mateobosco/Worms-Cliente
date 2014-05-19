@@ -212,7 +212,7 @@ structInicial* Juego::getPaqueteInicial(){
 }
 
 
-void Juego::aplicarPaquete(structEventos* evento, ManejadorPersonajes* manejador_personajes){
+void Juego::aplicarPaquete(structEvento* evento, ManejadorPersonajes* manejador_personajes){
 	if (evento->click_mouse.x != -1){ // recibio un click
 		manejador_personajes->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}

@@ -3,11 +3,12 @@
 int Cliente::cant_clientes = 0;
 
 Cliente::Cliente(int fd){
+	this->enviarpaquete = true;
 	this->name_client = NULL;
 	this->socket_cl = new Socket(PUERTO,fd);
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
-	strcpy(this->paquete_enviar, "socket tu chinga y puta madre\n");
+	//strcpy(this->paquete_enviar, "socket tu chinga y puta madre\n");
 	this->mutex = SDL_CreateMutex();
 	id = Cliente::cant_clientes;
 	Cliente::cant_clientes++;
@@ -72,12 +73,17 @@ int Cliente::conectar(){
 int Cliente::runEnviarInfo(){
 	while(true){
 		//se bloquea mutex
+		if ( enviarpaquete == false){
+			continue;
+		}
 		SDL_Delay(25);
 		char buffer[MAX_PACK];
 		SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		int enviados = this->enviar(buffer, MAX_PACK); //todo
-		if (enviados >= 0) /*printf("Voy a enviar: %s al servidor\n",buffer)*/;
+		if (enviados >= 0){
+			enviarpaquete = false; /*printf("Voy a enviar: %s al servidor\n",buffer)*/;
+		}
 		else if(enviados == -1){
 			printf("Error al enviar info cliente a servidor\n");
 			break;
@@ -169,3 +175,11 @@ const char* Cliente::getNombre(){
 structInicial* Cliente::getPaqueteInicial(){
 	return this->paqueteInicial;
 }
+
+void Cliente::actualizarPaquete(structEvento* evento){
+	this->enviarpaquete=true;
+	memcpy( this->paquete_enviar, evento, sizeof(structEvento));
+}
+
+
+

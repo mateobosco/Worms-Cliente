@@ -33,10 +33,10 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 }
 
 Dibujador::~Dibujador(){
-	delete this->escalador;
-	if (textureCielo) SDL_DestroyTexture(textureCielo);
-	if (textureAgua) SDL_DestroyTexture(textureAgua);
-	if (textureTierra) SDL_DestroyTexture(textureTierra);
+	//delete this->escalador;
+	//if (textureCielo) SDL_DestroyTexture(textureCielo); // FIJARSE PORQUE SE ROMPE
+	//if (textureAgua) SDL_DestroyTexture(textureAgua);
+	//if (textureTierra) SDL_DestroyTexture(textureTierra);
 }
 
 // Retorna: 0- Exito. Negativo- Fracaso.
@@ -332,8 +332,8 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete){
 	if (dir == 0) path = "TPTaller/imagenes/gusanitoderecha.png";
 	if (dir == 1) path = "TPTaller/imagenes/gusanitoizquierda.png";
 	b2Vec2 tam = paquete.tamano;
-	//if (paquete.conectado == false && dir == 0) path = "TPTaller/imagenes/gusanitonegroderecha.png";
-	//if (paquete.conectado == false && dir == 1) path = "TPTaller/imagenes/gusanitonegroizquierda.png";
+	if (paquete.conectado == false && dir == 0) path = "TPTaller/imagenes/gusanitonegroderecha.png";
+	if (paquete.conectado == false && dir == 1) path = "TPTaller/imagenes/gusanitonegroizquierda.png";
 
 
 	SDL_Texture *gusanito = loadTexture(path, this->renderizador);

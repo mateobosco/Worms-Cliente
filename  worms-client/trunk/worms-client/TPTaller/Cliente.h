@@ -29,6 +29,7 @@ class Cliente{
 		int id;
 		static int cant_clientes;
 		structInicial* paqueteInicial;
+		bool enviarpaquete;
 
 	public:
 		Cliente(const char *name, const char *ip_sv, const char* puerto);
@@ -45,6 +46,8 @@ class Cliente{
 		const char* getNombre();
 		char* getPaquete();
 		structInicial* getPaqueteInicial();
+		void actualizarPaquete(structEvento* evento);
+
 
 };
 

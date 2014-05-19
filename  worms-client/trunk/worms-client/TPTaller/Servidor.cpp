@@ -151,8 +151,8 @@ int Servidor::runRecibirInfo(void* cliente){
 		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK); //todo ver tamanio
 
 		if(cantidad >0){
-			void* novedad = malloc (sizeof (structEventos));
-			memcpy(novedad, paquete, sizeof (structEventos)); //todo ver como determinar el tamaño del paquete
+			void* novedad = malloc (sizeof (structEvento));
+			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
 			this->paquetesRecibir.push(novedad);
 			printf("Recibí: %s del cliente \n",paquete);
 		}

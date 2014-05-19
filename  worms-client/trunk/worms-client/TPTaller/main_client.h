@@ -8,7 +8,7 @@
 #include "Paquete.h"
 #include <string>
 
-structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente);// sino me tira error de que no esta definida aunque este el include
+//structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente);// sino me tira error de que no esta definida aunque este el include
 
 
 
@@ -64,8 +64,8 @@ int mainCliente(int argc, char* argv[]){
 	int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
 	int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*2);
 	int* posicion_mouse_movimiento = (int*)malloc (sizeof(int)*2);
-	posicion_mouse_click[0] = -1;
-	posicion_mouse_click[1] = -1;
+	posicion_mouse_click[0] = 0;
+	posicion_mouse_click[1] = 0;
 
 	structPaquete* paquete = new structPaquete;
 
@@ -80,22 +80,25 @@ int mainCliente(int argc, char* argv[]){
 		paquete = (structPaquete*) cliente->getPaquete();
 		structFigura* vector = paquete->vector_figuras;
 		int cantidad = paquete->cantidad_figuras;
-		printf("CANTIDAD DE FIGURAS %d \n",cantidad);
+		//printf("CANTIDAD DE FIGURAS %d \n",cantidad);
 		structFigura paqueteFigura = vector[0];
 		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-		printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
+		//printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
 
 
-		printf("CANTIDAD DE PERSONAJES %d \n",paquete->cantidad_personajes);
+		//printf("CANTIDAD DE PERSONAJES %d \n",paquete->cantidad_personajes);
 		structPersonaje* vector_personajes = paquete->vector_personajes;
 		//structPersonaje vector_personajes = vector_personajes[0];
 		b2Vec2 posicion2 = paqueteFigura.vector_vertices[2];
-		printf("posicion del gusanito 1 es  : (%f,%f) \n",posicion2.x,posicion2.y);
+		//printf("posicion del gusanito 1 es  : (%f,%f) \n",posicion2.x,posicion2.y);
 
 
 
 		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
 
+		structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID() );
+		cliente->actualizarPaquete(evento);
+		delete evento;
 		dibujador.dibujarPaquete(paquete);
 		dibujador.actualizar();
 		posicion_mouse_scroll[2]=0;

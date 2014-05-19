@@ -329,11 +329,11 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete){
 
 	char* path = "TPTaller/imagenes/gusanitoderecha.png";
 	int dir = paquete.direccion;
-	if (dir == 0) path = "TPTaller/imagenes/gusanitoderecha.png";
-	if (dir == 1) path = "TPTaller/imagenes/gusanitoizquierda.png";
+	if (dir == 1) path = "TPTaller/imagenes/gusanitoderecha.png";
+	if (dir == -1) path = "TPTaller/imagenes/gusanitoizquierda.png";
 	b2Vec2 tam = paquete.tamano;
-	if (paquete.conectado == false && dir == 0) path = "TPTaller/imagenes/gusanitonegroderecha.png";
-	if (paquete.conectado == false && dir == 1) path = "TPTaller/imagenes/gusanitonegroizquierda.png";
+	if (paquete.conectado == false && dir == 1) path = "TPTaller/imagenes/gusanitonegroder.png";
+	if (paquete.conectado == false && dir == -1) path = "TPTaller/imagenes/gusanitonegroizq.png";
 
 
 	SDL_Texture *gusanito = loadTexture(path, this->renderizador);

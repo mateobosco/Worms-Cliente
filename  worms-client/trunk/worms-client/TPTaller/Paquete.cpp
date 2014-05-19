@@ -71,6 +71,7 @@ structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
 	paquete->click_mouse = posicionEscalada;
 	paquete->direccion = -9; //DIRECION NO VALIDA
 	paquete->nro_jugador = cliente;
+	paquete->aleatorio = random();
 
 	return paquete;
 }
@@ -88,6 +89,7 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 	}
 	paquete->nro_jugador = id_jugador;
 	paquete->click_mouse = b2Vec2( -1, -1 );
+	paquete->aleatorio = random();
 	return paquete;
 }
 
@@ -96,6 +98,7 @@ structEvento* crearPaqueteVacio(){
 	paquete->click_mouse = b2Vec2 (-1,-1);
 	paquete->direccion = -9;
 	paquete->nro_jugador = 0;
+	paquete->aleatorio = random();
 	return paquete;
 }
 

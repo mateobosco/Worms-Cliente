@@ -108,25 +108,25 @@ int Dibujador::dibujarRectangulo(Rectangulo* rectangulo){
 SDL_Texture* Dibujador::RenderText(std::string message, std::string fontFile,
                         SDL_Color color, int fontSize)
 {
-//    //Open the font
-//
-//	if (TTF_Init() == -1){
-//	    std::cout << TTF_GetError() << std::endl;
-//	}
-//	TTF_Font *font = nullptr;
-//	font = TTF_OpenFont(fontFile.c_str(), fontSize);
-//	//TTF_Font* font = TTF_OpenFont( "TPTaller/imagenes/abecedarionegrita.ttf", 28 );
-//	if (font == nullptr)
-//       // throw std::runtime_error("Failed to load font: " + fontFile + TTF_GetError());
+    //Open the font
+
+	if (TTF_Init() == -1){
+	    std::cout << TTF_GetError() << std::endl;
+	}
+	TTF_Font *font = nullptr;
+	font = TTF_OpenFont(fontFile.c_str(), fontSize);
+	//TTF_Font* font = TTF_OpenFont( "TPTaller/imagenes/abecedarionegrita.ttf", 28 );
+	if (font == nullptr)
+        throw std::runtime_error("Failed to load font: " + fontFile + TTF_GetError());
 //
 //    //Render the message to an SDL_Surface, as that's what TTF_RenderText_X returns
-//    SDL_Surface* surf = TTF_RenderText_Blended(font, message.c_str(), color);
-//    SDL_Texture* texture = SDL_CreateTextureFromSurface(this->renderizador, surf);
-//    //Clean up unneeded stuff
-//    SDL_FreeSurface(surf);
-//    TTF_CloseFont(font);
+    SDL_Surface* surf = TTF_RenderText_Blended(font, message.c_str(), color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(this->renderizador, surf);
+    //Clean up unneeded stuff
+    SDL_FreeSurface(surf);
+    TTF_CloseFont(font);
 //
-//    return texture;
+    return texture;
 }
 
 SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
@@ -325,7 +325,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 	return retorno;
 }
 
-int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete){
+int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador){
 
 	char* path = "TPTaller/imagenes/gusanitoderecha.png";
 	int dir = paquete.direccion;
@@ -345,18 +345,21 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete){
 	int y = posicionVentanada->y - altoPX/2;
 	int w = anchoPX;
 	int h = altoPX;
-	SDL_Texture *image;
-	SDL_Color color = { 255, 255, 255 };
-	image = RenderText(" Juan ", "TPTaller/imagenes/lazy.ttf", color, 52); // despues preguntar el nombre de cada uno
+	if(paquete.seleccionado == 1 ){
+		SDL_Texture *image;
+		SDL_Color color = { 0, 0, 0 };
+		image = RenderText(nombre_jugador, "TPTaller/imagenes/abecedarionegrita.ttf", color, 60); // despues preguntar el nombre de cada uno
+		renderTexture2(image, this->renderizador, x - 30 ,y - 60 , 80, 80 );
+		if (image) SDL_DestroyTexture(image);
+	}
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
-	renderTexture2(image, this->renderizador, x - 30 ,y - 60 , 80, 80 );
-	if (image) SDL_DestroyTexture(image);
+
 	delete[] posicionVentanada;
 	if (gusanito) SDL_DestroyTexture(gusanito);
 	return 1;
 }
 
-void Dibujador::dibujarPaquete(structPaquete* paquete){
+void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente){
 	int figuras = paquete->cantidad_figuras;
 	int personajes = paquete->cantidad_personajes;
 	for (int i = 0 ; i < figuras ; i++ ){
@@ -365,7 +368,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete){
 	}
 	for (int j = 0 ; j < personajes ; j ++){
 		structPersonaje* vector1 = paquete->vector_personajes;
-		this->dibujarPaquetePersonaje(vector1[j]);
+		this->dibujarPaquetePersonaje(vector1[j], nombre_cliente );
 	}
 }
 

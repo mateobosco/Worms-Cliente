@@ -16,7 +16,7 @@ Cliente::Cliente(int fd){
 //	this->id = 1;// VER COMO GENERAR EL ID
 }
 
-Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
+Cliente::Cliente(char *name, const char *ip_sv, const char *puerto){
 	this->name_client = name;
 	this->socket_cl = new Socket(ip_sv, puerto);
 	memset(paquete_enviar, 0, MAX_PACK);
@@ -50,7 +50,7 @@ char* Cliente::getPaquete(){
 	return buffer;
 }
 
-const char* Cliente::getNombre(){
+char* Cliente::getNombre(){
 	return this->name_client;
 }
 

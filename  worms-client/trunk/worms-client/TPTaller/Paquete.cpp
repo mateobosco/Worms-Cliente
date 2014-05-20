@@ -50,6 +50,13 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	paquete->tamano.x = personaje->getAncho();
 	paquete->tamano.y = personaje->getAlto();
 	paquete->conectado = 1;
+	if (personaje->getSeleccionado()){
+		paquete->seleccionado = 1;
+	}
+	else{
+		paquete->seleccionado = 0;
+	}
+
 	return paquete;
 }
 

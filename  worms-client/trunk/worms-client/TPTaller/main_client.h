@@ -22,7 +22,7 @@ int mainCliente(int argc, char* argv[]){
 	if(checkCantParametros(argc) == EXIT_FAILURE){
 		return EXIT_FAILURE;
 	}
-	const char* name = argv[POS_NAME_USER];
+	char* name = argv[POS_NAME_USER];
 	const char* ip_sv = argv[POS_IP];
 	const char* puerto = argv[POS_PORT];
 
@@ -99,7 +99,7 @@ int mainCliente(int argc, char* argv[]){
 		structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID() );
 		cliente->actualizarPaquete(evento);
 		delete evento;
-		dibujador.dibujarPaquete(paquete);
+		dibujador.dibujarPaquete(paquete, cliente->getNombre());
 		dibujador.actualizar();
 		posicion_mouse_scroll[2]=0;
 	}

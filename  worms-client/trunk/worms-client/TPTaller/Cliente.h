@@ -21,7 +21,7 @@
 
 class Cliente{
 	private:
-		const char *name_client;
+		char *name_client;
 		Socket* socket_cl;
 		SDL_mutex *mutex;
 		char paquete_recibir[MAX_PACK];
@@ -33,7 +33,7 @@ class Cliente{
 		bool enviarpaquete;
 
 	public:
-		Cliente(const char *name, const char *ip_sv, const char* puerto);
+		Cliente(char *name, const char *ip_sv, const char* puerto);
 		Cliente(int fd);
 		~Cliente();
 		int conectar();
@@ -43,7 +43,7 @@ class Cliente{
 		int runEnviarInfo();
 		Socket* getSocket();
 		int getID();
-		const char* getNombre();
+		char* getNombre();
 		char* getPaquete();
 		structInicial* getPaqueteInicial();
 		void setConexion(bool estado);

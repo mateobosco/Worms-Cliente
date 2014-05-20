@@ -65,6 +65,14 @@ int crearVentana(Escalador *escalador){
 	return 0;
 }
 
+void close(){
+	SDL_DestroyRenderer(gRenderer);
+	SDL_DestroyWindow(gWindow);
+	gRenderer = NULL;
+	gWindow = NULL;
+	SDL_Quit();
+}
+
 //Genera la fecha y la hora obtenida desde el sistema.
 void generarFechaYHora(char* fecha, char* hora){
 	char* anio = new char[5];
@@ -109,14 +117,6 @@ void loguear(){
 	logFile << fecha << " " << hora ;
 	delete[] fecha;
 	delete[] hora;
-}
-
-void close(){
-	SDL_DestroyRenderer(gRenderer);
-	SDL_DestroyWindow(gWindow);
-	gRenderer = NULL;
-	gWindow = NULL;
-	SDL_Quit();
 }
 
 void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mouse_click, int* posicion_mouse_wheel) {

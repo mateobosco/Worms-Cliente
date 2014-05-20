@@ -29,6 +29,7 @@ class Cliente{
 		int id;
 		static int cant_clientes;
 		structInicial* paqueteInicial;
+		bool conectado;
 		bool enviarpaquete;
 
 	public:
@@ -37,7 +38,6 @@ class Cliente{
 		~Cliente();
 		int conectar();
 		int enviar(char *mensaje, size_t longData);
-//		int recibir(char *mensaje, int longDataMax);
 		int runRecibirInfo();
 		int run();
 		int runEnviarInfo();
@@ -46,6 +46,7 @@ class Cliente{
 		const char* getNombre();
 		char* getPaquete();
 		structInicial* getPaqueteInicial();
+		void setConexion(bool estado);
 		void actualizarPaquete(structEvento* evento);
 
 

@@ -61,7 +61,7 @@ private:
 	float32 ancho;
 	float32 alto;
 	bool muerto;
-	bool conectado;
+	int conectado;
 
 };
 

@@ -103,7 +103,7 @@ int mainCliente(int argc, char* argv[]){
 		dibujador.actualizar();
 		posicion_mouse_scroll[2]=0;
 	}
-
+	delete paqueteInicial; //ver si hay que hacer casteo a char*
 	delete agua;
 	delete escalador;
 	delete paquete;

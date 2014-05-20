@@ -15,6 +15,7 @@ int random( int n ) // TODO
 }
 
 Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador) {
+	conectado = 1;
 	muerto = false;
 	dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 	nro_jugador = numero_jugador;
@@ -65,7 +66,6 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador) {
 	for (int i = 0 ; i<4; i++){
 		seleccionado[i] = false;
 	}
-	this->conectado = true;
 }
 
 Personaje::~Personaje() {

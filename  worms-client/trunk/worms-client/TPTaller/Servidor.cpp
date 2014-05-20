@@ -12,8 +12,7 @@ Servidor::Servidor(int maxCon){
 	this->maxFD = 0;
 	this->listener = new Socket(NULL, PUERTO);
 	this->mutex = SDL_CreateMutex();
-	memset(this->paqueteEnviar, 0, MAX_PACK);
-	strcpy(paqueteEnviar, "facuuuuuuuu\n");
+	this->enviar=true;
 
 	for (int i=0; i < MAXJUG; i++){
 		vector_clientes[i]=0;
@@ -30,10 +29,15 @@ Socket* Servidor::getSocket(){
 	return listener;
 }
 
+void Servidor::setPaqueteInicial(char paquete[MAX_PACK]){
+	memcpy(this->paqueteInicial, paquete, MAX_PACK);
+}
+
 void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
-	SDL_LockMutex(mutex);
+	this->enviar=true;
+	//SDL_LockMutex(mutex);
 	memcpy(this->paqueteEnviar, paquete, MAX_PACK);
-	SDL_UnlockMutex(mutex);
+	//SDL_UnlockMutex(mutex);
 }
 
 void* Servidor::desencolarPaquete(){
@@ -88,10 +92,13 @@ int Servidor::aceptarConexiones(){
 		while(validarSocket(sockCliente) == 1){
 			close(sockCliente);
 			sockCliente = this->listener->aceptar();
-			printf("ASigno mismo fd : %d\n",sockCliente);
 		}
 		Cliente* cliente = new Cliente(sockCliente);
-		printf("fd del socket creado desde accept: %d\n",sockCliente);
+		if(validarCliente(cliente)==0){
+			printf("Cliente existente");
+		}
+		//todo validar cliente
+		this->runEnviarInfoInicial(cliente);
 		conexion_t par;
 		par.cliente = cliente;
 		par.servidor = this;
@@ -99,17 +106,13 @@ int Servidor::aceptarConexiones(){
 		if(enviar ==NULL){
 			//log error todo
 		}
-//		int thread_1 = 0;
-//		SDL_WaitThread(enviar, &thread_1);
 		SDL_Thread* recibir = SDL_CreateThread(runRecvInfo,"recibir",(void*)&par);
 		if(recibir == NULL){
 			//log errror todo
 		}
-//		int thread_2 = 0;
-//		SDL_WaitThread(recibir, &thread_2);
 		this->clientes[this->cantClientes] = cliente;
 		this->cantClientes++;
-//		this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
+		this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
 		printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
 		return EXIT_SUCCESS;
 	}else{
@@ -117,47 +120,126 @@ int Servidor::aceptarConexiones(){
 	}
 }
 
+int Servidor::validarCliente(Cliente* cliente){
+	int i;
+	for(i =0;i<this->cantClientes ;i++){
+		int compare_name = strcmp(this->clientes[i]->getNombre(),cliente->getNombre());
+		if(compare_name == 0) return 0;
+	}
+	return 1;
+
+
+}
+
 int Servidor::runEnviarInfo(Cliente* cliente){
 
 	while(true){
-		SDL_Delay(50);
+		if (this->enviar == false){
+			continue;
+		}
+		SDL_Delay(25);
 		char envio[MAX_PACK];
-		SDL_LockMutex(this->mutex);
+		//SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
-		SDL_UnlockMutex(this->mutex);
+		//SDL_UnlockMutex(this->mutex);
 		int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
-		if(enviados > 0){
-			//SDL_Delay(5000);
-			printf("Actualizar paquete \n");
-			this->actualizarPaquete("nahueeeeee\n");//todo
+		//printf("envie %d bytes al cliente \n", enviados);
+		//printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
+		structPaquete* paqueteCiclo = (structPaquete*) envio;
+
+		//printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+		//printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+
+
+		structFigura* vector = paqueteCiclo->vector_figuras;
+		structFigura paqueteFigura = vector[0];
+		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
+
+		//printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
+		//printf(" ------- SALGO DEL ENVIAR DEL SERVIDOR ----------- \n");
+
+
+
+		//structInicial* inicial = (structInicial*) envio;
+		if (enviados > 0){
+			this->enviar = false;
 		}
-		else if(enviados == -1){
-			printf("Error del servidor al enviar al cliente\n");
-			break;
+		else if(enviados == -1){ // no se pudo enviar
+			printf("no se envio el paquete \n");
+
+			//this->actualizarPaquete("nahueeeeee\n");//todo
 		}
+	}
+		return EXIT_SUCCESS;
+}
+
+int Servidor::runEnviarInfoInicial(Cliente* cliente){
+	SDL_Delay(25);
+	//SDL_Delay(500);
+	char envio[MAX_PACK];
+	//SDL_LockMutex(this->mutex);
+	memcpy(envio, this->paqueteInicial, MAX_PACK);
+	//SDL_UnlockMutex(this->mutex);
+	int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
+
+	printf("envie %d bytes al cliente \n", enviados);
+	//printf(" ------- DENTRO DEL ENVIAR DEL SERVIDOR ----------- \n");
+
+	structPaquete* paqueteCiclo = (structPaquete*) envio;
+
+	//printf(" Voy a enviar un paquete con %d figuras \n", paqueteCiclo->cantidad_figuras);
+	//printf(" Voy a enviar un paquete con %d personajes \n", paqueteCiclo->cantidad_personajes);
+
+
+	structFigura* vector = paqueteCiclo->vector_figuras;
+	structFigura paqueteFigura = vector[0];
+	b2Vec2 posicion = paqueteFigura.vector_vertices[2];
+	
+	//printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
+	//printf(" ------- SALGO DEL ENVIAR DEL SERVIDOR ----------- \n");
+
+
+	//structInicial* inicial = (structInicial*) envio;
+	if (enviados > 0){
+		this->enviar = false;
+	}
+	if(enviados == -1){ // no se pudo enviar
+		printf("no se envio el paquete \n");
 	}
 	return EXIT_SUCCESS;
 }
 
-
 int Servidor::runRecibirInfo(void* cliente){
 	while(true){
-		//SDL_Delay(2000);
-		SDL_Delay(50);
+		SDL_Delay(25);
 		SDL_LockMutex(this->mutex);
 		Cliente* client = (Cliente*) cliente;
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
-		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK); //todo ver tamanio
+		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK);
 
 		if(cantidad >0){
+
+			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (sizeof (structEvento));
 			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
+
 			this->paquetesRecibir.push(novedad);
-			printf("Recibí: %s del cliente \n",paquete);
+
+			//printf("Recibi del cliente la posicion del mouse %f, %f \n", evento->click_mouse.x, evento->click_mouse.y);
+
 		}
 		else if(cantidad ==0){
 			printf("Cliente desconectado\n");
+			client->setConexion(false);
+			int i;
+			for(i=0;i<this->cantClientes; i++){
+				if((this->clientes[i]->getID() == client->getID()) && (strcmp(this->clientes[i]->getNombre(),client->getNombre())==0)){
+					this->clientes[i]->setConexion(false); //ver si es necesario
+				}
+			}
+			//ver si this->cantClientes--;
+			//todo desconexion cliente
 			break;
 		}
 		else if(cantidad ==-1){
@@ -169,12 +251,10 @@ int Servidor::runRecibirInfo(void* cliente){
 	return EXIT_SUCCESS;
 }
 
-
 int Servidor::runEscucharConexiones(){
 	int conexiones;
 	try{
 		conexiones = this->getSocket()->EnlazarYEscuchar(this->cantidadMaxConexiones);
-
 	}catch(exception &e){
 		close(this->listener->getFD());
 		return EXIT_FAILURE;
@@ -187,9 +267,8 @@ int Servidor::runEscucharConexiones(){
 				printf("Error al escuchar conexiones \n");
 				return EXIT_FAILURE;
 			}
-
 		}
-		if(this->cantClientes == this->cantidadMaxConexiones){
+		if(this->cantClientes > this->cantidadMaxConexiones){
 			printf("break\n");
 			break;
 		}

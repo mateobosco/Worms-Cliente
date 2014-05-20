@@ -34,7 +34,7 @@ class Cliente{
 		bool activo;
 
 	public:
-		Cliente(char *name, const char *ip_sv, const char* puerto);
+		Cliente(const char *name, const char *ip_sv, const char* puerto);
 		Cliente(int fd);
 		~Cliente();
 		int conectar();

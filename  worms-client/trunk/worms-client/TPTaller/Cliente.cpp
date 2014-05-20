@@ -61,14 +61,14 @@ void Cliente::setConexion(bool estado){
 
 int runSendInfoCliente(void* cliente){
 	Cliente* clien = (Cliente*) cliente;
-	clien->runEnviarInfo();
-	return EXIT_SUCCESS;
+	return clien->runEnviarInfo();
+	//return EXIT_SUCCESS;
 }
 
 int runRecvInfoCliente(void* cliente){
 	Cliente* client = (Cliente*) cliente;
-	client->runRecibirInfo();
-	return EXIT_SUCCESS;
+	return client->runRecibirInfo();
+	//return EXIT_SUCCESS;
 }
 
 int Cliente::conectar(){
@@ -178,8 +178,10 @@ int Cliente::runRecibirInfo(){
 
 
 void Cliente::actualizarPaquete(structEvento* evento){
-	this->enviarpaquete=true;
-	memcpy( this->paquete_enviar, evento, sizeof(structEvento));
+	if(evento != NULL){
+		this->enviarpaquete=true;
+		memcpy( this->paquete_enviar, evento, sizeof(structEvento));
+	}
 }
 
 char* Cliente::getNombre(){

@@ -121,7 +121,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 		printf (" CREO UN PAQUETE CLICK ------------------------ \n");
 	}
 	else {
-		paquete = crearPaqueteVacio();
+		paquete = NULL;//crearPaqueteVacio();
 	}
 	return paquete;
 

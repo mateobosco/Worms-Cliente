@@ -51,6 +51,7 @@ public:
 	bool getSeleccionado();
 	int getNrojugador();
 	virtual ~Personaje();
+	bool* getSeleccion();
 
 
 private:

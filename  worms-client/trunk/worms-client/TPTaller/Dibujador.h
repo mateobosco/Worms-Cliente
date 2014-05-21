@@ -47,7 +47,7 @@ public:
 	void iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra);
 	void dibujarFondo(Agua* agua);
 	int dibujarPaqueteFigura(structFigura paquete);
-	int dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio);
+	int dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id);
 	SDL_Texture* RenderText(std::string message, std::string fontFile,  SDL_Color color, int fontSize);
 	bool init();
 	void close();
@@ -69,6 +69,8 @@ private:
 	SDL_Window* window;
 	SDL_Texture* texturederecha;
 	SDL_Texture* textureizquierda;
+	SDL_Texture* texturederechaNEGRO;
+	SDL_Texture* textureizquierdaNEGRO;
 };
 
 

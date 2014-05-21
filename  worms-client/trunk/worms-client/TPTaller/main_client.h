@@ -18,6 +18,7 @@
 // 			n=2: IP
 // 			n=3: Puerto
 int mainCliente(int argc, char* argv[]){
+	int id = -1;
 
 	if(checkCantParametros(argc) == EXIT_FAILURE){
 		return EXIT_FAILURE;
@@ -91,19 +92,8 @@ int mainCliente(int argc, char* argv[]){
 		escalador->moverVentana(posicion_mouse_movimiento);
 		escalador->hacerZoom(posicion_mouse_scroll);
 		paquete = (structPaquete*) cliente->getPaquete();
-		structFigura* vector = paquete->vector_figuras;
-		int cantidad = paquete->cantidad_figuras;
-		//printf("CANTIDAD DE FIGURAS %d \n",cantidad);
-		structFigura paqueteFigura = vector[0];
-		b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-		//printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
 
-
-		//printf("CANTIDAD DE PERSONAJES %d \n",paquete->cantidad_personajes);
-		structPersonaje* vector_personajes = paquete->vector_personajes;
-		//structPersonaje vector_personajes = vector_personajes[0];
-		b2Vec2 posicion2 = paqueteFigura.vector_vertices[2];
-		//printf("posicion del gusanito 1 es  : (%f,%f) \n",posicion2.x,posicion2.y);
+		cliente->setID(paquete->id);
 
 
 

@@ -66,6 +66,7 @@ class Cliente{
 		void setHilos(comThreads hilos_server);
 		comThreads getHilos();
 		int recibirConfiguracion();
+		void setID(int id);
 
 		SDL_mutex* getMutex();
 };

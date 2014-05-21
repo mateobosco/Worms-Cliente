@@ -16,20 +16,15 @@ ManejadorPersonajes::ManejadorPersonajes() {
 	this->personajesMax = MAX_CANT_PERSONAJES;
 	this->cantidad_actual_personajes = 0;
 	this->cantidad_jugadores = 0;
-	this->vector_personajes = new Personaje*[MAX_CANT_JUGADORES * this->personajesMax]; //ver delete todo
+	this->vector_personajes = new Personaje*[MAX_CANT_JUGADORES * this->personajesMax];
 }
 
 ManejadorPersonajes::~ManejadorPersonajes() {
-//	for(int i = 0; i<cantidad_actual_personajes; i++){
-//		Personaje* personaje = vector_personajes[i];
-//		delete personaje;
-//	}
 	//Es responsabilidad de cada Jugador borrar sus personajes
 	delete[] this->vector_personajes;
 }
 
 void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
-
 	b2CircleShape* shapeMouse = new b2CircleShape();
 	shapeMouse->m_radius = RADIOMOUSE;
 	b2Transform transformMouse = b2Transform(posicion, b2Rot(0) );
@@ -46,6 +41,7 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 				personaje_aux->setSeleccionado(false, id_jugador);
 			}
 			personaje->setSeleccionado(resultado, id_jugador);
+			printf("selecciono un personaje \n");
 		}
 
 	}
@@ -53,9 +49,9 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 }
 
 //TODO hay que borrarlo
-void ManejadorPersonajes::AgregarJugador(Mundo* mundo, int id_jugador){
+void ManejadorPersonajes::AgregarJugador(Mundo* mundo, int id_jugador, Personaje** vectorPersonajes){
 	for(int i=0 ; i <this->personajesMax; i++){
-		this->vector_personajes[i+this->cantidad_actual_personajes] = new Personaje(mundo, id_jugador);
+		this->vector_personajes[i+this->cantidad_actual_personajes] = vectorPersonajes[i];
 	}
 	this->cantidad_actual_personajes += this->personajesMax;
 	this->cantidad_jugadores+=1;

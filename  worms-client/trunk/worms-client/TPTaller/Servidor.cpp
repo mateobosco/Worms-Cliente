@@ -108,6 +108,7 @@ int Servidor::aceptarConexiones(){
 //		}
 
 		bool recibio_nombre = false;
+		SDL_LockMutex(this->mutex);
 		while (!recibio_nombre){
 			int bytes = this->recibirNombre(cliente);
 			if(bytes > 0 ) recibio_nombre = true;
@@ -120,6 +121,7 @@ int Servidor::aceptarConexiones(){
 				if (cliente_viejo != NULL) delete cliente_viejo;
 				else this->cantClientes++;
 				this->setAceptado(true);
+				cliente->activar(); //TODO hay que arreglar esto
 				if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
 				conexion_t par;
 				par.cliente = cliente;
@@ -130,6 +132,7 @@ int Servidor::aceptarConexiones(){
 				if(hilosCliente.enviar ==NULL){
 					//log error todo
 				}
+				printf("Se crea el hilo de recibir\n");
 				hilosCliente.recibir = SDL_CreateThread(runRecvInfo,"recibir",(void*)&par);
 				if(hilosCliente.recibir == NULL){
 					//log error todo
@@ -147,6 +150,7 @@ int Servidor::aceptarConexiones(){
 				delete cliente;
 				return EXIT_FAILURE;
 			}
+			SDL_UnlockMutex(this->mutex);
 		}else {
 			delete cliente;
 			return EXIT_FAILURE;
@@ -249,23 +253,17 @@ int Servidor::runRecibirInfo(void* cliente){
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
 		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK);
-
 		if(cantidad >0){
-
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (sizeof (structEvento));
-			SDL_LockMutex(this->mutex);
+			SDL_LockMutex(client->getMutex());
 			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
-
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
 			if (anterior->aleatorio != evento->aleatorio){
 				this->paquetesRecibir.push(novedad);
 			}
-			SDL_UnlockMutex(this->mutex);
-			//SDL_Delay(25);
-
-
+			SDL_UnlockMutex(client->getMutex());
 		}
 		else if(cantidad ==0){
 			printf("Cliente desconectado\n");

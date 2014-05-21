@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_pixels.h>
+#include <stdexcept>
 
 #include "Agua.h"
 

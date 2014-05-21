@@ -84,7 +84,7 @@ void Mundo::Crear_Chains(b2Vec2* tierra, float32 pixelesX){
 	this->vertices_tierra = vs;
 	this->cantidad_vertices_tierra = cantidad+2;
 	delete[] tierra;
-	//delete[] vs;
+	//delete[] vs; todo
 }
 
 void Mundo::comprobar_nivel_agua(){
@@ -116,30 +116,6 @@ void Mundo::comprobar_nivel_agua(){
 			personaje_actual->setMuerto();
 		}
 	}
-
-
-
-//	for (b2Body* body_actual = my_world->GetBodyList(); body_actual; body_actual = body_actual->GetNext()){
-//		b2Vec2 posicion = body_actual->GetPosition();
-//		if (posicion.y >= agua->GetNivel()){
-//
-//			if(v != 0) {
-//			   // old was safely casted to NewType
-//			   //v->doSomething();
-//				printf("ENTRA ACAAAAA \n");
-//			}
-//
-//			Figura* figura_actual = (Figura*)body_actual->GetUserData();
-//			//if( figura_actual == NULL) return;
-//			//figura_actual->Hundir();
-//			b2Vec2 velocidad(0, 0);
-//			b2Vec2 fuerza;
-//			fuerza.x = 0;
-//			fuerza.y = -grav.y;
-//			body_actual->SetLinearVelocity(velocidad);
-//			body_actual->ApplyForceToCenter(fuerza, true);
-//		}
-//	}
 }
 
 void Mundo::dormir_figuras(Figura** figuras){

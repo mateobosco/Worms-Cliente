@@ -4,7 +4,7 @@ Juego::Juego(){
 	mundo = NULL;
 
 	cantidad_jugadores = 0;
-	manejador = NULL;
+
 	escalador = NULL;
 	lector = NULL;
 
@@ -16,21 +16,23 @@ Juego::Juego(){
 	inicial = NULL;
 
 	this->cargar();
+	manejador = new ManejadorPersonajes();
 }
 
 Juego::~Juego(){
-		for(size_t i= 0; i < cantidad_figuras ; i++){
-			if (figuras != NULL){
-				if(figuras[i] != NULL){
-					delete figuras[i];
-				}
+	for(size_t i= 0; i < cantidad_figuras ; i++){
+		if (figuras != NULL){
+			if(figuras[i] != NULL){
+				delete figuras[i];
 			}
 		}
-		delete[] figuras;
-		delete agua;
-		delete lector;
-		delete mundo;
-		delete manejador;
+	}
+	delete[] figuras;
+	delete agua;
+	delete lector;
+	delete mundo;
+	delete manejador;
+	delete escalador; //todo
 	for(Uint8 i = 0; i < cantidad_jugadores; i++){
 		if(jugadores[i] != NULL){
 			delete jugadores[i];
@@ -85,6 +87,7 @@ void Juego::cargar() {
 	Node *nodo_escenario = this->cargaInicial(cargador);
 	this->cargaPrincipal(cargador, *nodo_escenario);
 	inicial = cargador->getPaqueteInicial();
+	delete nodo_escenario; //todo
 	delete cargador;
 }
 
@@ -112,10 +115,10 @@ Node* Juego::cargaInicial(Cargador* cargador){
 		loguear();
 		logFile << "    Error   " << "\t No se encuentra el escenario. Se carga escenario por defecto."<<endl;
 		delete cargador;
-		cargador = new Cargador(pathDefEs.c_str()); //ver delete todo
+		cargador = new Cargador(pathDefEs.c_str());
 		(*nodo_escenario) = cargador->getNodo()["escenario"];
 	}
-	return nodo_escenario; //ver delete todo<
+	return nodo_escenario;
 }
 
 void Juego::cargarEscalador(Cargador *cargador, Node nodo_escenario){
@@ -164,7 +167,7 @@ void Juego::cargarCielo(Cargador *cargador, Node nodo_escenario){
 }
 
 void Juego::cargarLector(string tierra){
-	this->lector = new LectorMascara(tierra); //ver delete todo
+	this->lector = new LectorMascara(tierra);
 	if(!this->lector){
 		loguear();
 		logFile << "    Error   " << "\t  No se pudo crear el Lector de Máscara. " <<  SDL_GetError()<< endl;
@@ -212,12 +215,25 @@ structInicial* Juego::getPaqueteInicial(){
 }
 
 
-void Juego::aplicarPaquete(structEvento* evento, ManejadorPersonajes* manejador_personajes){
+void Juego::aplicarPaquete(structEvento* evento){
+	if (evento == NULL) return;
 	if (evento->click_mouse.x != -1){ // recibio un click
-		manejador_personajes->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
+		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
 	if (evento->direccion != -9){ // recibio un click
-		manejador_personajes->moverPersonaje(evento->direccion , evento->nro_jugador);
+		printf (" APLICO UN PAQUETE DE MOVER PERSONAJE EN LA DIRECC %d \n", evento->direccion);
+		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
 	}
+	else return;
 }
 
+void Juego::agregarJugador(int id){
+
+	this->jugadores[id] = new Jugador(mundo,id,manejador);
+	Personaje** pers = this->jugadores[id]->getPersonajes();
+	this->manejador->AgregarJugador(mundo,id, pers);
+}
+
+ManejadorPersonajes* Juego::getManejadorPersonajes(){
+	return this->manejador;
+}

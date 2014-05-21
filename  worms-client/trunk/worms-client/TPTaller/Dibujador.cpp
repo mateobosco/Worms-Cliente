@@ -140,8 +140,6 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 	int w = anchoPX;
 	int h = altoPX;
 	char* direccion;
-	//TTF_Font* gFont = TTF_OpenFont( "TPTaller/imagenes/lazy.ttf", 28 );
-	//std::string textureText = "Some Text";
 	SDL_Color textColor;
 	textColor.r = 0;
 	textColor.g = 0;
@@ -150,7 +148,6 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 	std::string nombre_jugador;
 	SDL_Color color = { 0, 0, 0 };
 
-	//SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
 
 	if (personaje->getSeleccionado()){
 		nombre_jugador = "Juan";
@@ -164,7 +161,7 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 		if (image) SDL_DestroyTexture(image);
 	}
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
-	delete[] posicionVentanada;
+	delete posicionVentanada;
 	if (gusanito) SDL_DestroyTexture(gusanito);
 	return gusanito;
 }
@@ -302,6 +299,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 		b2Vec2* posicionVentanada = this->escalador->aplicarZoomPosicion(posicion);
 		retorno = filledEllipseRGBA( renderizador, posicionVentanada->x, posicionVentanada->y,
 										rad_pix_x, rad_pix_y, color.r, color.g, color.b, CIRC_OPACIDAD);
+		delete posicionVentanada;
 
 	}
 	if (cantidad > 2){
@@ -317,6 +315,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 		Sint16* vecYventanado = this->escalador->aplicarZoomYVector(vecY,cantidad_lados);
 		retorno =  filledPolygonRGBA(this->renderizador, vecXventanado, vecYventanado, cantidad_lados,
 										color.r, color.g, color.b, POLI_OPACIDAD);
+
 		delete[] vecX;
 		delete[] vecY;
 		delete[] vecYventanado;
@@ -362,7 +361,7 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
 
-	delete[] posicionVentanada;
+	delete posicionVentanada;
 	if (gusanito) SDL_DestroyTexture(gusanito);
 	return 1;
 }

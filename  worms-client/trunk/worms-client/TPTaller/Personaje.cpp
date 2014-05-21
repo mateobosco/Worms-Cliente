@@ -66,6 +66,7 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador) {
 	for (int i = 0 ; i<4; i++){
 		seleccionado[i] = false;
 	}
+	delete polygonShape;//todo ver si se puede
 }
 
 Personaje::~Personaje() {
@@ -108,7 +109,7 @@ b2Vec2* Personaje::getVertices(){
 	return verticesGlobales;
 }
 
-
+//todo no se usa
 
 float32* Personaje::getVecX(){
 	int cantidad = 4;
@@ -123,7 +124,7 @@ float32* Personaje::getVecX(){
 	return vector_x;
 }
 
-
+///TODO NO SE USA
 float32* Personaje::getVecY(){
 	int cantidad = 4;
 	float32* vector_y = new float32[cantidad];

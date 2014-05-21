@@ -73,7 +73,7 @@ void destruirPaquetePersonaje(structPersonaje* paquete){
 
 
 structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
-	structEvento* paquete = new structEvento;
+	structEvento* paquete = new structEvento; //todo
 	b2Vec2 posicion(click[0],click[1]);
 	b2Vec2 posicionEscalada = escalador->escalarPosicion(posicion);
 	paquete->click_mouse = posicionEscalada;
@@ -102,7 +102,7 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 }
 
 structEvento* crearPaqueteVacio(){
-	structEvento* paquete = new structEvento;
+	structEvento* paquete = new structEvento; //todo
 	paquete->click_mouse = b2Vec2 (-1,-1);
 	paquete->direccion = -9;
 	paquete->nro_jugador = -1;

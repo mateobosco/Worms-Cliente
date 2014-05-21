@@ -35,7 +35,7 @@ int mainCliente(int argc, char* argv[]){
 	while (!cliente->getPaqueteInicial()){
 	}
 
-	structInicial* paqueteInicial = (structInicial*) cliente->getPaquete();
+	structInicial* paqueteInicial = (structInicial*) cliente->getPaqueteInicial();
 
 	Escalador* escalador = new Escalador(paqueteInicial->ancho_ventana , paqueteInicial->alto_ventana,
 			paqueteInicial->ancho_unidades, paqueteInicial->alto_unidades,
@@ -68,7 +68,6 @@ int mainCliente(int argc, char* argv[]){
 	posicion_mouse_click[1] = 0;
 
 	structPaquete* paquete = new structPaquete;
-
 	while(KEYS[SDLK_ESCAPE] == false){
 
 		dibujador.dibujarFondo(agua);
@@ -98,7 +97,9 @@ int mainCliente(int argc, char* argv[]){
 
 		structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID() );
 		cliente->actualizarPaquete(evento);
-		delete evento;
+		if(evento){
+			delete evento;
+		}
 		dibujador.dibujarPaquete(paquete, cliente->getNombre());
 		dibujador.actualizar();
 		posicion_mouse_scroll[2]=0;

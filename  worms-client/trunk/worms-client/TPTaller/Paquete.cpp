@@ -104,7 +104,7 @@ structEvento* crearPaqueteVacio(){
 	structEvento* paquete = new structEvento;
 	paquete->click_mouse = b2Vec2 (-1,-1);
 	paquete->direccion = -9;
-	paquete->nro_jugador = 0;
+	paquete->nro_jugador = -1;
 	paquete->aleatorio = random();
 	return paquete;
 }
@@ -121,7 +121,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 		printf (" CREO UN PAQUETE CLICK ------------------------ \n");
 	}
 	else {
-		paquete = NULL;//crearPaqueteVacio();
+		paquete = crearPaqueteVacio();
 	}
 	return paquete;
 

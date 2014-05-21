@@ -13,14 +13,18 @@ Servidor::Servidor(int maxCon){
 	this->listener = new Socket(NULL, PUERTO);
 	this->mutex = SDL_CreateMutex();
 	this->enviar=true;
-
-	for (int i=0; i < MAXJUG; i++){
+	this->finalizar = false;
+	this->clientesActivos = 0;
+	for (int i=0; i < MAX_CANT_JUGADORES; i++){
 		vector_clientes[i]=0;
 	}
 }
 
 
 Servidor::~Servidor() {
+	this->finalizar = true;
+	SDL_WaitThread(this->escuchar, 0);
+	SDL_WaitThread(this->aceptar, 0);
 	delete this->listener;
 	SDL_DestroyMutex(mutex);
 }
@@ -30,7 +34,7 @@ Socket* Servidor::getSocket(){
 }
 
 void Servidor::setPaqueteInicial(char paquete[MAX_PACK]){
-	memcpy(this->paqueteInicial, paquete, MAX_PACK);
+	memcpy(this->paqueteInicial, paquete, sizeof(structInicial));
 }
 
 void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
@@ -93,28 +97,60 @@ int Servidor::aceptarConexiones(){
 			close(sockCliente);
 			sockCliente = this->listener->aceptar();
 		}
+		// Ver que pasa con la ID del cliente,
+		// si ya está creado el usuario con ese nombre,
+		// xq aumentaría en uno por algo que ya existe.
+		// [Nahue: yo lo dejaría de usar ese atributo de clase]
 		Cliente* cliente = new Cliente(sockCliente);
-		if(validarCliente(cliente)==0){
-			printf("Cliente existente");
+
+//		if(validarCliente(cliente)==0){
+//			printf("Cliente existente");
+//		}
+
+		bool recibio_nombre = false;
+		while (!recibio_nombre){
+			int bytes = this->recibirNombre(cliente);
+			if(bytes > 0 ) recibio_nombre = true;
+			if(bytes == 0) break;// TODO Verificar qué pasa si la # de Bytes es -1 o 0;
 		}
-		//todo validar cliente
-		this->runEnviarInfoInicial(cliente);
-		conexion_t par;
-		par.cliente = cliente;
-		par.servidor = this;
-		SDL_Thread* enviar = SDL_CreateThread(runSendInfo,"enviar",(void*)&par);
-		if(enviar ==NULL){
-			//log error todo
+		if(recibio_nombre){
+			int posicion = this->checkNuevoCliente(cliente);
+			if(posicion != -1){
+				Cliente *cliente_viejo = this->clientes[posicion];
+				if (cliente_viejo != NULL) delete cliente_viejo;
+				else this->cantClientes++;
+				this->setAceptado(true);
+				if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
+				conexion_t par;
+				par.cliente = cliente;
+				par.servidor = this;
+
+				comThreads hilosCliente;
+				hilosCliente.enviar = SDL_CreateThread(runSendInfo,"enviar",(void*)&par);
+				if(hilosCliente.enviar ==NULL){
+					//log error todo
+				}
+				hilosCliente.recibir = SDL_CreateThread(runRecvInfo,"recibir",(void*)&par);
+				if(hilosCliente.recibir == NULL){
+					//log error todo
+				}
+				cliente->setHilos(hilosCliente);
+
+				this->clientes[posicion] = cliente;
+				this->clientesActivos++;
+				this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
+				printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
+				return EXIT_SUCCESS;
+			}else {
+				this->setAceptado(false);
+				this->runEnviarInfoInicial(cliente);
+				delete cliente;
+				return EXIT_FAILURE;
+			}
+		}else {
+			delete cliente;
+			return EXIT_FAILURE;
 		}
-		SDL_Thread* recibir = SDL_CreateThread(runRecvInfo,"recibir",(void*)&par);
-		if(recibir == NULL){
-			//log errror todo
-		}
-		this->clientes[this->cantClientes] = cliente;
-		this->cantClientes++;
-		this->vector_clientes[cantClientes-1] = 1; // TODO ponerle un nombre / id de jugador
-		printf("Cantidad de clientes aceptados: %d\n",this->cantClientes);
-		return EXIT_SUCCESS;
 	}else{
 		return EXIT_FAILURE;
 	}
@@ -127,12 +163,10 @@ int Servidor::validarCliente(Cliente* cliente){
 		if(compare_name == 0) return 0;
 	}
 	return 1;
-
-
 }
 
 int Servidor::runEnviarInfo(Cliente* cliente){
-
+	while(!cliente->getNombre());
 	while(true){
 		if (this->enviar == false){
 			continue;
@@ -157,8 +191,6 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 
 		//printf(" Envia estas posiciones: (%f, %f) \n ", posicion.x,posicion.y);
 		//printf(" ------- SALGO DEL ENVIAR DEL SERVIDOR ----------- \n");
-
-
 
 		//structInicial* inicial = (structInicial*) envio;
 		if (enviados > 0){
@@ -210,10 +242,10 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 }
 
 int Servidor::runRecibirInfo(void* cliente){
-	while(true){
+	Cliente* client = (Cliente*) cliente;
+	while(!client->getNombre());
+	while(client->getActivo()){
 		SDL_Delay(25);
-		SDL_LockMutex(this->mutex);
-		Cliente* client = (Cliente*) cliente;
 		char paquete[MAX_PACK];
 		memset(paquete, 0, MAX_PACK);
 		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK);
@@ -222,11 +254,17 @@ int Servidor::runRecibirInfo(void* cliente){
 
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (sizeof (structEvento));
+			SDL_LockMutex(this->mutex);
 			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
 
-			this->paquetesRecibir.push(novedad);
+			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
+			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
+			if (anterior->aleatorio != evento->aleatorio){
+				this->paquetesRecibir.push(novedad);
+			}
+			SDL_UnlockMutex(this->mutex);
+			//SDL_Delay(25);
 
-			//printf("Recibi del cliente la posicion del mouse %f, %f \n", evento->click_mouse.x, evento->click_mouse.y);
 
 		}
 		else if(cantidad ==0){
@@ -246,7 +284,6 @@ int Servidor::runRecibirInfo(void* cliente){
 			printf("Error al recibir información del cliente\n");
 			break;
 		}
-		SDL_UnlockMutex(this->mutex);
 	}
 	return EXIT_SUCCESS;
 }
@@ -260,7 +297,7 @@ int Servidor::runEscucharConexiones(){
 		return EXIT_FAILURE;
 		//loguear error
 	}
-	while(true){
+	while(!this->finalizar){
 		while((this->cantClientes < this->cantidadMaxConexiones)){
 			conexiones = this->escucharConexiones();
 			if (conexiones == -1){
@@ -277,7 +314,6 @@ int Servidor::runEscucharConexiones(){
 
 }
 
-
 int Servidor::getCantidadMaxConexiones(){
 	return this->cantidadMaxConexiones;
 }
@@ -289,4 +325,52 @@ int Servidor::getCantidadClientes(){
 
 int* Servidor::getVectorClientes(){
 	return vector_clientes;
+}
+
+int Servidor::recibirNombre(Cliente *client){
+	char buffer[MAX_NAME_USER];
+	int bytes_recibidos = client->getSocket()->recibir(buffer, MAX_NAME_USER);
+	client->setNombre(buffer);
+	return bytes_recibidos;
+}
+
+// Retorna un número positivo o cero [n], en caso de aceptar al nuevo cliente,
+// siendo n la posicion a ocupar en el array clientes:
+//		- Es nuevo y hay espacio para crearlo.
+//		- Está creado e inactivo.
+// Retorna -1 si:
+//		- Está creado y activo.
+// 		- No hay más espacio para crearlo.
+int Servidor::checkNuevoCliente(Cliente *client){
+//	while (!client->getNombre());
+	int indice = 0;
+	Cliente *cliente_recorrido = this->clientes[indice];
+	while(cliente_recorrido != NULL ){
+		if(!(strcmp(cliente_recorrido->getNombre(), client->getNombre()))){
+			if(cliente_recorrido->getActivo()) {
+				printf("Cliente existente");
+				return -1; // El nombre está en uso y Activo.
+			} else return indice; //Devuelve la posicion del Cliente Inactivo
+		}
+		indice++;
+		if (indice == MAX_CANT_JUGADORES) break;
+		cliente_recorrido = this->clientes[indice];
+	}
+	if(this->cantClientes >= MAX_CANT_JUGADORES) return -1; //No hay más espacio para nuevos Clientes
+	return indice; // Devuelve la posicion donde será guardado el nuevo Cliente
+}
+
+bool Servidor::getFinalizar(){
+	return this->finalizar;
+}
+
+void Servidor::setThreadEscuchar(SDL_Thread *listen){
+	this->escuchar = listen;
+}
+void Servidor::setThreadAceptar(SDL_Thread *accept){
+	this->aceptar = accept;
+}
+
+void Servidor::setAceptado(bool aceptar){
+	((structInicial* )this->paqueteInicial)->cliente_aceptado = aceptar; //Todo check
 }

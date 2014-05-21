@@ -126,7 +126,8 @@ int Cliente::runEnviarInfo(){
 		SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		int enviados = this->enviar(buffer, MAX_PACK); //todo
-		if (enviados >= 0){
+		SDL_UnlockMutex(this->mutex);
+		if (enviados > 0){
 			enviarpaquete = false;
 		}
 		else if(enviados == -1){
@@ -134,8 +135,11 @@ int Cliente::runEnviarInfo(){
 			logFile << "Error al enviar información del cliente "<< this->name_client <<" al servidor \n" << endl;
 			//break;
 		}
+		if(enviados == 0) {
+			printf("Servidor desconectado \n");
+			this->desactivar();
+		}
 		//Se desbloquea
-		SDL_UnlockMutex(this->mutex);
 	}
 	return EXIT_SUCCESS;
 }
@@ -194,8 +198,7 @@ int Cliente::runRecibirInfo(){
 		else if(recibidos ==0){
 			loguear();
 			logFile << "Error \t Servidor desconectado, no se puede recibir información " << endl;
-			break; //corta xq si se desconecta no tiene que recibir mas
-			//VER QUE HACER SI SE DESCONECTA EL SERVIDOR todo
+			this->desactivar();
 		}
 		else if (recibidos == -1){
 			printf("Error al recibir \n");

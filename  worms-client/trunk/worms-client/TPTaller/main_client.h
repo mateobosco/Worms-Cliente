@@ -80,7 +80,8 @@ int mainCliente(int argc, char* argv[]){
 	posicion_mouse_click[0] = 0;
 	posicion_mouse_click[1] = 0;
 
-	structPaquete* paquete = new structPaquete;
+	//char* paquete_devuelto;
+	structPaquete* paquete;// = new structPaquete;
 	while(KEYS[SDLK_ESCAPE] == false){
 
 		dibujador.dibujarFondo(agua);
@@ -115,22 +116,19 @@ int mainCliente(int argc, char* argv[]){
 		}
 		dibujador.dibujarPaquete(paquete, cliente->getNombre(), cliente->getID());
 		dibujador.actualizar();
-		posicion_mouse_scroll[2]=0;
-		delete[] paquete; //todo
+		posicion_mouse_scroll[2] = 0;
+		delete[] paquete;
 	}
 	delete paqueteInicial; //ver si hay que hacer casteo a char*
 	delete agua;
 	delete escalador;
-	delete[] paquete;
-	delete[] name;
-	delete[] ip_sv;
-	delete[] puerto;
+	//delete paquete;
 	free(posicion_mouse_click);
 	free(posicion_mouse_scroll);
 	free(posicion_mouse_movimiento);
 	dibujador.close();
 
-	delete cliente;
+	//delete cliente;
 	return 0;
 }
 

@@ -21,7 +21,8 @@ int aceptarConex(void* servidor){
 
 int main_server(int argc,char* argv[]){
 	int retorno = 0;
-/*	Servidor *servidor = new Servidor(MAX_CANT_JUGADORES);
+
+	Servidor *servidor = new Servidor(MAX_CANT_JUGADORES);
 	printf("Servidor corriendo\n");
 
 	Juego *juego = new Juego();
@@ -129,7 +130,7 @@ int main_server(int argc,char* argv[]){
 	//
 	logFile.close();
 	delete juego;
-	delete servidor; */
+	delete servidor;
 	return retorno;
 
 }

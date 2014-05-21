@@ -32,7 +32,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->textureTierra = NULL;
 }
 
-Dibujador::~Dibujador(){
+Dibujador::~Dibujador(){ // todo fijarse porque se rompe
 	//delete this->escalador;
 	//if (textureCielo) SDL_DestroyTexture(textureCielo); // FIJARSE PORQUE SE ROMPE
 	//if (textureAgua) SDL_DestroyTexture(textureAgua);

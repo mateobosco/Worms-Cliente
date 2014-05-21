@@ -255,7 +255,7 @@ int Servidor::runRecibirInfo(void* cliente){
 		int cantidad = client->getSocket()->recibir(paquete, MAX_PACK);
 		if(cantidad >0){
 			structEvento* evento = (structEvento*) paquete;
-			void* novedad = malloc (sizeof (structEvento));
+			void* novedad = malloc (sizeof (structEvento)); // todo deletear esta novedad
 			SDL_LockMutex(client->getMutex());
 			memcpy(novedad, paquete, sizeof (structEvento)); //todo ver como determinar el tamaño del paquete
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);

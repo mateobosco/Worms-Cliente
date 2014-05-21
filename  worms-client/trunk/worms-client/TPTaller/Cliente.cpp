@@ -3,7 +3,8 @@
 int Cliente::cant_clientes = 0;
 
 Cliente::Cliente(int fd){
-	memset(name_client, 0, MAX_NAME_USER);
+	this->name_client = new char[MAX_NAME_USER];
+	memset(this->name_client,0,MAX_NAME_USER);
 	this->enviarpaquete = true;
 	this->socket_cl = new Socket(PUERTO,fd);
 	memset(paquete_enviar, 0, MAX_PACK);
@@ -20,6 +21,8 @@ Cliente::Cliente(int fd){
 }
 
 Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
+	this->name_client = new char[MAX_NAME_USER];
+	memset(this->name_client,0,MAX_NAME_USER);
 	strncpy(this->name_client, name, MAX_NAME_USER - 1);
 	this->socket_cl = new Socket(ip_sv, puerto);
 	memset(paquete_enviar, 0, MAX_PACK);
@@ -32,6 +35,7 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->activo = false;
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
+	this->enviarpaquete = true;
 }
 
 Cliente::~Cliente(){
@@ -50,6 +54,10 @@ Socket* Cliente::getSocket(){
 
 int Cliente::getID(){
 	return this->id;
+}
+
+void Cliente::setID(int un_id){
+	this->id = un_id;
 }
 
 char* Cliente::getPaquete(){
@@ -123,10 +131,10 @@ int Cliente::runEnviarInfo(){
 		}
 		SDL_Delay(25);
 		char buffer[MAX_PACK];
-		SDL_LockMutex(this->mutex);
+		//SDL_LockMutex(this->mutex);
 		memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		int enviados = this->enviar(buffer, MAX_PACK); //todo
-		SDL_UnlockMutex(this->mutex);
+		//SDL_UnlockMutex(this->mutex);
 		if (enviados > 0){
 			enviarpaquete = false;
 		}
@@ -220,9 +228,9 @@ char* Cliente::getNombre(){
 }
 
 void Cliente::setNombre(char *name){
-	SDL_LockMutex(this->mutex);
+	//SDL_LockMutex(this->mutex);
 	strncpy(this->name_client, name, MAX_NAME_USER-1);
-	SDL_UnlockMutex(this->mutex);
+	//SDL_UnlockMutex(this->mutex);
 }
 
 int Cliente::enviarNombre(){

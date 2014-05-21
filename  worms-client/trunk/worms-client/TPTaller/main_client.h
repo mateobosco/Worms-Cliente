@@ -22,9 +22,22 @@ int mainCliente(int argc, char* argv[]){
 	if(checkCantParametros(argc) == EXIT_FAILURE){
 		return EXIT_FAILURE;
 	}
-	char* name = argv[POS_NAME_USER];
-	const char* ip_sv = argv[POS_IP];
-	const char* puerto = argv[POS_PORT];
+	char* name = new char[MAX_NAME_USER];
+	memset(name,0,MAX_NAME_USER);
+	char* nombre = argv[POS_NAME_USER]; //inicializar todo
+	strcpy(name,nombre);
+
+	//const char* ip_sv = argv[POS_IP]; //inicializar todo
+	char* ip_sv = new char[20];
+	memset(ip_sv,0,20);
+	char* ip = argv[POS_IP]; //inicializar todo
+	strcpy(ip_sv,ip);
+
+	char* puerto = new char[10];
+	memset(puerto,0,10);
+	char* port = argv[POS_PORT];
+	strcpy(puerto,port);
+	//const char* puerto = argv[POS_PORT]; //inicializar todo
 
 	Cliente* cliente = new Cliente(name, ip_sv, puerto);
 
@@ -62,7 +75,7 @@ int mainCliente(int argc, char* argv[]){
 	//delete paqueteInicial;
 
 	int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
-	int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*2);
+	int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*3);
 	int* posicion_mouse_movimiento = (int*)malloc (sizeof(int)*2);
 	posicion_mouse_click[0] = 0;
 	posicion_mouse_click[1] = 0;
@@ -103,17 +116,21 @@ int mainCliente(int argc, char* argv[]){
 		dibujador.dibujarPaquete(paquete, cliente->getNombre(), cliente->getID());
 		dibujador.actualizar();
 		posicion_mouse_scroll[2]=0;
+		delete[] paquete; //todo
 	}
 	delete paqueteInicial; //ver si hay que hacer casteo a char*
 	delete agua;
 	delete escalador;
-	delete paquete;
+	delete[] paquete;
+	delete[] name;
+	delete[] ip_sv;
+	delete[] puerto;
 	free(posicion_mouse_click);
 	free(posicion_mouse_scroll);
 	free(posicion_mouse_movimiento);
 	dibujador.close();
 
-	//delete cliente;
+	delete cliente;
 	return 0;
 }
 

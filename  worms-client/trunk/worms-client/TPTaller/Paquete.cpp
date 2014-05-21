@@ -102,10 +102,10 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 }
 
 structEvento* crearPaqueteVacio(){
-	structEvento* paquete = new structEvento; //todo
+	structEvento* paquete = new structEvento;
 	paquete->click_mouse = b2Vec2 (-1,-1);
 	paquete->direccion = -9;
-	paquete->nro_jugador = -1;
+	paquete->nro_jugador = 0;
 	paquete->aleatorio = random();
 	return paquete;
 }
@@ -129,7 +129,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 }
 
 structPaquete* crearPaqueteCiclo(Mundo* mundo){
-	structPaquete* paquete = (structPaquete*) malloc(sizeof(structPaquete));
+	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);//sizeof(structPaquete)
 	paquete->tipo = 1;
 
 	Personaje** vector_personajes = mundo->getPersonajes();
@@ -157,12 +157,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo){
 	return paquete;
 }
 
-//void destruirPaqueteCiclo(structPaquete* paquete){
-//	for (int i=0 ; i < paquete->cantidad_figuras; i++){
-//		destruirPaqueteFigura(paquete->vector_figuras[i]);
-//	}
-//	for (int i=0 ; i < paquete->cantidad_personajes; i++){
-//		destruirPaquetePersonaje(paquete->vector_personajes[i]);
-//	}
-//	free(paquete);
-//}
+void destruirPaqueteCiclo(structPaquete* paquete){
+	free(paquete);
+}

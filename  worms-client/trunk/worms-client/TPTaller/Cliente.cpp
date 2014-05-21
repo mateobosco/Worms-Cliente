@@ -53,10 +53,10 @@ int Cliente::getID(){
 }
 
 char* Cliente::getPaquete(){
-	SDL_LockMutex(this->mutex);
+	//SDL_LockMutex(this->mutex);
 	char* buffer = new char[MAX_PACK];
 	memcpy(buffer, this->paquete_recibir, MAX_PACK);
-	SDL_UnlockMutex(this->mutex);
+	//SDL_UnlockMutex(this->mutex);
 	return buffer;
 }
 

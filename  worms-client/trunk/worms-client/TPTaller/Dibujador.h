@@ -67,6 +67,8 @@ private:
 	SDL_Texture* textureAgua;
 	SDL_Texture* textureTierra;
 	SDL_Window* window;
+	SDL_Texture* texturederecha;
+	SDL_Texture* textureizquierda;
 };
 
 

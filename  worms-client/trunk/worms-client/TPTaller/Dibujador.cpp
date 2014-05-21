@@ -30,6 +30,9 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->textureCielo = NULL;
 	this->textureAgua = NULL;
 	this->textureTierra = NULL;
+	this->texturederecha = NULL;
+	this->textureizquierda = NULL;
+
 }
 
 Dibujador::~Dibujador(){ // todo fijarse porque se rompe
@@ -326,16 +329,24 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 
 int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio){
 
-	char* path = "TPTaller/imagenes/gusanitoderecha.png";
+	//char* path = "TPTaller/imagenes/gusanitoderecha.png";
 	int dir = paquete.direccion;
-	if (dir == 1) path = "TPTaller/imagenes/gusanitoderecha.png";
-	if (dir == -1) path = "TPTaller/imagenes/gusanitoizquierda.png";
+	//if (dir == 1) path = "TPTaller/imagenes/gusanitoderecha.png";
+	//if (dir == -1) path = "TPTaller/imagenes/gusanitoizquierda.png";
 	b2Vec2 tam = paquete.tamano;
-	if (paquete.conectado == false && dir == 1) path = "TPTaller/imagenes/gusanitonegroder.png";
-	if (paquete.conectado == false && dir == -1) path = "TPTaller/imagenes/gusanitonegroizq.png";
+	//if (paquete.conectado == false && dir == 1) path = "TPTaller/imagenes/gusanitonegroder.png";
+	//if (paquete.conectado == false && dir == -1) path = "TPTaller/imagenes/gusanitonegroizq.png";
+
+	SDL_Texture* gusanito;
+	if (dir ==1){
+		gusanito = this->texturederecha;
+	}
+	if (dir == -1){
+		gusanito = this->textureizquierda;
+	}
 
 
-	SDL_Texture *gusanito = loadTexture(path, this->renderizador);
+	//SDL_Texture *gusanito = loadTexture(path, this->renderizador);
 	b2Vec2 posicion = paquete.posicion;
 	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion);
 	int anchoPX = escalador->aplicarZoomX( tam.x);
@@ -351,7 +362,7 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 		renderTexture2(image, this->renderizador, x - 30 ,y - 60 , 80, 80 );
 		if (image) SDL_DestroyTexture(image);
 	}
-	if(paquete.seleccionado == 1 && duenio == false ){
+	else if(paquete.seleccionado == 1 && duenio == false ){
 		SDL_Texture *image;
 		SDL_Color color = { 0, 0, 0 };
 		image = RenderText("Enemigo", "TPTaller/imagenes/Hilarious.ttf", color, 60); // despues preguntar el nombre de cada uno
@@ -362,7 +373,7 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
 
 	delete posicionVentanada;
-	if (gusanito) SDL_DestroyTexture(gusanito);
+	//if (gusanito) SDL_DestroyTexture(gusanito);
 	return 1;
 }
 
@@ -421,6 +432,8 @@ bool Dibujador::init(){
 			}
 		}
 	}
+	this->texturederecha = loadTexture("TPTaller/imagenes/gusanitoderecha.png", this->renderizador);
+	this->textureizquierda = loadTexture("TPTaller/imagenes/gusanitoizquierda.png", this->renderizador);
 	return success;
 }
 

@@ -39,17 +39,18 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	b2Vec2 pos = personaje->getPosition();
 	int dir;
 	b2Body* body = personaje->getBody();
-	if (body->GetLinearVelocity().x > 0 ){
-		dir = 0;
-	}
-	else{
+	if (body->GetLinearVelocity().x > 0.5 ){
 		dir = 1;
 	}
-	paquete->direccion = dir;
+	else{
+		dir = -1;
+	}
+	paquete->direccion = personaje->getOrientacion();
 	paquete->posicion = pos;
 	paquete->tamano.x = personaje->getAncho();
 	paquete->tamano.y = personaje->getAlto();
 	paquete->conectado = 1;
+	paquete->id_jugador = personaje->getNrojugador();
 	if (personaje->getSeleccionado()){
 		paquete->seleccionado = 1;
 	}

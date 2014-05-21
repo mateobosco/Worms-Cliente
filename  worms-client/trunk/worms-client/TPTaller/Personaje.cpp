@@ -221,4 +221,8 @@ void Personaje::setConectado(int estado){
 	conectado = estado;
 }
 
+int Personaje::getOrientacion(){
+	return orientacion;
+}
+
 

@@ -100,7 +100,7 @@ int mainCliente(int argc, char* argv[]){
 		if(evento){
 			delete evento;
 		}
-		dibujador.dibujarPaquete(paquete, cliente->getNombre());
+		dibujador.dibujarPaquete(paquete, cliente->getNombre(), cliente->getID());
 		dibujador.actualizar();
 		posicion_mouse_scroll[2]=0;
 	}

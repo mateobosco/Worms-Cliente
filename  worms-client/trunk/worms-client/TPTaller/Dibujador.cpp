@@ -325,7 +325,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 	return retorno;
 }
 
-int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador){
+int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio){
 
 	char* path = "TPTaller/imagenes/gusanitoderecha.png";
 	int dir = paquete.direccion;
@@ -345,13 +345,21 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 	int y = posicionVentanada->y - altoPX/2;
 	int w = anchoPX;
 	int h = altoPX;
-	if(paquete.seleccionado == 1 ){
+	if(paquete.seleccionado == 1 && duenio ){
 		SDL_Texture *image;
 		SDL_Color color = { 0, 0, 0 };
-		image = RenderText(nombre_jugador, "TPTaller/imagenes/abecedarionegrita.ttf", color, 60); // despues preguntar el nombre de cada uno
+		image = RenderText(nombre_jugador, "TPTaller/imagenes/Hilarious.ttf", color, 60); // despues preguntar el nombre de cada uno
 		renderTexture2(image, this->renderizador, x - 30 ,y - 60 , 80, 80 );
 		if (image) SDL_DestroyTexture(image);
 	}
+	if(paquete.seleccionado == 1 && duenio == false ){
+		SDL_Texture *image;
+		SDL_Color color = { 0, 0, 0 };
+		image = RenderText("Enemigo", "TPTaller/imagenes/Hilarious.ttf", color, 60); // despues preguntar el nombre de cada uno
+		renderTexture2(image, this->renderizador, x - 30 ,y - 60 , 80, 80 );
+		if (image) SDL_DestroyTexture(image);
+	}
+
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
 
 	delete[] posicionVentanada;
@@ -359,7 +367,7 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 	return 1;
 }
 
-void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente){
+void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int cliente_id){
 	int figuras = paquete->cantidad_figuras;
 	int personajes = paquete->cantidad_personajes;
 	for (int i = 0 ; i < figuras ; i++ ){
@@ -368,7 +376,10 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente){
 	}
 	for (int j = 0 ; j < personajes ; j ++){
 		structPersonaje* vector1 = paquete->vector_personajes;
-		this->dibujarPaquetePersonaje(vector1[j], nombre_cliente );
+		if (cliente_id == vector1->id_jugador){
+			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true ); // es propio
+		}
+		else this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false); // no es propio
 	}
 }
 

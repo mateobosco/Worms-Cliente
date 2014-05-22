@@ -42,10 +42,19 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 }
 
 Dibujador::~Dibujador(){ // todo fijarse porque se rompe
+	delete this->escalador;
+	if(this->textureAgua) SDL_DestroyTexture(this->textureAgua);
+	if(this->textureCielo) SDL_DestroyTexture(this->textureCielo);
+	if (this->textureTierra) SDL_DestroyTexture(textureTierra);
+	if (this->texturederecha) SDL_DestroyTexture(texturederecha);
+	if (this->textureizquierda) SDL_DestroyTexture(textureizquierda);
+	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO);
+	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
+	this->close();
 	//delete this->escalador;
 	//if (textureCielo) SDL_DestroyTexture(textureCielo); // FIJARSE PORQUE SE ROMPE
 	//if (textureAgua) SDL_DestroyTexture(textureAgua);
-	//if (textureTierra) SDL_DestroyTexture(textureTierra);
+	//
 }
 
 // Retorna: 0- Exito. Negativo- Fracaso.
@@ -134,7 +143,7 @@ SDL_Texture* Dibujador::RenderText(std::string message, std::string fontFile,
     //Clean up unneeded stuff
     SDL_FreeSurface(surf);
     TTF_CloseFont(font);
-//
+
     return texture;
 }
 
@@ -148,11 +157,6 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 	int y = posicionVentanada->y - altoPX/2;
 	int w = anchoPX;
 	int h = altoPX;
-	char* direccion;
-	SDL_Color textColor;
-	textColor.r = 0;
-	textColor.g = 0;
-	textColor.b = 0;
 	SDL_Texture *image;
 	std::string nombre_jugador;
 	SDL_Color color = { 0, 0, 0 };
@@ -170,7 +174,7 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 		if (image) SDL_DestroyTexture(image);
 	}
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
-	delete posicionVentanada;
+	delete[] posicionVentanada; //todo
 	if (gusanito) SDL_DestroyTexture(gusanito);
 	return gusanito;
 }
@@ -261,7 +265,8 @@ SDL_Texture* Dibujador::loadTexture(const std::string &path, SDL_Renderer *ren){
     SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
     if( loadedSurface == NULL )
     {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+        loguear();
+        logFile << "No se pudo cargar la imagen: " <<path.c_str() << "! SDL_image Error: " <<  IMG_GetError() << endl;
     }
     else
     {
@@ -269,7 +274,8 @@ SDL_Texture* Dibujador::loadTexture(const std::string &path, SDL_Renderer *ren){
         newTexture = SDL_CreateTextureFromSurface( ren, loadedSurface );
         if( newTexture == NULL )
         {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+        	loguear();
+        	logFile << "No se pudo crear textura de: " <<path.c_str() << "! SDL Error: " <<  SDL_GetError() << endl;
         }
 
         //Get rid of old loaded surface

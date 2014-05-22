@@ -1,10 +1,3 @@
-/*
- * Socket.cpp
- *
- *  Created on: 06/05/2014
- *      Author: sami
- */
-
 #include "Socket.h"
 
 // Para Servidor debe pasarse el IP como NULL, Que luego se cargará la ip propia del servidor,
@@ -37,7 +30,7 @@ Socket::Socket(const char* puerto, int sockfd) {
 }
 
 Socket::~Socket() {
-	freeaddrinfo(this->info);
+	//freeaddrinfo(this->info);
 	close(this->sockFD);
 }
 
@@ -81,7 +74,6 @@ int Socket::aceptar(){
 
 	//Se acepta la conexión y se el asigna un fd
 	nuevoFD = accept(this->sockFD,(struct sockaddr *)&infoCliente,&len);
-	printf("Acepta y fd es: %d\n",nuevoFD);
 	if (nuevoFD == -1) {
 		//loguear error todo
 		close(nuevoFD);
@@ -105,6 +97,7 @@ int Socket::enviar(const void* dato, size_t longDato){
 	int bytesRestantes = longDato;
 	int n;
 	char buffer[longDato];
+	memset(buffer,0,longDato);
 	memcpy(buffer, (char*) dato, longDato);
 	while(bytesRestantes > 0) {
 		n = send(this->sockFD, buffer + bytesTotal, bytesRestantes, 0);

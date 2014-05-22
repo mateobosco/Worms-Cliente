@@ -7,7 +7,7 @@ Cliente::Cliente(int fd){
 	memset(this->name_client,0,MAX_NAME_USER);
 	this->enviarpaquete = false;
 	this->socket_cl = new Socket(PUERTO,fd);
-	memset(paquete_enviar, NULL, MAX_PACK);
+	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
 	this->mutex = SDL_CreateMutex();
 	this->id = Cliente::cant_clientes;
@@ -135,12 +135,12 @@ int Cliente::runEnviarInfo(){
 		if ( enviarpaquete == true){
 			SDL_Delay(25);
 			char buffer[MAX_PACK];
+			memset(buffer,0,MAX_PACK);
 			//SDL_LockMutex(this->mutex);
 			memcpy(buffer, this->paquete_enviar, MAX_PACK);
 			int enviados = this->enviar(buffer, MAX_PACK); //todo
 			//SDL_UnlockMutex(this->mutex);
 			if (enviados > 0){
-				printf(" ENVIE ALGOOOOOOOOOOOO %d \n", contador);
 				enviarpaquete = false;
 			}
 			else if(enviados == -1){
@@ -149,13 +149,13 @@ int Cliente::runEnviarInfo(){
 				//break;
 			}
 			if(enviados == 0) {
-				printf("Servidor desconectado \n");
-				this->desactivar();
+			loguear();
+			logFile << "Error \t Se enviaron 0 bytes de información al servidor." << endl;
+			this->desactivar();
 			}
 		//Se desbloquea
-
+			}
 		}
-	}
 	return EXIT_SUCCESS;
 }
 
@@ -172,14 +172,13 @@ int Cliente::runRecibirInfo(){
 		SDL_Delay(25);
 		char buffer[MAX_PACK];
 		//char* buffer = (char*) malloc(sizeof(char) * MAX_PACK);
-		//memset(buffer, 0, MAX_PACK);
+		memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 		printf("recibi %d bytes", recibidos);
 		if (recibidos > 0){
 			contador++;
-			//SDL_Delay(2000);
 			//SDL_LockMutex(this->mutex);
-			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
+			memcpy(this->paquete_recibir, buffer, MAX_PACK);
 			if (contador > 2){
 				//printf(" --------- ENTRA EN RECIBIR CLIENTE ------------ \n");
 				//structPaquete* paquete = new structPaquete;
@@ -190,11 +189,6 @@ int Cliente::runRecibirInfo(){
 				structFigura paqueteFigura = vector[0];
 				b2Vec2 posicion = paqueteFigura.vector_vertices[2];
 				//printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
-				structPersonaje* vector2 = paquete->vector_personajes;
-				//structPersonaje paquetitox = vector2[0];
-				//if (paquetitox.conectado == 1){
-				//	printf ( " RECIBIO CONECTADO = TRUEEE \n");
-				//}
 				//printf(" --------- SALE DE RECIBIR CLIENTE ------------ \n");
 
 			}
@@ -216,7 +210,8 @@ int Cliente::runRecibirInfo(){
 			this->desactivar();
 		}
 		else if (recibidos == -1){
-			printf("Error al recibir \n");
+			loguear();
+			logFile << "Error al recibir información" << endl;
 		}
 	}
 	return EXIT_SUCCESS;
@@ -268,6 +263,7 @@ comThreads Cliente::getHilos(){
 
 int Cliente::recibirConfiguracion(){
 	char buffer[MAX_PACK];
+	memset(buffer, 0, MAX_PACK);
 	int bytes_recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 	memcpy(this->paqueteInicial, buffer, sizeof(structInicial));
 	return bytes_recibidos;

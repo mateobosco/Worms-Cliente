@@ -40,7 +40,9 @@ class Juego{
 	public:
 		Juego();
 		~Juego();
+		void crearJugador();
 		//uint8 crearJugador();
+		
 		Jugador** getJugadores();
 		uint8 getCantidadJugadores();
 		Mundo* getMundo();
@@ -53,7 +55,9 @@ class Juego{
 		int run();
 		structInicial* getPaqueteInicial();
 		void aplicarPaquete(structEvento* evento);
+
 		Jugador* agregarJugador(int id, char* nombre_cliente);
+
 		ManejadorPersonajes* getManejadorPersonajes();
 
 

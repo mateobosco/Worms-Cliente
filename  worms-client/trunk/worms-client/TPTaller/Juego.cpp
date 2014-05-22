@@ -17,7 +17,6 @@ Juego::Juego(){
 
 	this->cargar();
 	manejador = new ManejadorPersonajes();
-
 	for (int i =0; i< 4; i++){
 		jugadores[i]=NULL;
 	}
@@ -44,10 +43,17 @@ Juego::~Juego(){
 	}
 }
 
+
+//void Juego::crearJugador(){
+//	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
+//	cantidad_jugadores++;
+//}
+
 //uint8 Juego::crearJugador(){
 //	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
 //	cantidad_jugadores++;
 //}
+
 
 Jugador** Juego::getJugadores(){
 	return jugadores;
@@ -95,11 +101,6 @@ void Juego::cargar() {
 	delete cargador;
 }
 
-//TODO ver el tema del retorno
-int Juego::run(){
-
-
-}
 
 
 // Funciones Privadas:

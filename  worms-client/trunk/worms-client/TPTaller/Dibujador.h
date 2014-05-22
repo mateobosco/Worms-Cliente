@@ -66,6 +66,7 @@ private:
 	SDL_Texture* textureCielo;
 	SDL_Texture* textureAgua;
 	SDL_Texture* textureTierra;
+	SDL_Texture* flechitaroja;
 	SDL_Window* window;
 	SDL_Texture* texturederecha;
 	SDL_Texture* textureizquierda;

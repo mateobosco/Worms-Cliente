@@ -368,31 +368,36 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 	int w = anchoPX;
 	int h = altoPX;
 	SDL_Texture *image;
-	SDL_Color color = { 0, 0, 0 };
+	SDL_Color vectorcolores[4];
+	vectorcolores[0] = { 0, 0, 0 };
+	vectorcolores[1]= { 255, 0, 0 };
+	vectorcolores[2] = { 0, 255, 0 };
+	vectorcolores[3] = { 0, 0, 255 };
+
 	std::string nombre_a_imprimir = string(paquete.nombre_cliente);
 	printf(" EL NOMBRE QUE RECIBE ESSSSSSSSSSSS %s \n", paquete.nombre_cliente);
-	image = RenderText(paquete.nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", color, 60); // despues preguntar el nombre de cada uno
-	renderTexture2(image, this->renderizador, x - 30 ,y - 60 , 80, 80 );
+	image = RenderText(paquete.nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[paquete.id_jugador], 20); // despues preguntar el nombre de cada uno
+	renderTexture2(image, this->renderizador, x - 20 ,y - 40 , 80, 30 );
 	if (image) SDL_DestroyTexture(image);
 
 
 
 	int id = paquete.id_jugador;
-	//if(paquete.seleccionado[cliente_id] == 1 && duenio == true ){
-
+	if(paquete.seleccionado[cliente_id] == 1 && duenio == true ){
+		renderTexture2(flechitaroja, this->renderizador,x - 30, y - 120, 80, 80);
 		//SDL_Texture *image;
 		//SDL_Color color = { 0, 0, 0 };
 		//image = RenderText(nombre_jugador, "TPTaller/imagenes/Hilarious.ttf", color, 60); // despues preguntar el nombre de cada uno
 		//renderTexture2(image, this->renderizador, x - 30 ,y - 60 , 80, 80 );
 		//if (image) SDL_DestroyTexture(image);
-	//}
+	}
 	//else if(paquete.seleccionado[cliente_id] == 1 && duenio == false ){
-//		SDL_Texture *image;
-	//	SDL_Color color = { 0, 0, 0 };
-	//	image = RenderText("Enemigo", "TPTaller/imagenes/Hilarious.ttf", color, 60); // despues preguntar el nombre de cada uno
-	//	renderTexture2(image, this->renderizador, x - 30 ,y - 60 , 80, 80 );
-	//	if (image) SDL_DestroyTexture(image);
-	//}
+		//SDL_Texture *image;
+		//SDL_Color color = { 0, 0, 0 };
+		//image = RenderText("Enemigo", "TPTaller/imagenes/Hilarious.ttf", color, 60); // despues preguntar el nombre de cada uno
+		//renderTexture2(image, this->renderizador, x - 30 ,y - 60 , 80, 80 );
+		//if (image) SDL_DestroyTexture(image);
+//	}
 
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
 
@@ -464,6 +469,7 @@ bool Dibujador::init(){
 	this->textureizquierda = loadTexture("TPTaller/imagenes/gusanitoizquierda.png", this->renderizador);
 	this->texturederechaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
 	this->textureizquierdaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
+	this->flechitaroja = loadTexture("TPTaller/imagenes/flechitaroja.png", this->renderizador);
 	return success;
 }
 

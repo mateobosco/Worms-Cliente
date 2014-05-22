@@ -94,7 +94,7 @@ int mainCliente(int argc, char* argv[]){
 		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
 		structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID() );
 		if (evento){
-			printf(" ----- PAQUETE LISTOOO ---------- \n");
+			//printf(" ----- PAQUETE LISTOOO ---------- \n");
 			cliente->actualizarPaquete(evento);
 		}
 		if(evento){

@@ -40,6 +40,8 @@ public:
 	void setConectado(int estado);
 	int getConectado();
 	int getOrientacion();
+	void desconectar();
+	void conectar();
 
 	float32 getAlto();
 	float32 getAncho();

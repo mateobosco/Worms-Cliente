@@ -10,16 +10,18 @@ Cliente::Cliente(int fd){
 	memset(paquete_enviar, 0, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
 	this->mutex = SDL_CreateMutex();
-
-	Cliente::cant_clientes++;
 	this->id = Cliente::cant_clientes;
+	Cliente::cant_clientes++;
 	this->paqueteInicial = new structInicial();
 	this->conectado = false;
 	this->activo = false;
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
 //	this->id = 1;// VER COMO GENERAR EL ID
+	jugador=NULL;
 }
+
+
 
 Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->name_client = new char[MAX_NAME_USER];
@@ -46,6 +48,7 @@ Cliente::~Cliente(){
 	SDL_WaitThread(this->hilos.recibir, 0);
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
+	Cliente::cant_clientes--;
 }
 
 Socket* Cliente::getSocket(){
@@ -168,14 +171,14 @@ int Cliente::runRecibirInfo(){
 		//char* buffer = (char*) malloc(sizeof(char) * MAX_PACK);
 		//memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
-		//printf("recibi %d bytes", recibidos);
+		printf("recibi %d bytes", recibidos);
 		if (recibidos > 0){
 			contador++;
 			//SDL_Delay(2000);
 			//SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
 			if (contador > 2){
-				//printf(" --------- ENTRA EN RECIBIR CLIENTE ------------ \n");
+				printf(" --------- ENTRA EN RECIBIR CLIENTE ------------ \n");
 				//structPaquete* paquete = new structPaquete;
 				structPaquete* paquete = (structPaquete*) buffer;
 				structFigura* vector = paquete->vector_figuras;
@@ -183,13 +186,13 @@ int Cliente::runRecibirInfo(){
 				//printf("CANTIDAD DE FIGURAS %d \n",cantidad);
 				structFigura paqueteFigura = vector[0];
 				b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-//				printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
+				printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
 				structPersonaje* vector2 = paquete->vector_personajes;
 				//structPersonaje paquetitox = vector2[0];
 				//if (paquetitox.conectado == 1){
 				//	printf ( " RECIBIO CONECTADO = TRUEEE \n");
 				//}
-//				printf(" --------- SALE DE RECIBIR CLIENTE ------------ \n");
+				printf(" --------- SALE DE RECIBIR CLIENTE ------------ \n");
 
 			}
 			//SDL_UnlockMutex(this->mutex);
@@ -244,6 +247,7 @@ void Cliente::activar(){
 
 void Cliente::desactivar(){
 	this->activo = false;
+	jugador->desconectar();
 }
 
 bool Cliente::getActivo(){
@@ -270,6 +274,12 @@ SDL_mutex* Cliente::getMutex(){
 	return this->mutex;
 }
 
-void Cliente::setID(int id){
-	this->id=id;
+void Cliente::setJugador(Jugador* jug){
+	this->jugador=jug;
 }
+
+Jugador* Cliente::getJugador(){
+	return this->jugador;
+}
+
+

@@ -56,6 +56,20 @@ Uint8 Jugador::getNumero(){
 	return this->numero;
 }
 
+void Jugador::conectar(){
+	for( int i =0; i<4; i++){
+		this->personajes[i]->conectar();
+
+	}
+}
+
 SDL_Color Jugador::getColor(){
 	return this->color;
+}
+
+void Jugador::desconectar(){
+	for( int i =0; i<4; i++){
+		this->personajes[i]->desconectar();
+
+	}
 }

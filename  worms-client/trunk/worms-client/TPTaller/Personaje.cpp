@@ -237,3 +237,11 @@ int Personaje::getOrientacion(){
 	return orientacion;
 }
 
+void Personaje::desconectar(){
+	this->conectado=0;
+}
+
+void Personaje::conectar(){
+	this->conectado = 1;
+}
+

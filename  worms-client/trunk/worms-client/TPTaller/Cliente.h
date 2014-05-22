@@ -16,6 +16,7 @@
 #include <SDL2/SDL_thread.h>
 #include "Socket.h"
 #include "Paquete.h"
+#include "Jugador.h"
 
 #define MAX_DATOS 100 // max number of bytes we can get at once
 
@@ -38,6 +39,7 @@ class Cliente{
 		bool enviarpaquete;
 		bool activo;
 		comThreads hilos;
+		Jugador* jugador;
 
 	public:
 		Cliente(const char *name, const char *ip_sv, const char* puerto);
@@ -63,12 +65,14 @@ class Cliente{
 		void desactivar();
 		bool getActivo();
 
+		Jugador* getJugador();
+
 		void setHilos(comThreads hilos_server);
 		comThreads getHilos();
 		int recibirConfiguracion();
-		void setID(int id);
 
 		SDL_mutex* getMutex();
+		void setJugador(Jugador* jug);
 };
 
 

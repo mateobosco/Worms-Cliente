@@ -8,9 +8,6 @@
 #include "Paquete.h"
 #include <string>
 
-//structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente);// sino me tira error de que no esta definida aunque este el include
-
-
 
 // argv[n]:
 // 			n=0: Nombre del programa
@@ -73,8 +70,6 @@ int mainCliente(int argc, char* argv[]){
 	SDL_Delay(5000);
 
 
-	//delete paqueteInicial;
-
 	int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
 	memset(posicion_mouse_click,'\0',2);
 	int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*3);
@@ -84,7 +79,6 @@ int mainCliente(int argc, char* argv[]){
 	posicion_mouse_click[0] = 0;
 	posicion_mouse_click[1] = 0;
 
-	//char* paquete_devuelto;
 	structPaquete* paquete;
 	while(KEYS[SDLK_ESCAPE] == false){
 
@@ -97,7 +91,6 @@ int mainCliente(int argc, char* argv[]){
 		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
 		structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID() );
 		if (evento){
-			//printf(" ----- PAQUETE LISTOOO ---------- \n");
 			cliente->actualizarPaquete(evento);
 		}
 		if(evento){
@@ -114,7 +107,6 @@ int mainCliente(int argc, char* argv[]){
 	delete[] name;
 	delete[] ip_sv;
 	delete[] puerto;
-	//delete paquete;
 	free(posicion_mouse_click);
 	free(posicion_mouse_scroll);
 	free(posicion_mouse_movimiento);

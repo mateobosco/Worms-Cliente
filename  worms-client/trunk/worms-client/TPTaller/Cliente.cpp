@@ -17,7 +17,6 @@ Cliente::Cliente(int fd){
 	this->activo = false;
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
-//	this->id = 1;// VER COMO GENERAR EL ID
 	jugador=NULL;
 }
 
@@ -110,7 +109,6 @@ int Cliente::conectar(){
 		this->activar();
 
 //		this->conectado = true; //todo
-		printf("Conecte cliente %s con servidor. num de fd es: %d\n", this->name_client,this->socket_cl->getFD());
 		hilos.recibir = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
 		if(hilos.recibir == NULL){
 			loguear();
@@ -128,10 +126,7 @@ int Cliente::conectar(){
 }
 
 int Cliente::runEnviarInfo(){
-	int contador=0;
 	while(this->activo){
-		//se bloquea mutex
-		contador++;
 		if ( enviarpaquete == true){
 			SDL_Delay(25);
 			char buffer[MAX_PACK];
@@ -153,8 +148,7 @@ int Cliente::runEnviarInfo(){
 			logFile << "Error \t Se enviaron 0 bytes de información al servidor." << endl;
 			this->desactivar();
 			}
-		//Se desbloquea
-			}
+		}
 		}
 	return EXIT_SUCCESS;
 }
@@ -167,42 +161,17 @@ int Cliente::enviar(char* mensaje, size_t longData){
 
 
 int Cliente::runRecibirInfo(){
-	int contador = 0;
 	while(this->activo){
 		SDL_Delay(25);
 		char buffer[MAX_PACK];
 		//char* buffer = (char*) malloc(sizeof(char) * MAX_PACK);
 		memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
-		printf("recibi %d bytes", recibidos);
 		if (recibidos > 0){
-			contador++;
 			//SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK);
-			if (contador > 2){
-				//printf(" --------- ENTRA EN RECIBIR CLIENTE ------------ \n");
-				//structPaquete* paquete = new structPaquete;
-				structPaquete* paquete = (structPaquete*) buffer;
-				structFigura* vector = paquete->vector_figuras;
-				//int cantidad = paquete->cantidad_figuras;
-				//printf("CANTIDAD DE FIGURAS %d \n",cantidad);
-				structFigura paqueteFigura = vector[0];
-				b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-				//printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
-				//printf(" --------- SALE DE RECIBIR CLIENTE ------------ \n");
 
-			}
 			//SDL_UnlockMutex(this->mutex);
-
-			// TODO COMENTO ESTA FUNCION PARA REALIZAR EL RECIBIMIENTO DEL PAQUETE INICIAL
-			// AL MOMENTO DE CHECKEAR LA ACEPTACION AL SERVER [Nahue]
-
-//			if (contador == 1){
-//				structInicial* buffer2 = (structInicial*) buffer;
-//				this->paqueteInicial  = buffer2;
-//				printf("nivel del agua en recibir info es %f \n", buffer2->nivel_agua);
-//				printf("path de paquetito %s  \n", buffer2->cielo);
-//			}
 		}
 		else if(recibidos ==0){
 			loguear();

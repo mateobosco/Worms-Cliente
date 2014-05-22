@@ -87,20 +87,16 @@ int mainCliente(int argc, char* argv[]){
 
 		dibujador.dibujarFondo(agua);
 		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
-
-
 		escalador->moverVentana(posicion_mouse_movimiento);
 		escalador->hacerZoom(posicion_mouse_scroll);
 		paquete = (structPaquete*) cliente->getPaquete();
-
 		cliente->setID(paquete->id);
-
-
-
 		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
-
 		structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID() );
-		cliente->actualizarPaquete(evento);
+		if (evento){
+			printf(" ----- PAQUETE LISTOOO ---------- \n");
+			cliente->actualizarPaquete(evento);
+		}
 		if(evento){
 			delete evento;
 		}
@@ -109,6 +105,7 @@ int mainCliente(int argc, char* argv[]){
 		posicion_mouse_scroll[2] = 0;
 		delete[] paquete;
 	}
+
 	delete paqueteInicial; //ver si hay que hacer casteo a char*
 	delete agua;
 	delete escalador;

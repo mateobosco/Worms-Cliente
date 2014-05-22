@@ -17,6 +17,10 @@ Juego::Juego(){
 
 	this->cargar();
 	manejador = new ManejadorPersonajes();
+
+	for (int i =0; i< 4; i++){
+		jugadores[i]=NULL;
+	}
 }
 
 Juego::~Juego(){
@@ -40,10 +44,10 @@ Juego::~Juego(){
 	}
 }
 
-uint8 Juego::crearJugador(){
-	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
-	cantidad_jugadores++;
-}
+//uint8 Juego::crearJugador(){
+//	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
+//	cantidad_jugadores++;
+//}
 
 Jugador** Juego::getJugadores(){
 	return jugadores;
@@ -221,17 +225,17 @@ void Juego::aplicarPaquete(structEvento* evento){
 		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
 	if (evento->direccion != -9){ // recibio un click
-		printf (" APLICO UN PAQUETE DE MOVER PERSONAJE EN LA DIRECC %d \n", evento->direccion);
 		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
 	}
 	else return;
 }
 
-void Juego::agregarJugador(int id){
+Jugador* Juego::agregarJugador(int id, char* nombre_cliente){
 
-	this->jugadores[id] = new Jugador(mundo,id,manejador);
+	this->jugadores[id] = new Jugador(mundo,id,manejador, nombre_cliente);
 	Personaje** pers = this->jugadores[id]->getPersonajes();
 	this->manejador->AgregarJugador(mundo,id, pers);
+	return this->jugadores[id];
 }
 
 ManejadorPersonajes* Juego::getManejadorPersonajes(){

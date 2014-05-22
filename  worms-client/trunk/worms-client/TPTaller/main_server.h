@@ -63,7 +63,7 @@ int main_server(int argc,char* argv[]){
 		int* clientes = servidor->getVectorClientes();
 		if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
 		//printf("AGREGO UN JUGADOR \n");
-			juego->agregarJugador(i);
+			//juego->agregarJugador(i);
 			//manejador_personajes->AgregarJugador(juego->getMundo(), i);
 			//clientes[i] = i;
 		}
@@ -99,7 +99,7 @@ int main_server(int argc,char* argv[]){
 			int* clientes = servidor->getVectorClientes();
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
 //				printf("AGREGO UN JUGADOR \n");
-				juego->agregarJugador(i);
+				//juego->agregarJugador(i);
 				//manejador_personajes->AgregarJugador(juego->getMundo(), i);
 				//clientes[i] = i;
 			}

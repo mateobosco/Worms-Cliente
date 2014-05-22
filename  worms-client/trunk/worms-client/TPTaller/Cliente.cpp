@@ -5,9 +5,9 @@ int Cliente::cant_clientes = 0;
 Cliente::Cliente(int fd){
 	this->name_client = new char[MAX_NAME_USER];
 	memset(this->name_client,0,MAX_NAME_USER);
-	this->enviarpaquete = true;
+	this->enviarpaquete = false;
 	this->socket_cl = new Socket(PUERTO,fd);
-	memset(paquete_enviar, 0, MAX_PACK);
+	memset(paquete_enviar, NULL, MAX_PACK);
 	memset(paquete_recibir, 0, MAX_PACK);
 	this->mutex = SDL_CreateMutex();
 	this->id = Cliente::cant_clientes;
@@ -128,30 +128,33 @@ int Cliente::conectar(){
 }
 
 int Cliente::runEnviarInfo(){
+	int contador=0;
 	while(this->activo){
 		//se bloquea mutex
-		if ( enviarpaquete == false){
-			continue;
-		}
-		SDL_Delay(25);
-		char buffer[MAX_PACK];
-		//SDL_LockMutex(this->mutex);
-		memcpy(buffer, this->paquete_enviar, MAX_PACK);
-		int enviados = this->enviar(buffer, MAX_PACK); //todo
-		//SDL_UnlockMutex(this->mutex);
-		if (enviados > 0){
-			enviarpaquete = false;
-		}
-		else if(enviados == -1){
-			loguear();
-			logFile << "Error al enviar información del cliente "<< this->name_client <<" al servidor \n" << endl;
-			//break;
-		}
-		if(enviados == 0) {
-			printf("Servidor desconectado \n");
-			this->desactivar();
-		}
+		contador++;
+		if ( enviarpaquete == true){
+			SDL_Delay(25);
+			char buffer[MAX_PACK];
+			//SDL_LockMutex(this->mutex);
+			memcpy(buffer, this->paquete_enviar, MAX_PACK);
+			int enviados = this->enviar(buffer, MAX_PACK); //todo
+			//SDL_UnlockMutex(this->mutex);
+			if (enviados > 0){
+				printf(" ENVIE ALGOOOOOOOOOOOO %d \n", contador);
+				enviarpaquete = false;
+			}
+			else if(enviados == -1){
+				loguear();
+				logFile << "Error al enviar información del cliente "<< this->name_client <<" al servidor \n" << endl;
+				//break;
+			}
+			if(enviados == 0) {
+				printf("Servidor desconectado \n");
+				this->desactivar();
+			}
 		//Se desbloquea
+
+		}
 	}
 	return EXIT_SUCCESS;
 }
@@ -178,7 +181,7 @@ int Cliente::runRecibirInfo(){
 			//SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK); //todo ver como determinar el tamaño del paquete
 			if (contador > 2){
-				printf(" --------- ENTRA EN RECIBIR CLIENTE ------------ \n");
+				//printf(" --------- ENTRA EN RECIBIR CLIENTE ------------ \n");
 				//structPaquete* paquete = new structPaquete;
 				structPaquete* paquete = (structPaquete*) buffer;
 				structFigura* vector = paquete->vector_figuras;
@@ -186,13 +189,13 @@ int Cliente::runRecibirInfo(){
 				//printf("CANTIDAD DE FIGURAS %d \n",cantidad);
 				structFigura paqueteFigura = vector[0];
 				b2Vec2 posicion = paqueteFigura.vector_vertices[2];
-				printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
+				//printf("posicion de la figura : (%f,%f) \n",posicion.x,posicion.y);
 				structPersonaje* vector2 = paquete->vector_personajes;
 				//structPersonaje paquetitox = vector2[0];
 				//if (paquetitox.conectado == 1){
 				//	printf ( " RECIBIO CONECTADO = TRUEEE \n");
 				//}
-				printf(" --------- SALE DE RECIBIR CLIENTE ------------ \n");
+				//printf(" --------- SALE DE RECIBIR CLIENTE ------------ \n");
 
 			}
 			//SDL_UnlockMutex(this->mutex);

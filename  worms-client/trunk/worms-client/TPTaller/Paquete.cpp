@@ -49,8 +49,10 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	paquete->posicion = pos;
 	paquete->tamano.x = personaje->getAncho();
 	paquete->tamano.y = personaje->getAlto();
-	paquete->conectado = 1;
+	paquete->conectado = personaje->getConectado();
 	paquete->id_jugador = personaje->getNrojugador();
+	strcpy(paquete->nombre_cliente, personaje->getNombreCliente());
+	//paquete->nombre_cliente = personaje->getNombreCliente();
 	bool* seleccion = personaje->getSeleccion();
 	for (int i = 0 ; i<4; i++){
 		if (seleccion[i]){
@@ -66,6 +68,7 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 
 
 void destruirPaqueteFigura(structFigura* paquete){
+	//delete[] paquete->vector_vertices;
 	delete paquete;
 }
 

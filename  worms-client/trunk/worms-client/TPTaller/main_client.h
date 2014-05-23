@@ -108,8 +108,6 @@ int mainCliente(int argc, char* argv[]){
 		dibujador->actualizar();
 		posicion_mouse_scroll[2] = 0;
 		delete[] paquete;
-		posicion_mouse_click[0]=-1;
-		posicion_mouse_click[1]=-1;
 	}
 
 	delete paqueteInicial; //ver si hay que hacer casteo a char*

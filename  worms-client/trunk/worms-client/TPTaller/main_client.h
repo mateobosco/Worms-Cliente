@@ -83,6 +83,9 @@ int mainCliente(int argc, char* argv[]){
 	float aux2=0;
 
 	while(KEYS[SDLK_ESCAPE] == false){
+		posicion_mouse_click[0] = -1;
+		posicion_mouse_click[1] = -1;
+
 
 		dibujador->dibujarFondo(agua);
 		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);

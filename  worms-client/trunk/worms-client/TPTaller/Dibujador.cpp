@@ -341,13 +341,8 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 
 int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux){
 
-	//char* path = "TPTaller/imagenes/gusanitoderecha.png";
 	int dir = paquete.direccion;
-	//if (dir == 1) path = "TPTaller/imagenes/gusanitoderecha.png";
-	//if (dir == -1) path = "TPTaller/imagenes/gusanitoizquierda.png";
 	b2Vec2 tam = paquete.tamano;
-//	if (paquete.conectado == false && dir == 1) path = "TPTaller/imagenes/gusanitonegroder.png";
-//	if (paquete.conectado == false && dir == -1) path = "TPTaller/imagenes/gusanitonegroizq.png";
 
 	SDL_Texture* gusanito;
 	if (dir ==1){
@@ -363,8 +358,6 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 		gusanito = this->textureizquierdaNEGRO;
 	}
 
-
-	//SDL_Texture *gusanito = loadTexture(path, this->renderizador);
 	b2Vec2 posicion = paquete.posicion;
 	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion);
 	int anchoPX = escalador->aplicarZoomX( tam.x);
@@ -381,7 +374,6 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 	vectorcolores[3] = { 0, 0, 255 };
 
 	std::string nombre_a_imprimir = string(paquete.nombre_cliente);
-//	printf(" EL NOMBRE QUE RECIBE ESSSSSSSSSSSS %s \n", paquete.nombre_cliente);
 	image = RenderText(paquete.nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[paquete.id_jugador], 20); // despues preguntar el nombre de cada uno
 	renderTexture2(image, this->renderizador, x - 30 ,y - 30 , 80, 30 );
 	if (image) SDL_DestroyTexture(image);
@@ -389,7 +381,7 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 
 
 	int id = paquete.id_jugador;
-	if(paquete.seleccionado[cliente_id] == 1){
+	if(paquete.seleccionado[id] == 1){
 		renderTexture2(flechitaroja, this->renderizador,(x - 30), ((y)*aux/100)+(y-120), 80, 80);
 	}
 
@@ -412,7 +404,6 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 
 	structPersonaje* vector1 = paquete->vector_personajes;
 	for (int j = 0 ; j < personajes ; j ++){
-//		printf( "EL VECTOR SELECCION ES %d %d %d %d \n",vector1[j].seleccionado[0],vector1[j].seleccionado[1],vector1[j].seleccionado[2],vector1[j].seleccionado[3]);
 		if (cliente_id == vector1[j].id_jugador){
 			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux ); // es propio
 		}

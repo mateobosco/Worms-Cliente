@@ -76,8 +76,8 @@ int mainCliente(int argc, char* argv[]){
 	memset(posicion_mouse_scroll,'\0',3);
 	int* posicion_mouse_movimiento = (int*)malloc (sizeof(int)*2);
 	memset(posicion_mouse_movimiento,'\0',2);
-	posicion_mouse_click[0] = 0;
-	posicion_mouse_click[1] = 0;
+	posicion_mouse_click[0] = -1;
+	posicion_mouse_click[1] = -1;
 
 	structPaquete* paquete;
 	float aux2=0;

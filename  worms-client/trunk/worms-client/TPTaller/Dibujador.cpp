@@ -381,7 +381,8 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 
 
 	int id = paquete.id_jugador;
-	if(paquete.seleccionado[id] == 1){
+	if(paquete.seleccionado[cliente_id] == 1){
+		this->
 		renderTexture2(flechitaroja, this->renderizador,(x - 30), ((y)*aux/100)+(y-120), 80, 80);
 	}
 
@@ -399,6 +400,14 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	for (int i = 0 ; i < figuras ; i++ ){
 		structFigura* vector = paquete->vector_figuras;
 		this->dibujarPaqueteFigura(vector[i]);
+	}
+	SDL_Color color = {0,0,0};
+	if (paquete->mensaje_mostrar){
+		char mensaje[50];
+		strcpy(mensaje, " Se ha desconectado el usuario : ");
+		strcat(mensaje, paquete->mensaje_mostrar);
+		SDL_Texture* cartel = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
+		renderTexture2(cartel, this->renderizador, 0 , this->escalado_x/2 , 200, 30 );
 	}
 
 

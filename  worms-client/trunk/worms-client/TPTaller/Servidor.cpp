@@ -155,8 +155,7 @@ int Servidor::aceptarConexiones(){
 				return EXIT_SUCCESS;
 			}else {
 				this->setAceptado(false);
-				loguear();
-				logFile << "Cliente rechazado \n" << endl;
+				printf("Cliente Rechazado\n");
 				this->runEnviarInfoInicial(cliente);
 				delete cliente;
 				return EXIT_FAILURE;
@@ -287,22 +286,38 @@ int Servidor::runRecibirInfo(void* cliente){
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
 			structEvento* anterior = (structEvento*) this->paquetesRecibir.front();
 			if (evento == NULL) continue;
+			//printf(" ENTRA EN RECIBIR INFO \n");
 			if (anterior->aleatorio != evento->aleatorio){
-				this->paquetesRecibir.push(novedad);
+				if (evento->click_mouse.x == -1 && evento->direccion==-9 && evento->click_mouse.y == -1 ){
+					//printf("NO ENCOLA \n");
+				}
+				//printf(" ENCOLAAAA ALGO \n");
+				else{
+					this->paquetesRecibir.push(novedad);
+				}
 			}
 			int cantidad = (int) this->paquetesRecibir.size();
 			//printf("CANTIDAD DE PAQUETES EN LA COLA ES %d \n" ,cantidad);
 			//SDL_UnlockMutex(client->getMutex());
 		}
 		else if(cantidad == 0){
-			loguear();
-			logFile << "Cliente: " << client->getNombre() << "desconectado "<< endl;
+			printf("Cliente desconectado\n");
 			client->desactivar();
+			this->setMensajeMostrar(client->getNombre());
+//			client->setConexion(false);
+//			int i;
+//			for(i=0;i<this->cantClientes; i++){
+//				if((this->clientes[i]->getID() == client->getID()) && (strcmp(this->clientes[i]->getNombre(),client->getNombre())==0)){
+//					this->clientes[i]->setConexion(false); //ver si es necesario
+//				}
+//			}
+//			ver si this->cantClientes--;
+//			todo desconexion cliente
+//			break;
 		}
 		else if(cantidad ==-1){
 			client->desactivar();
-			loguear();
-			logFile << "Error al recibir información del cliente: " << client->getNombre() << endl;
+			printf("Error al recibir información del cliente\n");
 			break;
 		}
 	}
@@ -314,12 +329,9 @@ int Servidor::runEscucharConexiones(){
 	try{
 		conexiones = this->getSocket()->EnlazarYEscuchar(this->cantidadMaxConexiones);
 	}catch(exception &e){
-		//loguear error
-		loguear();
-		logFile << "No se pudo enlazar y escuchar" << endl;
 		close(this->listener->getFD());
 		return EXIT_FAILURE;
-
+		//loguear error
 	}
 	while(!this->finalizar){
 		while((!this->finalizar) && (this->cantClientes < this->cantidadMaxConexiones)){
@@ -330,8 +342,7 @@ int Servidor::runEscucharConexiones(){
 			}
 		}
 		if(this->cantClientes > this->cantidadMaxConexiones){
-			loguear();
-			logFile << "Se alcanzó la máxima cantidad de clientes " << endl;
+			printf("break\n");
 			break;
 		}
 	}
@@ -354,7 +365,6 @@ int* Servidor::getVectorClientes(){
 
 int Servidor::recibirNombre(Cliente *client){
 	char buffer[MAX_NAME_USER];
-	memset(buffer,0,MAX_NAME_USER);
 	int bytes_recibidos = client->getSocket()->recibir(buffer, MAX_NAME_USER);
 	client->setNombre(buffer);
 	return bytes_recibidos;
@@ -368,6 +378,7 @@ int Servidor::recibirNombre(Cliente *client){
 //		- Está creado y activo.
 // 		- No hay más espacio para crearlo.
 int Servidor::checkNuevoCliente(Cliente *client){
+//	while (!client->getNombre());
 	int indice = 0;
 	Cliente *cliente_recorrido = this->clientes[indice];
 	while(cliente_recorrido != NULL ){
@@ -417,3 +428,13 @@ int Servidor::getCantidadClientesActivos(){
 void Servidor::setFinalizar(bool condicion){
 	this->finalizar = condicion;
 }
+
+char* Servidor::getMensajeMostrar(){
+	return this->mensaje_mostrar;
+}
+
+void Servidor::setMensajeMostrar(char* mensaje){
+	this->mensaje_mostrar = mensaje;
+
+}
+

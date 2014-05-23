@@ -136,6 +136,7 @@ int Cliente::runEnviarInfo(){
 			int enviados = this->enviar(buffer, MAX_PACK); //todo
 			//SDL_UnlockMutex(this->mutex);
 			if (enviados > 0){
+				//printf(" ENVIE ALGOO \n");
 				enviarpaquete = false;
 			}
 			else if(enviados == -1){

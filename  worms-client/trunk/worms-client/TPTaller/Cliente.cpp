@@ -175,6 +175,7 @@ int Cliente::runRecibirInfo(){
 			//SDL_UnlockMutex(this->mutex);
 		}
 		else if(recibidos ==0){
+			//this->dibujarMensajeDesconexion();
 			loguear();
 			logFile << "Error \t Servidor desconectado, no se puede recibir información " << endl;
 			this->desactivar();
@@ -250,5 +251,16 @@ void Cliente::setJugador(Jugador* jug){
 Jugador* Cliente::getJugador(){
 	return this->jugador;
 }
+
+
+void Cliente::setDibujador(Dibujador* dibu){
+	this->dibujador = dibu;
+}
+void Cliente::dibujarMensajeDesconexion(){
+	char* mensaje;
+	this->dibujador->dibujarMensaje();
+
+}
+
 
 

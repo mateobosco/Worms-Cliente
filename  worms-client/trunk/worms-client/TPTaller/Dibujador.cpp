@@ -29,6 +29,7 @@ Dibujador::Dibujador(){
 
 Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->escalador = esc;
+	this->window=NULL;
 	this->renderizador = renderer;
 	this->escalado_x = esc->getEscalaX();
 	this->escalado_y = esc->getEscalaY();
@@ -402,15 +403,21 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 		this->dibujarPaqueteFigura(vector[i]);
 	}
 	SDL_Color color = {0,0,0};
-	if (paquete->mensaje_mostrar){
+	SDL_Texture* nombre = RenderText(nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
+	renderTexture2(nombre, this->renderizador, 0 , 0 , 100, 30 );
+	//SDL_DestroyTexture(cartel);
+
+
+	if (paquete->mensaje_mostrar[0] != NULL){
+		//printf(" ENTRA ACAAAAAAAAAAAAA ****************************** \n");
 		char mensaje[50];
-		strcpy(mensaje, " Se ha desconectado el usuario : ");
-		strcat(mensaje, paquete->mensaje_mostrar);
-		SDL_Texture* cartel = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
+		//strcpy(mensaje, " Se ha desconectado el usuario : ");
+		//strcat(mensaje, paquete->mensaje_mostrar);
+		SDL_Texture* cartel = RenderText(paquete->mensaje_mostrar, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
 		renderTexture2(cartel, this->renderizador, 0 , this->escalado_x/2 , 200, 30 );
+		SDL_DestroyTexture(cartel);
+
 	}
-
-
 	structPersonaje* vector1 = paquete->vector_personajes;
 	for (int j = 0 ; j < personajes ; j ++){
 		if (cliente_id == vector1[j].id_jugador){
@@ -419,7 +426,6 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 		else{
 			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux); // no es propio
 		}
-
 	}
 }
 
@@ -475,3 +481,12 @@ void Dibujador::close(){
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
+
+
+void Dibujador::dibujarMensaje(){
+	printf(" DIBUJA EL MENSAJE FINAL \n");
+	SDL_Color color = {0,0,0};
+	SDL_Texture* cartel = RenderText(" SE CERRO EL SERVIDOR WACHOOOO", "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
+	renderTexture2(cartel, this->renderizador, 0 , 0 , 200, 200 );
+}
+

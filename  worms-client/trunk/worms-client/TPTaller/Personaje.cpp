@@ -49,8 +49,11 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	massData.I = RECT_INERCIA_ROT;
 	body->SetMassData(&massData);
 
-	b2PolygonShape* polygonShape = new b2PolygonShape(); // creo una shape
-	polygonShape->SetAsBox(ancho/2 , alto/2) ;
+//	b2PolygonShape* polygonShape = new b2PolygonShape(); // creo una shape
+//	polygonShape->SetAsBox(ancho/2 , alto/2) ;
+	shape2 = new b2CircleShape();
+	shape2->m_radius = ancho/2;
+
 
 	b2Filter filtro = b2Filter();
 	filtro.groupIndex = INDICE_GRUPO;
@@ -58,11 +61,12 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	b2FixtureDef fd; // creo un fixture
 	fd.filter = filtro;
 	fd.restitution = 0;
-	fd.friction = 1;
+	fd.friction = 0.5;
 	//fd.density = 100;
-	fd.shape = polygonShape; // le pongo el shape creado
+	fd.shape = shape2;
+//	fd.shape = polygonShape; // le pongo el shape creado
 	body->CreateFixture(&fd); // al body le pongo la fixture creada
-	shape = polygonShape;
+//	shape = polygonShape;
 	body->SetAwake(false);
 	//seleccionado = false;
 	for (int i = 0 ; i<4; i++){
@@ -75,15 +79,15 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 Personaje::~Personaje() {
 	b2World* mundo = body->GetWorld();
 	mundo->DestroyBody(body);
-	//delete shape; //SUPONGO QUE ESTO YA LO HACE EL DESTROY BODY
 }
 
 void Personaje::mover(b2Vec2 direccion){
-	float32 modulo = 1;
+	float32 modulo = 0.20;
 	b2Vec2 fuerza = b2Vec2(modulo * direccion.x, modulo* direccion.y ); // TODO ver cuanto aplicarle
 	if (direccion.x > 0) orientacion = 1;
 	if (direccion.x < 0) orientacion = -1;
-	body->ApplyForceToCenter(fuerza, true );
+	//body->ApplyForceToCenter(fuerza, true );
+	body->ApplyLinearImpulse(fuerza, body->GetWorldCenter(), true );
 }
 
 void Personaje::dejar_quieto(){
@@ -143,40 +147,21 @@ float32* Personaje::getVecY(){
 	return vector_y;
 }
 
-//void Personaje::leermovimiento(SDL_Event evento, bool* KEYS, int id_jugador){
-//	if (this->nro_jugador == id_jugador && seleccionado[id_jugador-1]){
-//		if (KEYS[100] && body->GetLinearVelocity().x == 0){ // para la derecha
-//			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
-//			this->mover(b2Vec2(10,0));
-//		}
-//		if (KEYS[101] && body->GetLinearVelocity().x == 0 ){ // para la izquierda
-//			dir_imagen = "TPTaller/imagenes/gusanitoizquierda.png";
-//			this->mover(b2Vec2(-10,0));
-//		}
-//		if ((KEYS[102] || KEYS[SDLK_SPACE])  && body->GetLinearVelocity().y == 0){ // para arriba
-//			this->mover(b2Vec2(0,-15)); //15
-//		}
-//	}
-//}
-
 void Personaje::leermovimiento(int direccion, int id_jugador){
-	if (this->nro_jugador == id_jugador && seleccionado[id_jugador]){
+	if (this->nro_jugador == id_jugador&& seleccionado[id_jugador]){
 
-		if (direccion == 1 && body->GetLinearVelocity().x == 0){ // para la derecha
+		if (direccion == 3 && body->GetLinearVelocity().x < 0.7){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 			orientacion=1;
-			printf("MUEVE EL PERSONAJE \n");
-			this->mover(b2Vec2(10,0));
+			this->mover(b2Vec2(2,0));
 		}
-		if (direccion == -1 && body->GetLinearVelocity().x == 0 ){ // para la izquierda
+		if (direccion == 1 && body->GetLinearVelocity().x > -0.7 ){ // para la izquierda
 			dir_imagen = "TPTaller/imagenes/gusanitoizquierda.png";
 			orientacion=-1;
-			this->mover(b2Vec2(-10,0));
-			printf("MUEVE EL PERSONAJE \n");
+			this->mover(b2Vec2(-2,0));
 		}
-		if (direccion == 0  && body->GetLinearVelocity().y == 0){ // para arriba
-			this->mover(b2Vec2(0,-15)); //15
-			printf("MUEVE EL PERSONAJE \n");
+		if (direccion == 2  && body->GetLinearVelocity().y == 0){ // para arriba
+			this->mover(b2Vec2(0,-5));
 		}
 	}
 }
@@ -189,8 +174,8 @@ void Personaje::setSeleccionado(bool seleccion, int id_jugador){
 	this->seleccionado[id_jugador] = seleccion;
 }
 
-b2PolygonShape* Personaje::getShape(){
-	return this->shape;
+b2CircleShape* Personaje::getShape(){
+	return this->shape2;
 }
 
 b2Vec2 Personaje::getPosition(){
@@ -205,7 +190,7 @@ float32 Personaje::getAncho(){
 	return ancho;
 }
 
-const char* Personaje::getDirImagen(){
+char* Personaje::getDirImagen(){
 	return dir_imagen;
 }
 

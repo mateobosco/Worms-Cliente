@@ -40,6 +40,7 @@ class Cliente{
 		bool activo;
 		comThreads hilos;
 		Jugador* jugador;
+		Dibujador* dibujador;
 
 	public:
 		Cliente(const char *name, const char *ip_sv, const char* puerto);
@@ -64,6 +65,8 @@ class Cliente{
 		void activar();
 		void desactivar();
 		bool getActivo();
+		void setDibujador(Dibujador* dibujador);
+		void dibujarMensajeDesconexion();
 
 		Jugador* getJugador();
 

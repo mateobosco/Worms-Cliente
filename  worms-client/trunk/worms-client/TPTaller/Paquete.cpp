@@ -93,13 +93,13 @@ structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
 structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 	structEvento* paquete = new structEvento;
 	if (KEYS[100]){ // para la derecha
-		paquete->direccion = 1;
+		paquete->direccion = 3;
 	}
 	if (KEYS[101]){ // para la izquierda
-		paquete->direccion = -1;
+		paquete->direccion = 1;
 	}
 	if ((KEYS[102] || KEYS[SDLK_SPACE])){ // para arriba
-		paquete->direccion = 0;
+		paquete->direccion = 2;
 	}
 	paquete->nro_jugador = id_jugador;
 	paquete->click_mouse = b2Vec2( -1, -1 );
@@ -156,7 +156,9 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
 	}
 	paquete->cantidad_figuras = cantidad_figuras;
 	paquete->cantidad_personajes = cantidad_personajes;
-	if (mensaje) strcpy(paquete->mensaje_mostrar, mensaje);
+	if (mensaje != NULL){
+		strcpy(paquete->mensaje_mostrar, mensaje);
+	}
 	//paquete->mensaje_mostrar = mensaje;
 //	paquete->vector_figuras = figurasEmpaquetadas;
 //	paquete->vector_personajes = personajesEmpaquetados;

@@ -40,6 +40,7 @@ int mainCliente(int argc, char* argv[]){
 	Cliente* cliente = new Cliente(name, ip_sv, puerto);
 
 	if(cliente->conectar() != EXIT_SUCCESS){
+		SDL_Delay(10000);
 		return EXIT_FAILURE;
 	}
 
@@ -51,19 +52,18 @@ int mainCliente(int argc, char* argv[]){
 	Escalador* escalador = new Escalador(paqueteInicial->ancho_ventana , paqueteInicial->alto_ventana,
 			paqueteInicial->ancho_unidades, paqueteInicial->alto_unidades,
 			paqueteInicial->ancho_escenario,paqueteInicial->alto_escenario);
-
 	Dibujador* dibujador =new Dibujador(NULL, escalador);
 	dibujador->init();
 	SDL_Event event;
 	for(int i = 0; i < 322; i++) { // inicializa todas en falso
 	   KEYS[i] = false;
 	}
+
+	cliente->setDibujador(dibujador);
 	string pathAgua = string(paqueteInicial->agua);
 	string pathTierra = string(paqueteInicial->tierra);
 	string pathCielo = string(paqueteInicial->cielo);
 	Agua* agua = new Agua(paqueteInicial->nivel_agua, pathAgua);
-
-
 	dibujador->iniciarFondo(agua, pathCielo, pathTierra);
 	dibujador->dibujarFondo(agua);
 
@@ -85,8 +85,6 @@ int mainCliente(int argc, char* argv[]){
 	while(KEYS[SDLK_ESCAPE] == false){
 		posicion_mouse_click[0] = -1;
 		posicion_mouse_click[1] = -1;
-
-
 		dibujador->dibujarFondo(agua);
 		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
 		escalador->moverVentana(posicion_mouse_movimiento);

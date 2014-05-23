@@ -53,6 +53,7 @@ public:
 	void close();
 	void actualizar();
 	void dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int id_cliente, float aux);
+	void dibujarMensaje();
 
 
 protected:

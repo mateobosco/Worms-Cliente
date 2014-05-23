@@ -47,12 +47,12 @@ public:
 	void iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra);
 	void dibujarFondo(Agua* agua);
 	int dibujarPaqueteFigura(structFigura paquete);
-	int dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id);
+	int dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux);
 	SDL_Texture* RenderText(std::string message, std::string fontFile,  SDL_Color color, int fontSize);
 	bool init();
 	void close();
 	void actualizar();
-	void dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int id_cliente);
+	void dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int id_cliente, float aux);
 
 
 protected:

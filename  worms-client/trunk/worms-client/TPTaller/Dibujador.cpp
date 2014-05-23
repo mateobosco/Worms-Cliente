@@ -339,7 +339,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 	return retorno;
 }
 
-int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id){
+int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux){
 
 	//char* path = "TPTaller/imagenes/gusanitoderecha.png";
 	int dir = paquete.direccion;
@@ -383,14 +383,14 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 	std::string nombre_a_imprimir = string(paquete.nombre_cliente);
 //	printf(" EL NOMBRE QUE RECIBE ESSSSSSSSSSSS %s \n", paquete.nombre_cliente);
 	image = RenderText(paquete.nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[paquete.id_jugador], 20); // despues preguntar el nombre de cada uno
-	renderTexture2(image, this->renderizador, x - 20 ,y - 40 , 80, 30 );
+	renderTexture2(image, this->renderizador, x - 30 ,y - 30 , 80, 30 );
 	if (image) SDL_DestroyTexture(image);
 
 
 
 	int id = paquete.id_jugador;
 	if(paquete.seleccionado[cliente_id] == 1){
-		renderTexture2(flechitaroja, this->renderizador,x - 30, y - 120, 80, 80);
+		renderTexture2(flechitaroja, this->renderizador,(x - 30), ((y)*aux/100)+(y-120), 80, 80);
 	}
 
 
@@ -401,21 +401,23 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 	return 1;
 }
 
-void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int cliente_id){
+void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int cliente_id, float aux){
 	int figuras = paquete->cantidad_figuras;
 	int personajes = paquete->cantidad_personajes;
 	for (int i = 0 ; i < figuras ; i++ ){
 		structFigura* vector = paquete->vector_figuras;
 		this->dibujarPaqueteFigura(vector[i]);
 	}
+
+
 	structPersonaje* vector1 = paquete->vector_personajes;
 	for (int j = 0 ; j < personajes ; j ++){
 //		printf( "EL VECTOR SELECCION ES %d %d %d %d \n",vector1[j].seleccionado[0],vector1[j].seleccionado[1],vector1[j].seleccionado[2],vector1[j].seleccionado[3]);
 		if (cliente_id == vector1[j].id_jugador){
-			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id ); // es propio
+			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux ); // es propio
 		}
 		else{
-			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id); // no es propio
+			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux); // no es propio
 		}
 
 	}

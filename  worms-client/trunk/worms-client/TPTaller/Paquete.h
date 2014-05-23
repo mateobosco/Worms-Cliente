@@ -50,7 +50,7 @@ typedef struct structInicial {
 
 typedef struct structEvento{
 	b2Vec2 click_mouse; // posicion escalada del mouse
-	int direccion= 0; // -1 izquierda, 0 arriba, 1 derecha //todo
+	int direccion=3; // -1 izquierda, 0 arriba, 1 derecha //todo
 	int nro_jugador = 0; //Identificador del cliente
 	int aleatorio = 0;
 }structEvento;

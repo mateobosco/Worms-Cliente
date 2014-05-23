@@ -67,7 +67,7 @@ int mainCliente(int argc, char* argv[]){
 	dibujador->iniciarFondo(agua, pathCielo, pathTierra);
 	dibujador->dibujarFondo(agua);
 
-	SDL_Delay(5000);
+	SDL_Delay(2000);
 
 
 	int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
@@ -80,6 +80,8 @@ int mainCliente(int argc, char* argv[]){
 	posicion_mouse_click[1] = 0;
 
 	structPaquete* paquete;
+	float aux2=0;
+
 	while(KEYS[SDLK_ESCAPE] == false){
 
 		dibujador->dibujarFondo(agua);
@@ -96,10 +98,15 @@ int mainCliente(int argc, char* argv[]){
 		if(evento){
 			delete evento;
 		}
-		dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID());
+		float aux=cos(aux2);
+		aux2+=0.1;
+		if (aux2==360) aux2=0;
+		dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
 		dibujador->actualizar();
 		posicion_mouse_scroll[2] = 0;
 		delete[] paquete;
+		posicion_mouse_click[0]=-1;
+		posicion_mouse_click[1]=-1;
 	}
 
 	delete paqueteInicial; //ver si hay que hacer casteo a char*

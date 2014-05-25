@@ -104,25 +104,24 @@ int Cliente::conectar(){
 		if(bytes == 0) break;// TODO Verificar qué pasa si la # de Bytes es -1 o 0;
 	}
 	if(this->recibirConfiguracion() <= 0) return EXIT_FAILURE;
-	else{
-		if(!this->paqueteInicial->cliente_aceptado) return EXIT_FAILURE;
-		this->activar();
+
+	if(!this->paqueteInicial->cliente_aceptado) return EXIT_FAILURE;
+	this->activar();
 
 //		this->conectado = true; //todo
-		hilos.recibir = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
-		if(hilos.recibir == NULL){
-			loguear();
-			logFile << "No se puede crear hilo para recibir información del servidor" << endl;
-			return EXIT_FAILURE;
-		}
-		hilos.enviar = SDL_CreateThread(runSendInfoCliente,"enviarServidor",(void*)this);
-		if(hilos.enviar == NULL){
-			loguear();
-			logFile << "No se puede crear hilo para enviar información al servidor" << endl;
-			return EXIT_FAILURE;
-		}
-		return EXIT_SUCCESS;
+	hilos.recibir = SDL_CreateThread(runRecvInfoCliente, "recibirServidor",(void*)this);
+	if(hilos.recibir == NULL){
+		loguear();
+		logFile << "No se puede crear hilo para recibir información del servidor" << endl;
+		return EXIT_FAILURE;
 	}
+	hilos.enviar = SDL_CreateThread(runSendInfoCliente,"enviarServidor",(void*)this);
+	if(hilos.enviar == NULL){
+		loguear();
+		logFile << "No se puede crear hilo para enviar información al servidor" << endl;
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
 }
 
 int Cliente::runEnviarInfo(){

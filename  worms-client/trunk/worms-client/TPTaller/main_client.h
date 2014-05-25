@@ -48,75 +48,76 @@ int mainCliente(int argc, char* argv[]){
 	}
 
 	structInicial* paqueteInicial = (structInicial*) cliente->getPaqueteInicial();
+	if(paqueteInicial->cliente_aceptado){
+		Escalador* escalador = new Escalador(paqueteInicial->ancho_ventana , paqueteInicial->alto_ventana,
+				paqueteInicial->ancho_unidades, paqueteInicial->alto_unidades,
+				paqueteInicial->ancho_escenario,paqueteInicial->alto_escenario);
+		Dibujador* dibujador =new Dibujador(NULL, escalador);
+		dibujador->init();
+		SDL_Event event;
+		for(int i = 0; i < 322; i++) { // inicializa todas en falso
+		   KEYS[i] = false;
+		}
 
-	Escalador* escalador = new Escalador(paqueteInicial->ancho_ventana , paqueteInicial->alto_ventana,
-			paqueteInicial->ancho_unidades, paqueteInicial->alto_unidades,
-			paqueteInicial->ancho_escenario,paqueteInicial->alto_escenario);
-	Dibujador* dibujador =new Dibujador(NULL, escalador);
-	dibujador->init();
-	SDL_Event event;
-	for(int i = 0; i < 322; i++) { // inicializa todas en falso
-	   KEYS[i] = false;
-	}
+		cliente->setDibujador(dibujador);
+		string pathAgua = string(paqueteInicial->agua);
+		string pathTierra = string(paqueteInicial->tierra);
+		string pathCielo = string(paqueteInicial->cielo);
+		Agua* agua = new Agua(paqueteInicial->nivel_agua, pathAgua);
+		dibujador->iniciarFondo(agua, pathCielo, pathTierra);
+		dibujador->dibujarFondo(agua);
 
-	cliente->setDibujador(dibujador);
-	string pathAgua = string(paqueteInicial->agua);
-	string pathTierra = string(paqueteInicial->tierra);
-	string pathCielo = string(paqueteInicial->cielo);
-	Agua* agua = new Agua(paqueteInicial->nivel_agua, pathAgua);
-	dibujador->iniciarFondo(agua, pathCielo, pathTierra);
-	dibujador->dibujarFondo(agua);
-
-	SDL_Delay(2000);
+		SDL_Delay(2000);
 
 
-	int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
-	memset(posicion_mouse_click,'\0',2);
-	int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*3);
-	memset(posicion_mouse_scroll,'\0',3);
-	int* posicion_mouse_movimiento = (int*)malloc (sizeof(int)*2);
-	memset(posicion_mouse_movimiento,'\0',2);
-	posicion_mouse_click[0] = -1;
-	posicion_mouse_click[1] = -1;
-
-	structPaquete* paquete;
-	float aux2=0;
-
-	while(KEYS[SDLK_ESCAPE] == false){
+		int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
+		memset(posicion_mouse_click,'\0',2);
+		int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*3);
+		memset(posicion_mouse_scroll,'\0',3);
+		int* posicion_mouse_movimiento = (int*)malloc (sizeof(int)*2);
+		memset(posicion_mouse_movimiento,'\0',2);
 		posicion_mouse_click[0] = -1;
 		posicion_mouse_click[1] = -1;
-		dibujador->dibujarFondo(agua);
-		keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
-		escalador->moverVentana(posicion_mouse_movimiento);
-		escalador->hacerZoom(posicion_mouse_scroll);
-		paquete = (structPaquete*) cliente->getPaquete();
-		cliente->setID(paquete->id);
-		keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
-		structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID() );
-		if (evento){
-			cliente->actualizarPaquete(evento);
-		}
-		if(evento){
-			delete evento;
-		}
-		float aux=cos(aux2);
-		aux2+=0.1;
-		if (aux2==360) aux2=0;
-		dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
-		dibujador->actualizar();
-		posicion_mouse_scroll[2] = 0;
-		delete[] paquete;
-	}
 
-	delete paqueteInicial; //ver si hay que hacer casteo a char*
-	delete agua;
-	delete[] name;
-	delete[] ip_sv;
-	delete[] puerto;
-	free(posicion_mouse_click);
-	free(posicion_mouse_scroll);
-	free(posicion_mouse_movimiento);
-	delete dibujador;
+		structPaquete* paquete;
+		float aux2=0;
+
+		while(KEYS[SDLK_ESCAPE] == false){
+			posicion_mouse_click[0] = -1;
+			posicion_mouse_click[1] = -1;
+			dibujador->dibujarFondo(agua);
+			keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
+			escalador->moverVentana(posicion_mouse_movimiento);
+			escalador->hacerZoom(posicion_mouse_scroll);
+			paquete = (structPaquete*) cliente->getPaquete();
+			cliente->setID(paquete->id);
+			keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
+			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID() );
+			if (evento){
+				cliente->actualizarPaquete(evento);
+			}
+			if(evento){
+				delete evento;
+			}
+			float aux=cos(aux2);
+			aux2+=0.1;
+			if (aux2==360) aux2=0;
+			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
+			dibujador->actualizar();
+			posicion_mouse_scroll[2] = 0;
+			delete[] paquete;
+		}
+
+		delete paqueteInicial; //ver si hay que hacer casteo a char*
+		delete agua;
+		delete[] name;
+		delete[] ip_sv;
+		delete[] puerto;
+		free(posicion_mouse_click);
+		free(posicion_mouse_scroll);
+		free(posicion_mouse_movimiento);
+		delete dibujador;
+	}
 
 	//delete cliente;
 	return 0;

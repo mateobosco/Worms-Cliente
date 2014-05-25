@@ -1,7 +1,7 @@
 #include "Escalador.h"
 
-#define BORDE1 10
-#define BORDE2 1
+#define BORDE1 100
+#define BORDE2 40
 
 
 Escalador::Escalador(int ventanaX, int ventanaY, float32 escalaX, float32 escalaY, int ancho_esc, int alto_esc) {
@@ -301,16 +301,16 @@ void Escalador::moverVentana(int* posicion_mouse){
 		this->moverArriba(1);
 	}
 	if (posicion_mouse[0] > (ventanaX - BORDE2) ){
-		this->moverDerecha(2);
+		this->moverDerecha(4);
 	}
 	if (posicion_mouse[1] > (ventanaY - BORDE2) ){
-		this->moverAbajo(2);
+		this->moverAbajo(4);
 	}
 	if (posicion_mouse[0] <  BORDE2 && posicion_mouse[0]>=0){
-		this->moverIzquierda(2);
+		this->moverIzquierda(4);
 	}
 	if (posicion_mouse[1] <  BORDE2 && posicion_mouse[1]>=0 ){
-		this->moverArriba(2);
+		this->moverArriba(4);
 	}
 
 }

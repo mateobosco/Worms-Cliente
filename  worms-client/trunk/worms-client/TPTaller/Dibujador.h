@@ -73,6 +73,7 @@ private:
 	SDL_Texture* textureizquierda;
 	SDL_Texture* texturederechaNEGRO;
 	SDL_Texture* textureizquierdaNEGRO;
+	int contador_cerrarse;
 };
 
 

@@ -24,6 +24,7 @@ Dibujador::Dibujador(){
 	this->textureizquierda = NULL;
 	this->texturederechaNEGRO = NULL;
 	this->textureizquierdaNEGRO = NULL;
+	this->contador_cerrarse = 10;
 
 }
 
@@ -40,6 +41,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->textureizquierda = NULL;
 	this->texturederechaNEGRO = NULL;
 	this->textureizquierdaNEGRO = NULL;
+	this->contador_cerrarse = 10;
 }
 
 Dibujador::~Dibujador(){ // todo fijarse porque se rompe
@@ -397,6 +399,15 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	SDL_Color color = {0,0,0};
 	SDL_Texture* nombre = RenderText(nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
 	renderTexture2(nombre, this->renderizador, 0 , 0 , 100, 30 );
+
+
+	//std::string mensaje = "Se cerro el server";
+	//SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
+	//renderTexture2(mensaje_final, this->renderizador, 10 , 10 , 100, 100 );
+
+
+
+
 	//SDL_DestroyTexture(cartel);
 
 
@@ -476,9 +487,19 @@ void Dibujador::close(){
 
 
 void Dibujador::dibujarMensaje(){
-	printf(" DIBUJA EL MENSAJE FINAL \n");
+	char mensaje[90];
+	//strcpy(mensaje, "Se cerro el server, la ventana se cerrar en:");
+	sprintf (mensaje, "Se cerro el server, la ventana se cerrara en: %d segundos", this->contador_cerrarse);
+	printf( " MENSAJE ES %s \n", mensaje);
+	//strcat(mensaje, contador);
+	//strcat(mensaje, "segundos");
+	//std::string mensaje = "Se cerro el server, la ventana se cerrara en ";
+
+	this->contador_cerrarse--;
+	SDL_Delay(1000);
 	SDL_Color color = {0,0,0};
-	SDL_Texture* cartel = RenderText(" SE CERRO EL SERVIDOR WACHOOOO", "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
-	renderTexture2(cartel, this->renderizador, 0 , 0 , 200, 200 );
+	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
+	renderTexture2(mensaje_final, this->renderizador, (this->escalado_x / 2)*2.5  , (this->escalado_y /2)*6 , 500, 50 );
+	SDL_DestroyTexture(mensaje_final);
 }
 

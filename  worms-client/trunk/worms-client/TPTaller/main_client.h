@@ -38,6 +38,7 @@ int mainCliente(int argc, char* argv[]){
 	Cliente* cliente = new Cliente(name, ip_sv, puerto);
 
 	if(cliente->conectar() != EXIT_SUCCESS){
+
 		printf("El servidor no puede aceptar más clientes.\n"
 				"El programa se cerrará en 5 segundos.\n");
 		SDL_Delay(5000);
@@ -103,7 +104,11 @@ int mainCliente(int argc, char* argv[]){
 			aux2+=0.1;
 			if (aux2==360) aux2=0;
 			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
+			if (cliente->getServidorConectado() == false){
+				dibujador->dibujarMensaje();
+			}
 			dibujador->actualizar();
+
 			posicion_mouse_scroll[2] = 0;
 			delete[] paquete;
 		}

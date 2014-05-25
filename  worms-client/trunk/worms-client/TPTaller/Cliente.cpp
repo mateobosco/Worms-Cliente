@@ -13,6 +13,7 @@ Cliente::Cliente(int fd){
 	this->id = Cliente::cant_clientes;
 	Cliente::cant_clientes++;
 	this->paqueteInicial = new structInicial();
+	this->servidor_conectado = true;
 	this->conectado = false;
 	this->activo = false;
 	this->hilos.enviar = NULL;
@@ -38,6 +39,7 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
 	this->enviarpaquete = true;
+	this->servidor_conectado = true;
 }
 
 Cliente::~Cliente(){
@@ -175,7 +177,9 @@ int Cliente::runRecibirInfo(){
 		}
 		else if(recibidos ==0){
 			//this->dibujarMensajeDesconexion();
+			this->servidor_conectado = false;
 			loguear();
+			SDL_Delay(11000);
 			logFile << "Error \t Servidor desconectado, no se puede recibir información " << endl;
 			this->desactivar();
 		}
@@ -256,10 +260,16 @@ void Cliente::setDibujador(Dibujador* dibu){
 	this->dibujador = dibu;
 }
 void Cliente::dibujarMensajeDesconexion(){
-	char* mensaje;
+	//char* mensaje;
 	this->dibujador->dibujarMensaje();
 
 }
 
+bool Cliente::getServidorConectado(){
+	return this->servidor_conectado;
+}
 
+void Cliente::setServidorConectado(bool estado){
+	this->servidor_conectado = estado;
+}
 

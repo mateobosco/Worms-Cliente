@@ -25,7 +25,6 @@ int mainCliente(int argc, char* argv[]){
 	char* nombre = argv[POS_NAME_USER]; //inicializar todo
 	strcpy(name,nombre);
 
-	//const char* ip_sv = argv[POS_IP]; //inicializar todo
 	char* ip_sv = new char[20];
 	memset(ip_sv,0,20);
 	char* ip = argv[POS_IP]; //inicializar todo
@@ -35,7 +34,6 @@ int mainCliente(int argc, char* argv[]){
 	memset(puerto,0,10);
 	char* port = argv[POS_PORT];
 	strcpy(puerto,port);
-	//const char* puerto = argv[POS_PORT]; //inicializar todo
 
 	Cliente* cliente = new Cliente(name, ip_sv, puerto);
 

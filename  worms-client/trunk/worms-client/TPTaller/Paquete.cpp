@@ -52,7 +52,6 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	paquete->conectado = personaje->getConectado();
 	paquete->id_jugador = personaje->getNrojugador();
 	strcpy(paquete->nombre_cliente, personaje->getNombreCliente());
-	//paquete->nombre_cliente = personaje->getNombreCliente();
 	bool* seleccion = personaje->getSeleccion();
 	for (int i = 0 ; i<4; i++){
 		if (seleccion[i]){
@@ -68,7 +67,6 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 
 
 void destruirPaqueteFigura(structFigura* paquete){
-	//delete[] paquete->vector_vertices;
 	delete paquete;
 }
 
@@ -119,13 +117,11 @@ structEvento* crearPaqueteVacio(){
 structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente){
 	structEvento* paquete;
 	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE]){ // no es un click, es un movimiento
-		printf (" CREO UN PAQUETE MOVIMIENTO ------------------------ \n");
 		paquete = crearPaqueteMovimiento(KEYS, cliente);
 
 	}
 	else if (click[0] != -1){
 		paquete = crearPaqueteClick(click, escalador, cliente);
-		printf (" CREO UN PAQUETE CLICK ------------------------ \n");
 	}
 	else {
 		paquete = crearPaqueteVacio();
@@ -140,7 +136,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
 
 	Personaje** vector_personajes = mundo->getPersonajes();
 	int cantidad_personajes = mundo->getCantidadPersonajes();
-	//structPersonaje** personajesEmpaquetados = (structPersonaje**) malloc(sizeof(structPersonaje*)*cantidad_personajes);
 	for (int i=0 ; i<cantidad_personajes; i++){
 		structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[i]);
 		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
@@ -148,7 +143,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
 	}
 	Figura** vector_figuras = mundo->getFiguras();
 	int cantidad_figuras = mundo->getCantidadFiguras();
-	//structFigura** figurasEmpaquetadas = (structFigura**) malloc(sizeof(structFigura*)*cantidad_figuras);
 	for (int i=0 ; i<cantidad_figuras; i++){
 		structFigura* paquetito = crearPaqueteFigura(vector_figuras[i]);
 		memcpy(&paquete->vector_figuras[i],paquetito,sizeof(structFigura));
@@ -159,10 +153,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
 	if (mensaje != NULL){
 		strcpy(paquete->mensaje_mostrar, mensaje);
 	}
-	//paquete->mensaje_mostrar = mensaje;
-//	paquete->vector_figuras = figurasEmpaquetadas;
-//	paquete->vector_personajes = personajesEmpaquetados;
-
 
 	return paquete;
 }

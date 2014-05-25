@@ -273,8 +273,10 @@ void Escalador::hacerZoom(int* posicion_mouse_scroll){
 
 
 	if (posicion_mouse_scroll[2] == 1){
-		centroX = posicion_mouse_scroll[0];
-		centroY = posicion_mouse_scroll[1];
+		centroX = ((pixelesX/2 ) - ventanaX/2) * ((float) zoom/100) + ventanaX/2 - offsetX;
+		centroY = ((pixelesY/2 ) - ventanaY/2) * ((float) zoom/100) + ventanaY/2 - offsetY;
+//		centroX = posicion_mouse_scroll[0];
+//		centroY = posicion_mouse_scroll[1];
 		this->zoomAcercar();
 	}
 	if (posicion_mouse_scroll[2] == -1){

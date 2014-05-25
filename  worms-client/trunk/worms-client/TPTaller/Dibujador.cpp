@@ -165,13 +165,10 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 
 	if (personaje->getSeleccionado()){
 		nombre_jugador = "Juan";
-		// DEBERIA DECIR nombre_jugador = personaje->nombreJugador;
-		//SDL_Texture *cartel = loadTexture(direccion, this->renderizador);
-		//renderTexture2(cartel, this->renderizador, x - 30 ,y - 60 , 80, 80 );
+
 		image = RenderText( nombre_jugador, "TPTaller/imagenes/abecedarionegrita.ttf", color, 52); // despues preguntar el nombre de cada uno
 
 		renderTexture2(image, this->renderizador, x - 30 ,y - 70 , 80, 80 );
-		//if (cartel) SDL_DestroyTexture(cartel);
 		if (image) SDL_DestroyTexture(image);
 	}
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
@@ -376,18 +373,13 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 
 	std::string nombre_a_imprimir = string(paquete.nombre_cliente);
 	image = RenderText(paquete.nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[paquete.id_jugador], 20); // despues preguntar el nombre de cada uno
-	renderTexture2(image, this->renderizador, x - 30 ,y - 30 , 80, 30 );
+	renderTexture2(image, this->renderizador, x - 30 ,y - 30 , 80 , 30 );
 	if (image) SDL_DestroyTexture(image);
-
-
-
-	int id = paquete.id_jugador;
+//	int id = paquete.id_jugador;
 	if(paquete.seleccionado[cliente_id] == 1){
 		this->
 		renderTexture2(flechitaroja, this->renderizador,(x - 30), ((y)*aux/100)+(y-120), 80, 80);
 	}
-
-
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
 
 	delete posicionVentanada;

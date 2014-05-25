@@ -38,7 +38,9 @@ int mainCliente(int argc, char* argv[]){
 	Cliente* cliente = new Cliente(name, ip_sv, puerto);
 
 	if(cliente->conectar() != EXIT_SUCCESS){
-		SDL_Delay(10000);
+		printf("El servidor no puede aceptar más clientes.\n"
+				"El programa se cerrará en 5 segundos.\n");
+		SDL_Delay(5000);
 		return EXIT_FAILURE;
 	}
 

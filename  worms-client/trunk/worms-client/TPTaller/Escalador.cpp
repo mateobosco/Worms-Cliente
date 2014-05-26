@@ -1,7 +1,10 @@
 #include "Escalador.h"
 
 #define BORDE1 100
-#define BORDE2 40
+#define BORDE2 50
+#define VEL1 3
+#define VEL2 7
+#define VELZOOM 5
 
 
 Escalador::Escalador(int ventanaX, int ventanaY, float32 escalaX, float32 escalaY, int ancho_esc, int alto_esc) {
@@ -202,26 +205,26 @@ b2Vec2* Escalador::aplicarZoomPosicion(b2Vec2 posicionEscalar){
 
 void Escalador::moverDerecha(int n){
 	if (((((offsetX + ventanaX-centroX)*(float)100/zoom))+centroX) >= pixelesX-5) return;
-	offsetX +=2;
+	offsetX += n;
 }
 
 void Escalador::moverIzquierda(int n){
 	if (((((offsetX+centroX)*(float32)zoom/100))-centroX) <= 5) return;
-	offsetX -=2;
+	offsetX -=n;
 }
 
 void Escalador::moverArriba(int n){
 	if (((((offsetY+centroY)*(float32)zoom/100))-centroY) <= 5) return;
-	offsetY -=2;
+	offsetY -=n;
 }
 
 void Escalador::moverAbajo(int n){
 	if (((((offsetY + ventanaY-centroY)*(float32)100/zoom))+centroY) >= pixelesY-5) return;
-	offsetY +=2;
+	offsetY +=n;
 }
 
 int Escalador::zoomAlejar(){
-	int zom = zoom - 3;
+	int zom = zoom - VELZOOM;
 	if (zom <= 10) return -5;
 
 	if (((((offsetX + centroX) * (float32)zom/100)) - centroX) <= 5){
@@ -238,13 +241,13 @@ int Escalador::zoomAlejar(){
 	}
 
 
-	zoom -=3;
+	zoom -= VELZOOM;
 	return 0;
 }
 
 int Escalador::zoomAcercar(){
 	if (zoom >= 1000) return -5;
-	int zom = zoom+3;
+	int zom = zoom + VELZOOM;
 
 	if (((((offsetX + centroX) * (float32)zom/100)) - centroX) <= 5){
 		return -1;
@@ -260,7 +263,7 @@ int Escalador::zoomAcercar(){
 	}
 
 
-	this->zoom +=3;
+	this->zoom += VELZOOM;
 	return 0;
 }
 
@@ -272,23 +275,18 @@ int Escalador::getZoom(){
 void Escalador::hacerZoom(int* posicion_mouse_scroll){
 
 
-
 	if (posicion_mouse_scroll[2] == 1){
-		centroX = ((pixelesX/2 ) - ventanaX/2) * ((float) zoom/100) + ventanaX/2 - offsetX;
-		centroY = ((pixelesY/2 ) - ventanaY/2) * ((float) zoom/100) + ventanaY/2 - offsetY;
-//		centroX = posicion_mouse_scroll[0];
-//		centroY = posicion_mouse_scroll[1];
-//		centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100) + ventanaX/2 - offsetX;
-//		centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100) + ventanaY/2 - offsetY;
-		centroX = this->ventanaX/2;
-		centroY = this->ventanaY/2;
+		centroX = posicion_mouse_scroll[0];
+		centroY = posicion_mouse_scroll[1];
+//		centroX = this->ventanaX/2;
+//		centroY = this->ventanaY/2;
 		int resultado = this->zoomAcercar();
 		if (resultado != 0){
 			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100) + ventanaX/2 - offsetX;
 			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100) + ventanaY/2 - offsetY;
-			this->zoomAcercar();
+			resultado = this->zoomAcercar();
 		}
-		if (resultado == 0) return;
+
 
 
 
@@ -296,43 +294,42 @@ void Escalador::hacerZoom(int* posicion_mouse_scroll){
 	if (posicion_mouse_scroll[2] == -1){
 		//centroX = ventanaX - posicion_mouse_scroll[0];
 		//centroY = ventanaY - posicion_mouse_scroll[1];
-//		centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100) + ventanaX/2 - offsetX;
-//		centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100) + ventanaY/2 - offsetY;
+
 
 		int resultado = this->zoomAlejar();
 		if (resultado != 0){
 			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100) + ventanaX/2 - offsetX;
 			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100) + ventanaY/2 - offsetY;
-			printf("HOLA \n");
 			this->zoomAlejar();
 		}
 		if (resultado == 0) return;
+
 	}
 }
 void Escalador::moverVentana(int* posicion_mouse){
 	if (posicion_mouse[0] > (ventanaX - BORDE1) ){
-		this->moverDerecha(1);
+		this->moverDerecha(VEL1);
 	}
 	if (posicion_mouse[1] > (ventanaY - BORDE1) ){
-		this->moverAbajo(1);
+		this->moverAbajo(VEL1);
 	}
 	if (posicion_mouse[0] <  BORDE1 && posicion_mouse[0]>=0){
-		this->moverIzquierda(1);
+		this->moverIzquierda(VEL1);
 	}
 	if (posicion_mouse[1] <  BORDE1 && posicion_mouse[1]>=0 ){
-		this->moverArriba(1);
+		this->moverArriba(VEL1);
 	}
 	if (posicion_mouse[0] > (ventanaX - BORDE2) ){
-		this->moverDerecha(4);
+		this->moverDerecha(VEL2);
 	}
 	if (posicion_mouse[1] > (ventanaY - BORDE2) ){
-		this->moverAbajo(4);
+		this->moverAbajo(VEL2);
 	}
 	if (posicion_mouse[0] <  BORDE2 && posicion_mouse[0]>=0){
-		this->moverIzquierda(4);
+		this->moverIzquierda(VEL2);
 	}
 	if (posicion_mouse[1] <  BORDE2 && posicion_mouse[1]>=0 ){
-		this->moverArriba(4);
+		this->moverArriba(VEL2);
 	}
 
 }

@@ -1,4 +1,5 @@
 #include "Cliente.h"
+extern void loguear();
 
 int Cliente::cant_clientes = 0;
 
@@ -96,7 +97,7 @@ int runRecvInfoCliente(void* cliente){
 int Cliente::conectar(){
 	if ( this->socket_cl->conectar() != EXIT_SUCCESS) {
 		loguear();
-		logFile << "Cliente: " <<this->name_client << " \t No se pudo conectar con servidor" << endl;
+		logFile << "\t Cliente: " <<this->name_client << " \t No se pudo conectar con servidor" << endl;
 		return EXIT_FAILURE;
 	}
 	bool envio_nombre = false;
@@ -132,23 +133,21 @@ int Cliente::runEnviarInfo(){
 			SDL_Delay(25);
 			char buffer[MAX_PACK];
 			memset(buffer,0,MAX_PACK);
-			//SDL_LockMutex(this->mutex);
 			memcpy(buffer, this->paquete_enviar, MAX_PACK);
 			int enviados = this->enviar(buffer, MAX_PACK); //todo
-			//SDL_UnlockMutex(this->mutex);
 			if (enviados > 0){
-				//printf(" ENVIE ALGOO \n");
 				enviarpaquete = false;
 			}
 			else if(enviados == -1){
 				loguear();
-				logFile << "Error al enviar información del cliente "<< this->name_client <<" al servidor \n" << endl;
+				logFile << "\t Error al enviar información del cliente "<< this->name_client <<" al servidor. " << endl;
 				//break;
 			}
 			if(enviados == 0) {
-			loguear();
-			logFile << "Error \t Se enviaron 0 bytes de información al servidor." << endl;
-			this->desactivar();
+				//this->servidor_conectado = false;
+				loguear();
+				logFile << " Error \t Se enviaron 0 bytes de información al servidor." << endl;
+				//this->desactivar();
 			}
 		}
 		}
@@ -170,22 +169,21 @@ int Cliente::runRecibirInfo(){
 		memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 		if (recibidos > 0){
-			//SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK);
-
-			//SDL_UnlockMutex(this->mutex);
 		}
 		else if(recibidos ==0){
 			//this->dibujarMensajeDesconexion();
 			this->servidor_conectado = false;
 			loguear();
 			SDL_Delay(11000);
-			logFile << "Error \t Servidor desconectado, no se puede recibir información " << endl;
+			logFile << " Error \t Servidor desconectado, no se puede recibir información " << endl;
 			this->desactivar();
 		}
 		else if (recibidos == -1){
+			//this->servidor_conectado = false;
 			loguear();
-			logFile << "Error al recibir información" << endl;
+			logFile << "\t Error al recibir información" << endl;
+			//this->desactivar();
 		}
 	}
 	return EXIT_SUCCESS;
@@ -204,9 +202,7 @@ char* Cliente::getNombre(){
 }
 
 void Cliente::setNombre(char *name){
-	//SDL_LockMutex(this->mutex);
 	strncpy(this->name_client, name, MAX_NAME_USER-1);
-	//SDL_UnlockMutex(this->mutex);
 }
 
 int Cliente::enviarNombre(){
@@ -260,9 +256,7 @@ void Cliente::setDibujador(Dibujador* dibu){
 	this->dibujador = dibu;
 }
 void Cliente::dibujarMensajeDesconexion(){
-	//char* mensaje;
 	this->dibujador->dibujarMensaje();
-
 }
 
 bool Cliente::getServidorConectado(){

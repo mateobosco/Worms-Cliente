@@ -3,6 +3,7 @@
 
 #include "Dibujador.h"
 
+
 class Dibujable{
 public:
 	virtual int dibujar(Dibujador*) = 0;

@@ -1,8 +1,10 @@
+#include "Agua.h"
 #include "Dibujador.h"
 #include "Escalador.h"
 #include "LectorMascara.h"
 
-#include "Agua.h"
+extern ofstream logFile;
+extern void loguear();
 
 
 Agua::Agua(float32 nivel_agua, string &origen){

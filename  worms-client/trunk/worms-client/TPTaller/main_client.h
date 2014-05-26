@@ -8,6 +8,7 @@
 #include "Paquete.h"
 #include <string>
 
+extern void abrirLog();
 
 // argv[n]:
 // 			n=0: Nombre del programa
@@ -15,6 +16,7 @@
 // 			n=2: IP
 // 			n=3: Puerto
 int mainCliente(int argc, char* argv[]){
+	abrirLog();
 	int id = -1;
 
 	if(checkCantParametros(argc) == EXIT_FAILURE){
@@ -103,6 +105,7 @@ int mainCliente(int argc, char* argv[]){
 			float aux=cos(aux2);
 			aux2+=0.1;
 			if (aux2==360) aux2=0;
+			//SDL_LockMutex(mutex);
 			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
 			if(!cliente->getServidorConectado()){
 				cliente->dibujarMensajeDesconexion();
@@ -111,11 +114,12 @@ int mainCliente(int argc, char* argv[]){
 				break;
 			}
 			dibujador->actualizar();
+			//SDL_UnlockMutex(mutex);
 			posicion_mouse_scroll[2] = 0;
 			delete[] paquete;
 		}
 		SDL_DestroyMutex(mutex);
-		delete paqueteInicial; //ver si hay que hacer casteo a char*
+		delete paqueteInicial;
 		delete agua;
 		delete[] name;
 		delete[] ip_sv;
@@ -125,7 +129,7 @@ int mainCliente(int argc, char* argv[]){
 		free(posicion_mouse_movimiento);
 		delete dibujador;
 	}
-
+	logFile.close();
 	//delete cliente;
 	return 0;
 }

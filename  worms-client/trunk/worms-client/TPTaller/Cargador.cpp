@@ -8,6 +8,8 @@
 
 using namespace std;
 
+extern void loguear();
+extern ofstream logFile;
 
 Cargador::Cargador(const char* filename){
 

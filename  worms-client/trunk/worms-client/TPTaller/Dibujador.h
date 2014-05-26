@@ -6,12 +6,11 @@
 #include <SDL2/SDL_pixels.h>
 #include <stdexcept>
 
-#include "Agua.h"
 
+#include "Agua.h"
+//#include "Funciones.h"
 
 extern ofstream logFile;
-extern void generarFechaYHora(char*,char*);
-extern void loguear();
 
 class Dibujable;
 class Figura;
@@ -27,7 +26,7 @@ class Dibujador {
 
 public:
 	Dibujador();
-	Dibujador(SDL_Renderer* renderer, Escalador* escalador);
+	Dibujador(SDL_Renderer* renderer, Escalador* esc);
 	~Dibujador();
 	int limpiarFondo();
 	void dibujarFiguras(Figura** figuras, int cantidad);

@@ -10,10 +10,7 @@
 #include "Escalador.h"
 #include "Constantes.h"
 
-extern void generarFechaYHora(char*, char*);
 extern ofstream logFile;
-extern void loguear();
-
 
 class LectorMascara {
 public:

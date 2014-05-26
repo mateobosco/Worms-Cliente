@@ -1,5 +1,7 @@
 #include "LectorMascara.h"
 
+extern void loguear();
+
 LectorMascara::LectorMascara(string& path) {
 
 	this->superficie = IMG_Load( path.c_str() );

@@ -1,5 +1,9 @@
 #include "Juego.h"
 
+extern void loguear();
+extern ofstream logFile;
+extern void abrirLog();
+
 Juego::Juego(){
 	mundo = NULL;
 
@@ -43,18 +47,6 @@ Juego::~Juego(){
 	}
 }
 
-
-//void Juego::crearJugador(){
-//	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
-//	cantidad_jugadores++;
-//}
-
-//uint8 Juego::crearJugador(){
-//	jugadores[cantidad_jugadores] = new Jugador(mundo, cantidad_jugadores + 1, manejador); //ver delete todo
-//	cantidad_jugadores++;
-//}
-
-
 Jugador** Juego::getJugadores(){
 	return jugadores;
 }
@@ -92,7 +84,7 @@ uint8 Juego::getCantidadFiguras(){
 }
 
 void Juego::cargar() {
-	this->abrirLog();
+	abrirLog();
 	Cargador *cargador = new Cargador(pathEscTest.c_str());
 	Node *nodo_escenario = this->cargaInicial(cargador);
 	this->cargaPrincipal(cargador, *nodo_escenario);
@@ -105,11 +97,6 @@ void Juego::cargar() {
 
 // Funciones Privadas:
 
-void Juego::abrirLog(){
-	logFile.open("log.txt",ios::out);
-	logFile << "Log File. Ejecución Worms" << endl;
-	logFile << "   Fecha  | Hora |  Gravedad  | \t Mensaje " << endl;
-}
 
 Node* Juego::cargaInicial(Cargador* cargador){
 	Node *nodo_escenario =  new Node();

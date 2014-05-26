@@ -8,6 +8,8 @@
 #include "ManejadorPersonajes.h"
 
 ofstream logFile;
+void generarFechaYHora(char* fecha, char* hora);
+void loguear();
 
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -117,6 +119,12 @@ void loguear(){
 	logFile << fecha << " " << hora ;
 	delete[] fecha;
 	delete[] hora;
+}
+
+void abrirLog(){
+	logFile.open("log.txt",ios::out);
+	logFile << "Log File. Ejecución Worms" << endl;
+	logFile << "   Fecha  | Hora |  Gravedad  | \t Mensaje " << endl;
 }
 
 void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mouse_click, int* posicion_mouse_wheel) {

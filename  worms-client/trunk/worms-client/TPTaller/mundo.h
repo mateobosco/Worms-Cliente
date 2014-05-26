@@ -1,10 +1,17 @@
 #ifndef MUNDO_H
 #define MUNDO_H
 
-#include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Collision/Shapes/b2ChainShape.h>
+#include <Box2D/Dynamics/b2Body.h>
 
 #include "figura.h"
+
+//class Agua;
+//class b2Body;
+//class b2World;
+//class Escalador;
+//class Figura;
+//class Personaje;
 
 using namespace std;
 

@@ -1,5 +1,4 @@
 
-
 #include "Dibujador.h"
 #include "circulo.h"
 #include "poligono.h"
@@ -11,6 +10,8 @@
 #include <stdio.h>
 #include <string>
 #include <sstream>
+
+extern void loguear();
 
 Dibujador::Dibujador(){
 	this->escalador = NULL;

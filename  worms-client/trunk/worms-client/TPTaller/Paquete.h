@@ -1,11 +1,12 @@
 #ifndef PAQUETEDIBUJAR_H_
 #define PAQUETEDIBUJAR_H_
 
-#include "Personaje.h"
-#include "figura.h"
 #include "circulo.h"
+#include "figura.h"
 #include "poligono.h"
+#include "Personaje.h"
 #include "rectangulo.h"
+#include "Constantes.h"
 
 typedef struct structFigura {
 	b2Vec2 vector_vertices[6] ;

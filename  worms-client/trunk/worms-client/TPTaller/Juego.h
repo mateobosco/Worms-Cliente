@@ -19,7 +19,6 @@ class Juego{
 		string cielo;
 		Agua *agua;
 
-		void abrirLog();
 		Node* cargaInicial(Cargador* cargador);
 		void cargarEscalador(Cargador *cargador, Node nodo_escenario);
 		void cargarAgua(Cargador *cargador, Node nodo_escenario);

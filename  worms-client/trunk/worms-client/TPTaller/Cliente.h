@@ -18,6 +18,8 @@
 #include "Paquete.h"
 #include "Jugador.h"
 
+extern ofstream logFile;
+
 #define MAX_DATOS 100 // max number of bytes we can get at once
 
 typedef struct communicatedThreads{

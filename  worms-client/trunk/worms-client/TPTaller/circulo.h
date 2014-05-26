@@ -2,7 +2,6 @@
 #define CIRCULO_H
 
 #include <Box2D/Collision/Shapes/b2CircleShape.h>
-
 #include "mundo.h"
 
 class Circulo: public Figura {

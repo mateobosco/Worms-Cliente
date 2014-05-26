@@ -15,9 +15,8 @@
 #include "Paquete.h"
 #include "Constantes.h"
 
-extern ofstream logFile;
-extern void generarFechaYHora(char*,char*);
-extern void loguear();
+
+//extern ofstream logFile;
 
 using namespace std;
 using namespace YAML;

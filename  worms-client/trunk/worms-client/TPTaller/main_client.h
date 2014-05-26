@@ -103,10 +103,14 @@ int mainCliente(int argc, char* argv[]){
 			float aux=cos(aux2);
 			aux2+=0.1;
 			if (aux2==360) aux2=0;
-			SDL_LockMutex(mutex);
 			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
+			if(!cliente->getServidorConectado()){
+				cliente->dibujarMensajeDesconexion();
+				dibujador->actualizar();
+				SDL_Delay(10000);
+				break;
+			}
 			dibujador->actualizar();
-			SDL_UnlockMutex(mutex);
 			posicion_mouse_scroll[2] = 0;
 			delete[] paquete;
 		}

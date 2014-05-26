@@ -38,7 +38,6 @@ int mainCliente(int argc, char* argv[]){
 	Cliente* cliente = new Cliente(name, ip_sv, puerto);
 
 	if(cliente->conectar() != EXIT_SUCCESS){
-
 		printf("El servidor no puede aceptar más clientes.\n"
 				"El programa se cerrará en 5 segundos.\n");
 		SDL_Delay(5000);
@@ -83,6 +82,7 @@ int mainCliente(int argc, char* argv[]){
 		structPaquete* paquete;
 		float aux2=0;
 
+		SDL_mutex *mutex = SDL_CreateMutex();
 		while(KEYS[SDLK_ESCAPE] == false){
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
@@ -103,16 +103,14 @@ int mainCliente(int argc, char* argv[]){
 			float aux=cos(aux2);
 			aux2+=0.1;
 			if (aux2==360) aux2=0;
+			SDL_LockMutex(mutex);
 			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
-			if (cliente->getServidorConectado() == false){
-				dibujador->dibujarMensaje();
-			}
 			dibujador->actualizar();
-
+			SDL_UnlockMutex(mutex);
 			posicion_mouse_scroll[2] = 0;
 			delete[] paquete;
 		}
-
+		SDL_DestroyMutex(mutex);
 		delete paqueteInicial; //ver si hay que hacer casteo a char*
 		delete agua;
 		delete[] name;

@@ -10,8 +10,8 @@ using namespace std;
 const int TILE_SIZE = 40;
 const float M2P=20;
 const float P2M=1/M2P;
-const string pathAgua = "TPTaller/imagenes/aguaAzul.png";
-const string pathDefAgua = "TPTaller/imagenes/agua3.png";
+const string pathAgua = "TPTaller/imagenes/aguanueva.png";
+const string pathDefAgua = "TPTaller/imagenes/aguaAzul.png";;
 const string pathEscTest = "TPTaller/prueba_escenario.yaml";
 const string pathDefEs = "TPTaller/escenarioDef.yaml";
 const string pathDefMas = "TPTaller/imagenes/mascara.png";
@@ -22,7 +22,7 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 #define INDICE_GRUPO 8
 
 //Del circulo
-#define CIRC_OPACIDAD 0xFF
+#define CIRC_OPACIDAD 255
 #define CIRC_INERCIA_ROT -10.0f
 #define CIRC_RESTITUCION 0.2
 #define CIRC_FRICCION 0.15
@@ -31,7 +31,7 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 #define CIRC_CENTRO_MASA_Y 0
 
 //Del Poligono
-#define POLI_OPACIDAD 0xFF
+#define POLI_OPACIDAD 255
 #define POLI_INERCIA_ROT -10.0f
 #define POLI_RESTITUCION 0.2
 #define POLI_FRICCION 0.15
@@ -40,7 +40,7 @@ const string pathDefCielo = "TPTaller/imagenes/cieloN.jpg";
 #define POLI_CENTRO_MASA_Y 0
 
 //Del Rectangulo
-#define RECT_OPACIDAD 0xFF
+#define RECT_OPACIDAD 255
 #define RECT_INERCIA_ROT -10.0f
 #define RECT_RESTITUCION 0.2
 #define RECT_FRICCION 0.15

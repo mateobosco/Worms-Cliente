@@ -53,6 +53,7 @@ public:
 	void actualizar();
 	void dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int id_cliente, float aux);
 	void dibujarMensaje();
+	void dibujar_agua(Agua* agua);
 	int getContadorCerrarse();
 
 protected:
@@ -72,6 +73,7 @@ private:
 	SDL_Texture* textureizquierda;
 	SDL_Texture* texturederechaNEGRO;
 	SDL_Texture* textureizquierdaNEGRO;
+	float32 oscilaragua;
 	int contador_cerrarse;
 };
 

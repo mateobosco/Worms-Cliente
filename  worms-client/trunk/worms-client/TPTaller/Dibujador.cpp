@@ -43,6 +43,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->texturederechaNEGRO = NULL;
 	this->textureizquierdaNEGRO = NULL;
 	this->contador_cerrarse = 5;
+	this->oscilaragua = 0;
 }
 
 Dibujador::~Dibujador(){ // todo fijarse porque se rompe
@@ -226,12 +227,13 @@ SDL_Texture* Dibujador::dibujar_cielo(Escalador* escalador, std::string path, in
 }
 
 SDL_Texture* Dibujador::dibujarAgua(Escalador* escalador, Agua* agua ){
-	SDL_Texture *background = loadTexture(agua->GetPath(), this->renderizador);
+	SDL_Texture *background = loadTexture(pathAgua, this->renderizador);
 	if(background == NULL){
 		background = loadTexture(pathDefAgua,this->renderizador);
 		loguear();
 		logFile << "    Error    " <<"\t No se pudo cargar textura de agua. Se carga por defecto agua de ubicación '"<<pathDefAgua<<"'." << endl;
 	}
+	SDL_SetTextureAlphaMod(background, 150);
 	textureAgua = background;
 	int pixelY = escalador->aplicarZoomY(agua->GetNivel()) + escalador->getOffsetY();
 	renderTexture(background, this->renderizador,0- escalador->getOffsetX(), pixelY, escalador->getPixelX(), escalador->getPixelY());
@@ -289,15 +291,26 @@ SDL_Texture* Dibujador::loadTexture(const std::string &path, SDL_Renderer *ren){
 
 void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra){
 	float nivelAgua = escalador->aplicarZoomY(agua->GetNivel()) - escalador->getOffsetY();
+	this->dibujar_tierra(escalador, pathTierra);
 	this->dibujarAgua(escalador, agua);
 	this->dibujar_cielo(escalador, pathCielo, nivelAgua);
-	this->dibujar_tierra(escalador, pathTierra);
+
 }
 
 void Dibujador::dibujarFondo(Agua* agua){
 	this->renderTexture(textureCielo, renderizador,0 , 0, escalador->getPixelX(), escalador->getPixelY() );
-	this->renderTexture(textureAgua, renderizador, 0, agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()) , escalador->getPixelX(), escalador->getPixelY());
 	this->renderTexture(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
+}
+
+void Dibujador::dibujar_agua(Agua* agua){
+	this->oscilaragua+=0.03;
+	float32 aux=cos(oscilaragua);
+	if(oscilaragua > 360){
+		this->oscilaragua=0;
+	}
+
+	float nivel = (agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()));
+	this->renderTexture(textureAgua, renderizador, 0, nivel*aux/100 + (nivel)  , escalador->getPixelX(), escalador->getPixelY()-(agua->GetNivel() *(escalador->getPixelY()/escalador->getEscalaY()))+50);
 }
 
 
@@ -376,12 +389,12 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 
 	std::string nombre_a_imprimir = string(paquete.nombre_cliente);
 	image = RenderText(paquete.nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[paquete.id_jugador], 20); // despues preguntar el nombre de cada uno
-	renderTexture2(image, this->renderizador, x - 30 ,y - 30 , 80 , 30 );
+	renderTexture2(image, this->renderizador, x - anchoPX ,y - 30 , 80 , 30 );
 	if (image) SDL_DestroyTexture(image);
 //	int id = paquete.id_jugador;
 	if(paquete.seleccionado[cliente_id] == 1){
 		this->
-		renderTexture2(flechitaroja, this->renderizador,(x - 30), ((y)*aux/100)+(y-120), 80, 80);
+		renderTexture2(flechitaroja, this->renderizador, x - anchoPX, ((y)*aux/100)+(y-120), 80, 80);
 	}
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
 
@@ -405,10 +418,6 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	//std::string mensaje = "Se cerro el server";
 	//SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
 	//renderTexture2(mensaje_final, this->renderizador, 10 , 10 , 100, 100 );
-
-
-
-
 	//SDL_DestroyTexture(cartel);
 
 

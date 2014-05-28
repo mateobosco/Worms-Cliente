@@ -85,6 +85,7 @@ int mainCliente(int argc, char* argv[]){
 		structPaquete* paquete;
 		float aux2=0;
 
+
 		while(KEYS[SDLK_ESCAPE] == false){
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
@@ -108,14 +109,18 @@ int mainCliente(int argc, char* argv[]){
 			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
 			if(!cliente->getServidorConectado()){
 				cliente->dibujarMensajeDesconexion();
+
 				if(cliente->getContadorCerrarse() == -2){
 					break;
 				}
+
 			}
+			dibujador->dibujar_agua(agua);
 			dibujador->actualizar();
 			posicion_mouse_scroll[2] = 0;
 			delete[] paquete;
 		}
+
 		delete paqueteInicial;
 		delete agua;
 		delete[] name;

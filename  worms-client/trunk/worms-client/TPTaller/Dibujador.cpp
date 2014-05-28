@@ -25,7 +25,7 @@ Dibujador::Dibujador(){
 	this->textureizquierda = NULL;
 	this->texturederechaNEGRO = NULL;
 	this->textureizquierdaNEGRO = NULL;
-	this->contador_cerrarse = 10;
+	this->contador_cerrarse = 5;
 
 }
 
@@ -42,7 +42,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->textureizquierda = NULL;
 	this->texturederechaNEGRO = NULL;
 	this->textureizquierdaNEGRO = NULL;
-	this->contador_cerrarse = 10;
+	this->contador_cerrarse = 5;
 }
 
 Dibujador::~Dibujador(){ // todo fijarse porque se rompe
@@ -497,10 +497,13 @@ void Dibujador::dibujarMensaje(){
 	//std::string mensaje = "Se cerro el server, la ventana se cerrara en ";
 
 	this->contador_cerrarse--;
-	SDL_Delay(1000);
 	SDL_Color color = {0,0,0};
 	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
 	renderTexture2(mensaje_final, this->renderizador, (this->escalado_x / 2)*2.5  , (this->escalado_y /2)*6 , 500, 50 );
 	SDL_DestroyTexture(mensaje_final);
+	SDL_Delay(1000);
 }
 
+int Dibujador::getContadorCerrarse(){
+	return this->contador_cerrarse;
+}

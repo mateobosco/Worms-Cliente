@@ -1,4 +1,5 @@
-
+#ifndef SERVIDOR_H_
+#define SERVIDOR_H_
 
 using namespace std;
 #include <sys/types.h>
@@ -20,9 +21,7 @@ using namespace std;
 #include "Cliente.h"
 #include "Paquete.h"
 
-
-#ifndef SERVIDOR_H_
-#define SERVIDOR_H_
+void showTime();
 
 class Servidor {
 public:
@@ -68,7 +67,6 @@ public:
 
 private:
 	char paqueteEnviar[MAX_PACK];
-	char* mensaje_mostrar;
 	char paqueteInicial[MAX_PACK];
 	queue<void*> paquetesRecibir;
 	int cantidadMaxConexiones;
@@ -85,6 +83,7 @@ private:
 	bool finalizar;
 	SDL_Thread *escuchar;
 	SDL_Thread *aceptar;
+	char mensaje_mostrar[MAX_MENSAJE];
 
 };
 

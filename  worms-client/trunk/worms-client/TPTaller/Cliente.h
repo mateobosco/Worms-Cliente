@@ -19,6 +19,7 @@
 #include "Jugador.h"
 
 extern ofstream logFile;
+extern void loguear();
 
 #define MAX_DATOS 100 // max number of bytes we can get at once
 
@@ -81,6 +82,7 @@ class Cliente{
 
 		SDL_mutex* getMutex();
 		void setJugador(Jugador* jug);
+		int getContadorCerrarse();
 };
 
 

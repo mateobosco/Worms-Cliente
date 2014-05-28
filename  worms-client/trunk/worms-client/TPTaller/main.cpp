@@ -8,4 +8,3 @@ int main(int argc,char* argv[]){
 	if (server)	return main_server(argc, argv);
 	else return mainCliente(argc, argv);
 }
-

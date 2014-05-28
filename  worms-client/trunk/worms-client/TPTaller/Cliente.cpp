@@ -1,5 +1,4 @@
 #include "Cliente.h"
-extern void loguear();
 
 int Cliente::cant_clientes = 0;
 

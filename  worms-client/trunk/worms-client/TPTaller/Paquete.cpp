@@ -90,18 +90,34 @@ structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
 
 structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 	structEvento* paquete = new structEvento;
-	if (KEYS[100]){ // para la derecha
-		paquete->direccion = 3;
-	}
-	if (KEYS[101]){ // para la izquierda
-		paquete->direccion = 1;
-	}
+
 	if ((KEYS[102] || KEYS[SDLK_SPACE])){ // para arriba
 		paquete->direccion = 2;
 	}
+	if (KEYS[100]){ // para la derecha
+		if(KEYS[102]) paquete->direccion=4;
+		else{
+			paquete->direccion = 3;
+		}
+	}
+	if (KEYS[101]){ // para la izquierda
+		if(KEYS[102]) paquete->direccion=5;
+		else{
+			paquete->direccion = 1;
+		}
+	}
+	//if ((KEYS[100] && KEYS[102])){ // arriba a la derecha
+	//		paquete->direccion = 4;
+	//}
+	//if ((KEYS[102] && KEYS[101])){ // para arriba a la izquierda
+	//	paquete->direccion = 5;
+	//}
+
+
 	paquete->nro_jugador = id_jugador;
 	paquete->click_mouse = b2Vec2( -1, -1 );
 	paquete->aleatorio = random();
+	printf(" MANDO UN MAQUETE MOVER con la direccion %d \n", paquete->direccion);
 	return paquete;
 }
 
@@ -121,7 +137,9 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 
 	}
 	else if (click[0] != -1){
+
 		paquete = crearPaqueteClick(click, escalador, cliente);
+		printf(" MANDO UN MAQUETE CLICK con las posiciones : (%f, %f) \n", paquete->click_mouse.x, paquete->click_mouse.y);
 	}
 	else {
 		paquete = crearPaqueteVacio();
@@ -130,7 +148,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 
 }
 
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje){
+structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int nro_jugador){
 	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);//sizeof(structPaquete)
 	paquete->tipo = 1;
 

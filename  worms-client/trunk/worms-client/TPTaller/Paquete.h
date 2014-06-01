@@ -1,12 +1,11 @@
 #ifndef PAQUETEDIBUJAR_H_
 #define PAQUETEDIBUJAR_H_
 
-#include "circulo.h"
-#include "figura.h"
-#include "poligono.h"
 #include "Personaje.h"
+#include "figura.h"
+#include "circulo.h"
+#include "poligono.h"
 #include "rectangulo.h"
-#include "Constantes.h"
 
 typedef struct structFigura {
 	b2Vec2 vector_vertices[6] ;
@@ -33,6 +32,7 @@ typedef struct structPaquete{
 	int cantidad_personajes = 0;
 	int id;
 	char mensaje_mostrar[MAX_MENSAJE];
+	int turno_jugador;
 }structPaquete;
 
 typedef struct structInicial {
@@ -60,7 +60,7 @@ typedef struct structEvento{
 
 structFigura* crearPaqueteFigura(Figura* figura);
 structPersonaje* crearPaquetePersonaje(Personaje* personaje);
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje);
+structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador);
 structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente);
 
 void destruirPaqueteFigura(structFigura* paquete);

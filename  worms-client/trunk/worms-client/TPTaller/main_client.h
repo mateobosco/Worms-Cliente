@@ -93,6 +93,13 @@ int mainCliente(int argc, char* argv[]){
 			keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
 			escalador->moverVentana(posicion_mouse_movimiento);
 			escalador->hacerZoom(posicion_mouse_scroll);
+			//if(posicion_mouse_scroll[2] == 1){
+			//	dibujador->hacerZoom(posicion_mouse_scroll);
+			//}
+			//if(posicion_mouse_scroll[2] == -1){
+			//	dibujador->alejarZoom(posicion_mouse_scroll);
+			//}
+
 			paquete = (structPaquete*) cliente->getPaquete();
 			cliente->setID(paquete->id);
 			keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
@@ -109,15 +116,12 @@ int mainCliente(int argc, char* argv[]){
 			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
 			if(!cliente->getServidorConectado()){
 				cliente->dibujarMensajeDesconexion();
-
-				if(cliente->getContadorCerrarse() == -2){
-					break;
-				}
-
 			}
+
 			dibujador->dibujar_agua(agua);
 			dibujador->actualizar();
 			posicion_mouse_scroll[2] = 0;
+
 			delete[] paquete;
 		}
 

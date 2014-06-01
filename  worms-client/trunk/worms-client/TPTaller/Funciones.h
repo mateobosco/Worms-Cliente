@@ -3,7 +3,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "Dibujador.h"
+//#include "Dibujador.h"
 #include "Cargador.h"
 #include "ManejadorPersonajes.h"
 #include <ctime>
@@ -139,20 +139,23 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 			{
 				numero = event.key.keysym.sym;
 				if (numero == SDLK_RIGHT){
+					printf(" TOCO PARA LA DERECHA \n");
 					KEYS[100] = true;
-					break;
+					//break;
 				}
 				else if (numero == SDLK_LEFT){
+					printf(" TOCO PARA LA IZQ \n");
 					KEYS[101] = true;
-					break;
+					//break;
 				}
 				else if (numero == SDLK_UP){
+					printf(" TOCO PARA LA ARRIBA \n");
 					KEYS[102] = true;
-					break;
+					//break;
 				}
 				else if (numero == SDLK_DOWN){ //event.key.keysym.sym
 					KEYS[103] = true;
-					break;
+					//break;
 				}
 				if(numero < 1000){ //todo keys se puede acceder hasta la 321
 					//printf("ENTRA ACAAAA 4 \n");
@@ -166,14 +169,17 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 			{
 				int key = event.key.keysym.sym;
 				if (key == SDLK_RIGHT){
+					printf(" SUELTOO PARA LA DERECHA \n");
 					KEYS[100] = false;
 					break;
 				}
 				else if (key == SDLK_LEFT){
+					printf(" SUELTOO PARA LA IZQUIERDA \n");
 					KEYS[101] = false;
 					break;
 				}
 				else if (key == SDLK_UP){
+					printf(" SUELTOO PARA LA ARRIBA \n");
 					KEYS[102] = false;
 					break;
 				}
@@ -185,9 +191,10 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				else{
 					if(key < 322){
 						KEYS[key] = false;
-						break;
+						//break;
 					}
 				}
+				break;
 			}
 			case SDL_MOUSEBUTTONDOWN:
 			{

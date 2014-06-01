@@ -19,6 +19,7 @@ class Juego{
 		string cielo;
 		Agua *agua;
 
+		void abrirLog();
 		Node* cargaInicial(Cargador* cargador);
 		void cargarEscalador(Cargador *cargador, Node nodo_escenario);
 		void cargarAgua(Cargador *cargador, Node nodo_escenario);
@@ -29,6 +30,7 @@ class Juego{
 		void generarTierra();
 		void cargarFiguras(Cargador *cargador, Node nodo_escenario);
 		void cargaPrincipal(Cargador *cargador, Node nodo_escenario);
+		int jugador_actual;
 
 
 
@@ -39,9 +41,10 @@ class Juego{
 	public:
 		Juego();
 		~Juego();
+
 		void crearJugador();
 		//uint8 crearJugador();
-		
+
 		Jugador** getJugadores();
 		uint8 getCantidadJugadores();
 		Mundo* getMundo();
@@ -54,10 +57,10 @@ class Juego{
 		int run();
 		structInicial* getPaqueteInicial();
 		void aplicarPaquete(structEvento* evento);
-
 		Jugador* agregarJugador(int id, char* nombre_cliente);
-
 		ManejadorPersonajes* getManejadorPersonajes();
+		int getJugadorActual();
+		void pasarTurno();
 
 
 };

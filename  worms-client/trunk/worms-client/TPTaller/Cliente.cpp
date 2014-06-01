@@ -137,14 +137,16 @@ int Cliente::runEnviarInfo(){
 
 	while(this->activo){
 		if ( enviarpaquete == true){
-			SDL_Delay(25);
+			SDL_Delay(10);
 			char buffer[MAX_PACK];
 			memset(buffer,0,MAX_PACK);
 			memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		    if (setsockopt (this->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
 		        sizeof(timeout)) < 0) 	return ERROR;
 			int enviados = this->enviar(buffer, MAX_PACK); //todo
+			structEvento* buffer2 = (structEvento*) buffer;
 			if (enviados > 0){
+				//printf("************ MANDO UN MAQUETE CLICK con las posiciones : (%f, %f) \n", buffer2->click_mouse.x, buffer2->click_mouse.y);
 				enviarpaquete = false;
 			}
 			else if(enviados == 0) {
@@ -179,13 +181,13 @@ int Cliente::runRecibirInfo(){
     timeout.tv_sec = 5;
     timeout.tv_usec = 0;
 	while(this->activo){
-		SDL_Delay(25);
+		SDL_Delay(10);
 		char buffer[MAX_PACK];
 		//char* buffer = (char*) malloc(sizeof(char) * MAX_PACK);
 		memset(buffer, 0, MAX_PACK);
 
-	    if (setsockopt (this->getSocket()->getFD(), SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
-	        sizeof(timeout)) < 0) 	return ERROR;
+	    //if (setsockopt (this->getSocket()->getFD(), SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, // SINO SACO ESTO SE ROMPE
+	     //   sizeof(timeout)) < 0) 	return ERROR;
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 		if (recibidos > 0){
 			memcpy(this->paquete_recibir, buffer, MAX_PACK);
@@ -213,6 +215,8 @@ int Cliente::runRecibirInfo(){
 
 void Cliente::actualizarPaquete(structEvento* evento){
 	if(evento != NULL){
+		//printf(" LO ACTUALIZAAAA \n");
+		SDL_Delay(20);
 		this->enviarpaquete=true;
 		memcpy( this->paquete_enviar, evento, sizeof(structEvento));
 	}

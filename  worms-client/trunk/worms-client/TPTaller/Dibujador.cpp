@@ -5,6 +5,8 @@
 #include "rectangulo.h"
 #include "Personaje.h"
 #include "Paquete.h"
+//#include "Funciones.h"
+
 
 #include "SDL2/SDL_ttf.h"
 #include <stdio.h>
@@ -25,7 +27,7 @@ Dibujador::Dibujador(){
 	this->textureizquierda = NULL;
 	this->texturederechaNEGRO = NULL;
 	this->textureizquierdaNEGRO = NULL;
-	this->contador_cerrarse = 5;
+	this->contador_cerrarse = 10;
 
 }
 
@@ -42,8 +44,11 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->textureizquierda = NULL;
 	this->texturederechaNEGRO = NULL;
 	this->textureizquierdaNEGRO = NULL;
-	this->contador_cerrarse = 5;
+	this->contador_cerrarse = 10;
 	this->oscilaragua = 0;
+	this->escalaZoom = 100;
+	this->corrimientoX = 0;
+	this->corrimientoY = 0;
 }
 
 Dibujador::~Dibujador(){ // todo fijarse porque se rompe
@@ -298,8 +303,8 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 }
 
 void Dibujador::dibujarFondo(Agua* agua){
-	this->renderTexture(textureCielo, renderizador,0 , 0, escalador->getPixelX(), escalador->getPixelY() );
-	this->renderTexture(textureTierra, renderizador, 0 , 0, escalador->getPixelX() , escalador->getPixelY());
+	this->renderTexture(textureCielo, renderizador,0  , 0 , escalador->getPixelX(), escalador->getPixelY() );
+	this->renderTexture(textureTierra, renderizador, 0 - this->corrimientoX , 0 , escalador->getPixelX() , escalador->getPixelY() );
 }
 
 void Dibujador::dibujar_agua(Agua* agua){
@@ -310,7 +315,7 @@ void Dibujador::dibujar_agua(Agua* agua){
 	}
 
 	float nivel = (agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()));
-	this->renderTexture(textureAgua, renderizador, 0, nivel*aux/100 + (nivel)  , escalador->getPixelX(), escalador->getPixelY()-(agua->GetNivel() *(escalador->getPixelY()/escalador->getEscalaY()))+50);
+	this->renderTexture(textureAgua, renderizador, 0 , ((nivel*aux/100 + (nivel))) , escalador->getPixelX(), (escalador->getPixelY()-(agua->GetNivel() *(escalador->getPixelY()/escalador->getEscalaY()))+50));
 }
 
 
@@ -380,6 +385,7 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 	int y = posicionVentanada->y - altoPX/2;
 	int w = anchoPX;
 	int h = altoPX;
+
 	SDL_Texture *image;
 	SDL_Color vectorcolores[4];
 	vectorcolores[0] = { 0, 0, 0 };
@@ -396,11 +402,19 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 		this->
 		renderTexture2(flechitaroja, this->renderizador, x - anchoPX, ((y)*aux/100)+(y-120), 80, 80);
 	}
-	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
+	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
+	//if (KEYS[SDLK_z]){
+//		this->dibujarMenuArmas(x,y);
+	//}
 
 	delete posicionVentanada;
 	//if (gusanito) SDL_DestroyTexture(gusanito);
 	return 1;
+}
+
+void Dibujador::dibujarMenuArmas(int x, int y){
+	SDL_Texture* menu = loadTexture("TPTaller/imagenes/menuarmas.png", this->renderizador);
+	renderTexture2(menu, this->renderizador, x, y, 80,80);
 }
 
 void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int cliente_id, float aux){
@@ -516,3 +530,26 @@ void Dibujador::dibujarMensaje(){
 int Dibujador::getContadorCerrarse(){
 	return this->contador_cerrarse;
 }
+
+
+void Dibujador::hacerZoom(int* posicion_mouse){
+	//printf(" HACE ZOOM \n");
+	//SDL_Rect rect;
+	escalaZoom += 10;
+	corrimientoX = posicion_mouse[0];
+	corrimientoY = posicion_mouse[1];
+	//rect = realizarZoom(this->rect, corrimientoX, corrimientoY, escalaZoom);
+	//rect.h = 600 * escalaZoom;
+	//rect.w = 800 * escalaZoom;
+	//rect.x = 0;
+	//rect.y = 0;
+	//SDL_RenderCopyEx(this->renderizador, this->textureTierra , NULL , &rect, 0. ,NULL,SDL_FLIP_NONE);
+}
+
+void Dibujador::alejarZoom(int* posicion_mouse){
+	escalaZoom-=10;
+	corrimientoX = posicion_mouse[0];
+	corrimientoY = posicion_mouse[1];
+}
+
+

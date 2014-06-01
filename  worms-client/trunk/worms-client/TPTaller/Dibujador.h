@@ -55,6 +55,9 @@ public:
 	void dibujarMensaje();
 	void dibujar_agua(Agua* agua);
 	int getContadorCerrarse();
+	void hacerZoom(int* pos);
+	void alejarZoom(int* pos);
+	void dibujarMenuArmas(int x, int y);
 
 protected:
 	Escalador* escalador;
@@ -75,6 +78,10 @@ private:
 	SDL_Texture* textureizquierdaNEGRO;
 	float32 oscilaragua;
 	int contador_cerrarse;
+	int escalaZoom;
+	int corrimientoX;
+	int corrimientoY;
+
 };
 
 

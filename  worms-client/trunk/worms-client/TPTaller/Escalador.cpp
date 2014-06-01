@@ -282,8 +282,8 @@ void Escalador::hacerZoom(int* posicion_mouse_scroll){
 //		centroY = this->ventanaY/2;
 		int resultado = this->zoomAcercar();
 		if (resultado != 0){
-			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100) + ventanaX/2 - offsetX;
-			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100) + ventanaY/2 - offsetY;
+			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100)  - offsetX;
+			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100)  - offsetY;
 			resultado = this->zoomAcercar();
 		}
 
@@ -292,8 +292,8 @@ void Escalador::hacerZoom(int* posicion_mouse_scroll){
 
 	}
 	if (posicion_mouse_scroll[2] == -1){
-		//centroX = ventanaX - posicion_mouse_scroll[0];
-		//centroY = ventanaY - posicion_mouse_scroll[1];
+		centroX = ventanaX - posicion_mouse_scroll[0];
+		centroY = ventanaY - posicion_mouse_scroll[1];
 
 
 		int resultado = this->zoomAlejar();
@@ -305,6 +305,9 @@ void Escalador::hacerZoom(int* posicion_mouse_scroll){
 		if (resultado == 0) return;
 
 	}
+
+
+
 }
 void Escalador::moverVentana(int* posicion_mouse){
 	if (posicion_mouse[0] > (ventanaX - BORDE1) ){

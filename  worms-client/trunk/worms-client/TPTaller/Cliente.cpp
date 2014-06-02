@@ -216,7 +216,7 @@ int Cliente::runRecibirInfo(){
 void Cliente::actualizarPaquete(structEvento* evento){
 	if(evento != NULL){
 		//printf(" LO ACTUALIZAAAA \n");
-		SDL_Delay(10);
+		//SDL_Delay(10);
 		this->enviarpaquete=true;
 		memcpy( this->paquete_enviar, evento, sizeof(structEvento));
 	}

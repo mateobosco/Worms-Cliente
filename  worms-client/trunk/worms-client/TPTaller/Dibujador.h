@@ -44,7 +44,7 @@ public:
 	SDL_Texture* dibujarAgua(Escalador* escalador, Agua* agua);
 	SDL_Texture* dibujar_tierra(Escalador* escalador, std::string path);
 	void iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra);
-	void dibujarFondo(Agua* agua);
+	void dibujarFondo();
 	int dibujarPaqueteFigura(structFigura paquete);
 	int dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux);
 	SDL_Texture* RenderText(std::string message, std::string fontFile,  SDL_Color color, int fontSize);

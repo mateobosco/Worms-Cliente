@@ -214,12 +214,12 @@ structInicial* Juego::getPaqueteInicial(){
 void Juego::aplicarPaquete(structEvento* evento){
 	if (evento == NULL) return;
 	if (evento->click_mouse.x != -1){ // recibio un click
-		printf(" APLICO UN PAQUETE CLICKKKKK con las posiciones : (%f, %f) \n", evento->click_mouse.x, evento->click_mouse.y);
+		//printf(" APLICO UN PAQUETE CLICKKKKK con las posiciones : (%f, %f) \n", evento->click_mouse.x, evento->click_mouse.y);
 		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
 	if (evento->direccion > 0){ // recibio un click
 		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
-		printf(" APLICO UN PAQUETE MOVIMIENTO, PASO DE TURNO");
+		//printf(" APLICO UN PAQUETE MOVIMIENTO, PASO DE TURNO");
 		this->pasarTurno();
 	}
 	else return;

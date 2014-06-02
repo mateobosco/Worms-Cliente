@@ -6,6 +6,7 @@
 #include "circulo.h"
 #include "poligono.h"
 #include "rectangulo.h"
+#include <sys/time.h>
 
 typedef struct structFigura {
 	b2Vec2 vector_vertices[6] ;
@@ -61,11 +62,11 @@ typedef struct structEvento{
 structFigura* crearPaqueteFigura(Figura* figura);
 structPersonaje* crearPaquetePersonaje(Personaje* personaje);
 structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador);
-structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente);
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez);
 
 void destruirPaqueteFigura(structFigura* paquete);
 void destruirPaquetePersonaje(structPersonaje* paquete);
 void destruirPaqueteCiclo(structPaquete* paquete);
-
+bool estaVacio(structEvento* paquete);
 
 #endif /* PAQUETEDIBUJAR_H_ */

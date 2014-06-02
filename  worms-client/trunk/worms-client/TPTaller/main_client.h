@@ -68,10 +68,9 @@ int mainCliente(int argc, char* argv[]){
 		string pathCielo = string(paqueteInicial->cielo);
 		Agua* agua = new Agua(paqueteInicial->nivel_agua, pathAgua);
 		dibujador->iniciarFondo(agua, pathCielo, pathTierra);
-		dibujador->dibujarFondo(agua);
+		dibujador->dibujarFondo();
 
 		SDL_Delay(2000);
-
 
 		int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
 		memset(posicion_mouse_click,'\0',2);
@@ -85,11 +84,12 @@ int mainCliente(int argc, char* argv[]){
 		structPaquete* paquete;
 		float aux2=0;
 
-
+		timeval ultima_vez;
+		gettimeofday(&ultima_vez, 0x0);
 		while(KEYS[SDLK_ESCAPE] == false){
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
-			dibujador->dibujarFondo(agua);
+			dibujador->dibujarFondo();
 			keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
 			escalador->moverVentana(posicion_mouse_movimiento);
 			escalador->hacerZoom(posicion_mouse_scroll);
@@ -102,8 +102,8 @@ int mainCliente(int argc, char* argv[]){
 
 			paquete = (structPaquete*) cliente->getPaquete();
 			cliente->setID(paquete->id);
-			keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
-			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID() );
+			//keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
+			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez);
 			if (evento){
 				cliente->actualizarPaquete(evento);
 			}
@@ -121,7 +121,6 @@ int mainCliente(int argc, char* argv[]){
 			dibujador->dibujar_agua(agua);
 			dibujador->actualizar();
 			posicion_mouse_scroll[2] = 0;
-
 			delete[] paquete;
 		}
 

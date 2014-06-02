@@ -139,17 +139,17 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 			{
 				numero = event.key.keysym.sym;
 				if (numero == SDLK_RIGHT){
-					printf(" TOCO PARA LA DERECHA \n");
+					//printf(" TOCO PARA LA DERECHA \n");
 					KEYS[100] = true;
 					//break;
 				}
 				else if (numero == SDLK_LEFT){
-					printf(" TOCO PARA LA IZQ \n");
+					//printf(" TOCO PARA LA IZQ \n");
 					KEYS[101] = true;
 					//break;
 				}
 				else if (numero == SDLK_UP){
-					printf(" TOCO PARA LA ARRIBA \n");
+					//printf(" TOCO PARA LA ARRIBA \n");
 					KEYS[102] = true;
 					//break;
 				}
@@ -169,17 +169,17 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 			{
 				int key = event.key.keysym.sym;
 				if (key == SDLK_RIGHT){
-					printf(" SUELTOO PARA LA DERECHA \n");
+					//printf(" SUELTOO PARA LA DERECHA \n");
 					KEYS[100] = false;
 					break;
 				}
 				else if (key == SDLK_LEFT){
-					printf(" SUELTOO PARA LA IZQUIERDA \n");
+					//printf(" SUELTOO PARA LA IZQUIERDA \n");
 					KEYS[101] = false;
 					break;
 				}
 				else if (key == SDLK_UP){
-					printf(" SUELTOO PARA LA ARRIBA \n");
+					//printf(" SUELTOO PARA LA ARRIBA \n");
 					KEYS[102] = false;
 					break;
 				}

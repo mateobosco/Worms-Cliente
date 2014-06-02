@@ -302,7 +302,7 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 
 }
 
-void Dibujador::dibujarFondo(Agua* agua){
+void Dibujador::dibujarFondo(){
 	this->renderTexture(textureCielo, renderizador,0  , 0 , escalador->getPixelX(), escalador->getPixelY() );
 	this->renderTexture(textureTierra, renderizador, 0 - this->corrimientoX , 0 , escalador->getPixelX() , escalador->getPixelY() );
 }

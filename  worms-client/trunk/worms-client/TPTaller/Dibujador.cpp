@@ -1,12 +1,9 @@
-
 #include "Dibujador.h"
 #include "circulo.h"
 #include "poligono.h"
 #include "rectangulo.h"
 #include "Personaje.h"
 #include "Paquete.h"
-//#include "Funciones.h"
-
 
 #include "SDL2/SDL_ttf.h"
 #include <stdio.h>
@@ -27,8 +24,13 @@ Dibujador::Dibujador(){
 	this->textureizquierda = NULL;
 	this->texturederechaNEGRO = NULL;
 	this->textureizquierdaNEGRO = NULL;
+	this->flechitaroja = NULL;
+	this->window = NULL;
 	this->contador_cerrarse = 10;
-
+	this->oscilaragua = 0;
+	this->escalaZoom = 100;
+	this->corrimientoX = 0;
+	this->corrimientoY = 0;
 }
 
 Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
@@ -44,6 +46,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->textureizquierda = NULL;
 	this->texturederechaNEGRO = NULL;
 	this->textureizquierdaNEGRO = NULL;
+	this->flechitaroja = NULL;
 	this->contador_cerrarse = 10;
 	this->oscilaragua = 0;
 	this->escalaZoom = 100;
@@ -51,7 +54,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->corrimientoY = 0;
 }
 
-Dibujador::~Dibujador(){ // todo fijarse porque se rompe
+Dibujador::~Dibujador(){
 	delete this->escalador;
 	if(this->textureAgua) SDL_DestroyTexture(this->textureAgua);
 	if(this->textureCielo) SDL_DestroyTexture(this->textureCielo);
@@ -61,10 +64,6 @@ Dibujador::~Dibujador(){ // todo fijarse porque se rompe
 	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO);
 	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
 	this->close();
-	//delete this->escalador;
-	//if (textureCielo) SDL_DestroyTexture(textureCielo); // FIJARSE PORQUE SE ROMPE
-	//if (textureAgua) SDL_DestroyTexture(textureAgua);
-	//
 }
 
 // Retorna: 0- Exito. Negativo- Fracaso.
@@ -85,9 +84,7 @@ void Dibujador::dibujarPersonajes(Personaje** personajes, int cantidad){
 	for (int32 i = 0; i < cantidad; ++i){
 		if (personajes[i] != NULL) personajes[i]->dibujar(this);
 	}
-	//this->actualizar();
 }
-
 
 int Dibujador::dibujarCirculo(Circulo* circulo){
 	SDL_Color color = circulo->getColor();
@@ -133,27 +130,20 @@ int Dibujador::dibujarRectangulo(Rectangulo* rectangulo){
 	delete[] vecXventanado;
 	return retorno;
 }
-SDL_Texture* Dibujador::RenderText(std::string message, std::string fontFile,
-                        SDL_Color color, int fontSize)
-{
-    //Open the font
 
+SDL_Texture* Dibujador::RenderText(std::string message, std::string fontFile,
+                        SDL_Color color, int fontSize){
 	if (TTF_Init() == -1){
 	    std::cout << TTF_GetError() << std::endl;
 	}
 	TTF_Font *font = nullptr;
 	font = TTF_OpenFont(fontFile.c_str(), fontSize);
-	//TTF_Font* font = TTF_OpenFont( "TPTaller/imagenes/abecedarionegrita.ttf", 28 );
 	if (font == nullptr)
-        throw std::runtime_error("Failed to load font: " + fontFile + TTF_GetError());
-//
-//    //Render the message to an SDL_Surface, as that's what TTF_RenderText_X returns
+        throw std::runtime_error("Error al cargar font: " + fontFile + TTF_GetError());
     SDL_Surface* surf = TTF_RenderText_Blended(font, message.c_str(), color);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(this->renderizador, surf);
-    //Clean up unneeded stuff
     SDL_FreeSurface(surf);
     TTF_CloseFont(font);
-
     return texture;
 }
 
@@ -171,7 +161,6 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 	std::string nombre_jugador;
 	SDL_Color color = { 0, 0, 0 };
 
-
 	if (personaje->getSeleccionado()){
 		nombre_jugador = "Juan";
 
@@ -181,12 +170,10 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 		if (image) SDL_DestroyTexture(image);
 	}
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
-	delete[] posicionVentanada; //todo
+	delete[] posicionVentanada;
 	if (gusanito) SDL_DestroyTexture(gusanito);
 	return gusanito;
 }
-
-
 
 SDL_Renderer* Dibujador::getRenderizador(){
 	return this->renderizador;
@@ -261,37 +248,20 @@ void Dibujador::actualizar(){
 }
 
 SDL_Texture* Dibujador::loadTexture(const std::string &path, SDL_Renderer *ren){
-	//SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
-	//if(texture == NULL) {
-	//	loguear();
-	//	logFile << "    Error    " <<"\t No se pudo cargar textura del file: " <<file<< endl;
-	//}
-    //The final texture
     SDL_Texture* newTexture = NULL;
-
-    //Load image at specified path
-    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-    if( loadedSurface == NULL )
-    {
+    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+    if(loadedSurface == NULL){
         loguear();
-        logFile << "No se pudo cargar la imagen: " <<path.c_str() << "! SDL_image Error: " <<  IMG_GetError() << endl;
-    }
-    else
-    {
-        //Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( ren, loadedSurface );
-        if( newTexture == NULL )
-        {
+        logFile << "No se pudo cargar la imagen: " << path.c_str() << "! SDL_image Error: " <<  IMG_GetError() << endl;
+    } else{
+        newTexture = SDL_CreateTextureFromSurface(ren, loadedSurface);
+        if(newTexture == NULL){
         	loguear();
-        	logFile << "No se pudo crear textura de: " <<path.c_str() << "! SDL Error: " <<  SDL_GetError() << endl;
+        	logFile << "No se pudo crear textura de: " << path.c_str() << "! SDL Error: " <<  SDL_GetError() << endl;
         }
-
-        //Get rid of old loaded surface
-        SDL_FreeSurface( loadedSurface );
+        SDL_FreeSurface(loadedSurface);
     }
-
     return newTexture;
-	//return texture;
 }
 
 void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra){
@@ -317,8 +287,6 @@ void Dibujador::dibujar_agua(Agua* agua){
 	float nivel = (agua->GetNivel()*(escalador->getPixelY()/escalador->getEscalaY()));
 	this->renderTexture(textureAgua, renderizador, 0 , ((nivel*aux/100 + (nivel))) , escalador->getPixelX(), (escalador->getPixelY()-(agua->GetNivel() *(escalador->getPixelY()/escalador->getEscalaY()))+50));
 }
-
-
 
 int Dibujador::dibujarPaqueteFigura(structFigura figura){
 	int cantidad = figura.cantidad;
@@ -358,7 +326,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 	return retorno;
 }
 
-int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux){
+void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux){
 
 	int dir = paquete.direccion;
 	b2Vec2 tam = paquete.tamano;
@@ -395,21 +363,14 @@ int Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jug
 
 	std::string nombre_a_imprimir = string(paquete.nombre_cliente);
 	image = RenderText(paquete.nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[paquete.id_jugador], 20); // despues preguntar el nombre de cada uno
-	renderTexture2(image, this->renderizador, x - anchoPX ,y - 30 , 80 , 30 );
+	renderTexture2(image, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100) ,y - 30 , 80 , 30 );
 	if (image) SDL_DestroyTexture(image);
-//	int id = paquete.id_jugador;
 	if(paquete.seleccionado[cliente_id] == 1){
 		this->
-		renderTexture2(flechitaroja, this->renderizador, x - anchoPX, ((y)*aux/100)+(y-120), 80, 80);
+		renderTexture2(flechitaroja, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100), ((y)*aux/100)+(y-120), 80, 80);
 	}
 	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
-	//if (KEYS[SDLK_z]){
-//		this->dibujarMenuArmas(x,y);
-	//}
-
 	delete posicionVentanada;
-	//if (gusanito) SDL_DestroyTexture(gusanito);
-	return 1;
 }
 
 void Dibujador::dibujarMenuArmas(int x, int y){
@@ -428,18 +389,9 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	SDL_Texture* nombre = RenderText(nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
 	renderTexture2(nombre, this->renderizador, 0 , 0 , 100, 30 );
 
-
-	//std::string mensaje = "Se cerro el server";
-	//SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
-	//renderTexture2(mensaje_final, this->renderizador, 10 , 10 , 100, 100 );
-	//SDL_DestroyTexture(cartel);
-
-
 	if (paquete->mensaje_mostrar[0] != NULL){
-		//printf(" ENTRA ACAAAAAAAAAAAAA ****************************** \n");
 		char mensaje[50];
-		//strcpy(mensaje, " Se ha desconectado el usuario : ");
-		//strcat(mensaje, paquete->mensaje_mostrar);
+
 		SDL_Texture* cartel = RenderText(paquete->mensaje_mostrar, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
 		renderTexture2(cartel, this->renderizador, 0 , this->escalado_x/2 , 200, 30 );
 		SDL_DestroyTexture(cartel);
@@ -458,36 +410,33 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 
 bool Dibujador::init(){
 	bool success = true;
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-	{
+	if(SDL_Init(SDL_INIT_VIDEO) < 0){
 		loguear();
 		logFile << "    Error   " << "\t  SDL No pudo inicializar! SDL Error: " <<  SDL_GetError()<< endl;
 		success = false;
-	}
-	else{
-		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) ){
+	} else{
+		if(!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")){
 			loguear();
 			logFile << "    Warning " << "\t  Linear texture filtering no habilitado! " <<  endl;
 			success = false;
 		}
-		this->window = SDL_CreateWindow( "WORMS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, escalador->getVentanaX() , escalador->getVentanaY(), SDL_WINDOW_SHOWN );
-		if( this->window == NULL ){
+		this->window = SDL_CreateWindow("WORMS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, escalador->getVentanaX() , escalador->getVentanaY(), SDL_WINDOW_SHOWN);
+		if(this->window == NULL){
 			loguear();
 			logFile << "    Error   " << "\t  La ventana no pudo ser creada! SDL Error: " <<  SDL_GetError()<< endl;
 			success = false;
 		}
 		else{
-			this->renderizador = SDL_CreateRenderer( this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-			if( this->renderizador == NULL )	{
+			this->renderizador = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+			if(this->renderizador == NULL)	{
 				loguear();
 				logFile << "    Error   " << "\t  Renderer no pudo ser creado! SDL Error: " <<  SDL_GetError()<< endl;
 				success = false;
-			}
-			else{
-				SDL_SetRenderDrawColor( this->renderizador, 0xFF, 0xFF, 0xFF, 0xFF );
-				int imgFlags = (IMG_INIT_PNG |IMG_INIT_JPG ); //
-				int iniciadas = IMG_Init( imgFlags );
-				if((iniciadas & imgFlags) != imgFlags ){
+			} else{
+				SDL_SetRenderDrawColor(this->renderizador, 0xFF, 0xFF, 0xFF, 0xFF);
+				int imgFlags = (IMG_INIT_PNG |IMG_INIT_JPG); //
+				int iniciadas = IMG_Init(imgFlags);
+				if((iniciadas & imgFlags) != imgFlags){
 					loguear();
 					logFile << "    Error   " << "\t  SDL_image no puedo ser inicializado! SDL_image Error: " <<  SDL_GetError()<< endl;
 					success = false;
@@ -512,13 +461,8 @@ void Dibujador::close(){
 
 void Dibujador::dibujarMensaje(){
 	char mensaje[90];
-	//strcpy(mensaje, "Se cerro el server, la ventana se cerrar en:");
 	sprintf (mensaje, "Se cerro el server, la ventana se cerrara en: %d segundos", this->contador_cerrarse);
 	printf( " MENSAJE ES %s \n", mensaje);
-	//strcat(mensaje, contador);
-	//strcat(mensaje, "segundos");
-	//std::string mensaje = "Se cerro el server, la ventana se cerrara en ";
-
 	this->contador_cerrarse--;
 	SDL_Color color = {0,0,0};
 	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
@@ -531,19 +475,10 @@ int Dibujador::getContadorCerrarse(){
 	return this->contador_cerrarse;
 }
 
-
 void Dibujador::hacerZoom(int* posicion_mouse){
-	//printf(" HACE ZOOM \n");
-	//SDL_Rect rect;
 	escalaZoom += 10;
 	corrimientoX = posicion_mouse[0];
 	corrimientoY = posicion_mouse[1];
-	//rect = realizarZoom(this->rect, corrimientoX, corrimientoY, escalaZoom);
-	//rect.h = 600 * escalaZoom;
-	//rect.w = 800 * escalaZoom;
-	//rect.x = 0;
-	//rect.y = 0;
-	//SDL_RenderCopyEx(this->renderizador, this->textureTierra , NULL , &rect, 0. ,NULL,SDL_FLIP_NONE);
 }
 
 void Dibujador::alejarZoom(int* posicion_mouse){
@@ -551,5 +486,3 @@ void Dibujador::alejarZoom(int* posicion_mouse){
 	corrimientoX = posicion_mouse[0];
 	corrimientoY = posicion_mouse[1];
 }
-
-

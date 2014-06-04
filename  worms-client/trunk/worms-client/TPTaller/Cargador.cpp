@@ -30,6 +30,7 @@ Cargador::Cargador(const char* filename){
 		logFile <<"    Error  " << "\t El escenario no pudo ser cargado en un nodo. Se carga el escenario de '"<<pathDefEs<< "' por defecto." << endl;
 	}
 }
+
 Cargador::~Cargador(){
 	try{
 		this->f_input.close();
@@ -516,9 +517,7 @@ bool Cargador::validarColor(string color){
 			}
 		}
 	}
-
 	return valido;
-
 }
 
 SDL_Color Cargador::cargarColor(string color,size_t i){

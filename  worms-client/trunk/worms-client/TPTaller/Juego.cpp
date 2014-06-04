@@ -1,5 +1,6 @@
 #include "Juego.h"
 
+extern void loguear();
 
 Juego::Juego(){
 	mundo = NULL;
@@ -38,7 +39,7 @@ Juego::~Juego(){
 	delete lector;
 	delete mundo;
 	delete manejador;
-	delete escalador; //todo
+	delete escalador;
 	for(Uint8 i = 0; i < cantidad_jugadores; i++){
 		if(jugadores[i] != NULL){
 			delete jugadores[i];
@@ -88,10 +89,9 @@ void Juego::cargar() {
 	Node *nodo_escenario = this->cargaInicial(cargador);
 	this->cargaPrincipal(cargador, *nodo_escenario);
 	inicial = cargador->getPaqueteInicial();
-	delete nodo_escenario; //todo
+	delete nodo_escenario;
 	delete cargador;
 }
-
 
 
 // Funciones Privadas:
@@ -108,8 +108,8 @@ Node* Juego::cargaInicial(Cargador* cargador){
 			(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"escena"))||(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"escenar"))||(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"escenari"))||
 			(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"Esc"))||(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"ESC"))||(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"ESCENARIO"))||
 			(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"Escenario"))||(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"Esc")))){
-		//loguear();
-		//logFile << "    Error   " << "\t No se encuentra el escenario. Se carga escenario por defecto."<<endl;
+		loguear();
+		logFile << "    Error   " << "\t No se encuentra el escenario. Se carga escenario por defecto."<<endl;
 		delete cargador;
 		cargador = new Cargador(pathDefEs.c_str());
 		(*nodo_escenario) = cargador->getNodo()["escenario"];
@@ -120,8 +120,8 @@ Node* Juego::cargaInicial(Cargador* cargador){
 void Juego::cargarEscalador(Cargador *cargador, Node nodo_escenario){
 	this->escalador = cargador->loadEscalador(nodo_escenario);
 	if(!this->escalador){
-		//loguear();
-		//logFile << "    Error   " << "\t  No se pudo escalar la información "<< endl;
+		loguear();
+		logFile << "    Error   " << "\t  No se pudo escalar la información "<< endl;
 	}
 }
 
@@ -129,8 +129,8 @@ void Juego::cargarAgua(Cargador *cargador, Node nodo_escenario){
 	string imagen_agua = pathAgua;
 	this->agua = cargador->loadAgua(nodo_escenario, imagen_agua);
 	if(!this->agua){
-		//loguear();
-		//logFile << "    Error   " << "\t  No se pudo crear el agua. "<< endl;
+		loguear();
+		logFile << "    Error   " << "\t  No se pudo crear el agua. "<< endl;
 	}
 }
 
@@ -138,16 +138,16 @@ void Juego::cargarMundo(){
 	b2Vec2 escalas = b2Vec2(this->escalador->getEscalaX(), this->escalador->getEscalaY());
 	this->mundo = new Mundo(b2Vec2(GRAVEDAD_X,GRAVEDAD_Y), this->agua, escalas);
 	if(!this->mundo){
-		//loguear();
-		//logFile << "    Error   " << "\t  No se pudo crear el mundo."<< endl;
+		loguear();
+		logFile << "    Error   " << "\t  No se pudo crear el mundo."<< endl;
 	}
 }
 
 string Juego::cargarTierra(Cargador *cargador, Node nodo_escenario){
 	string tierra;
 	if(!((cargador->loadPath(nodo_escenario, "imagen_tierra",tierra))||(cargador->loadPath(nodo_escenario, "tierra",tierra))||(cargador->loadPath(nodo_escenario, "imagen-tierra",tierra)))){
-		//loguear();
-		//logFile << "    Error  " <<"\t No se pudo cargar el path correspondiente a la clave buscada. " << endl;
+		loguear();
+		logFile << "    Error  " <<"\t No se pudo cargar el path correspondiente a la clave buscada. " << endl;
 		tierra = pathDefMas;
 	}
 	return tierra;
@@ -156,8 +156,8 @@ string Juego::cargarTierra(Cargador *cargador, Node nodo_escenario){
 void Juego::cargarCielo(Cargador *cargador, Node nodo_escenario){
 	string cielo;
 	if(!((cargador->loadPath(nodo_escenario, "imagen_cielo",cielo))||(cargador->loadPath(nodo_escenario, "cielo",cielo))||(cargador->loadPath(nodo_escenario, "imagen-cielo",cielo)))){
-		//loguear();
-	//	logFile << "    Error  " <<"\t No se pudo cargar el path correspondiente a la clave buscada. " << endl;
+		loguear();
+		logFile << "    Error  " <<"\t No se pudo cargar el path correspondiente a la clave buscada. " << endl;
 		cielo = pathDefCielo;
 	}
 }
@@ -165,8 +165,8 @@ void Juego::cargarCielo(Cargador *cargador, Node nodo_escenario){
 void Juego::cargarLector(string tierra){
 	this->lector = new LectorMascara(tierra);
 	if(!this->lector){
-		//loguear();
-		//logFile << "    Error   " << "\t  No se pudo crear el L ector de Máscara. " <<  SDL_GetError()<< endl;
+		loguear();
+		logFile << "    Error   " << "\t  No se pudo crear el Lector de Máscara. " <<  SDL_GetError()<< endl;
 	}
 }
 
@@ -185,8 +185,8 @@ void Juego::cargarFiguras(Cargador *cargador, Node nodo_escenario){
 			this->figuras[i] = cargador->cargarFigura(objetos[i], this->mundo, this->escalador, i + 1);
 		}
 	}else{
-		//loguear();
-		//logFile << "    Warning " << "\t  No hay objetos para cargar "<< endl;
+		loguear();
+		logFile << "    Warning " << "\t  No hay objetos para cargar "<< endl;
 	}
 }
 
@@ -210,23 +210,19 @@ structInicial* Juego::getPaqueteInicial(){
 	return this->inicial;
 }
 
-
 void Juego::aplicarPaquete(structEvento* evento){
 	if (evento == NULL) return;
 	if (evento->click_mouse.x != -1){ // recibio un click
-		//printf(" APLICO UN PAQUETE CLICKKKKK con las posiciones : (%f, %f) \n", evento->click_mouse.x, evento->click_mouse.y);
 		manejador->seleccionarPersonaje(evento->click_mouse, evento->nro_jugador);
 	}
 	if (evento->direccion > 0){ // recibio un click
 		manejador->moverPersonaje(evento->direccion , evento->nro_jugador);
-		//printf(" APLICO UN PAQUETE MOVIMIENTO, PASO DE TURNO");
 		this->pasarTurno();
 	}
 	else return;
 }
 
 Jugador* Juego::agregarJugador(int id, char* nombre_cliente){
-
 	this->jugadores[id] = new Jugador(mundo,id,manejador, nombre_cliente);
 	Personaje** pers = this->jugadores[id]->getPersonajes();
 	this->manejador->AgregarJugador(mundo,id, pers);
@@ -247,4 +243,3 @@ void Juego::pasarTurno(){
 		jugador_actual =0;
 	}
 }
-

@@ -11,7 +11,6 @@ Poligono::Poligono(Mundo* mundo, b2Vec2 posicion, float32 escal, int cant_vertic
 
 	if(estatico) bodyDef.type = b2_staticBody;
 	else bodyDef.type = b2_dynamicBody;
-
 	body = world->CreateBody(&bodyDef);
 
 	b2MassData massData = b2MassData();

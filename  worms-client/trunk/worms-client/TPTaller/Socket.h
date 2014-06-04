@@ -1,10 +1,3 @@
-/*
- * Socket.h
- *
- *  Created on: 06/05/2014
- *      Author: sami
- */
-
 #ifndef SOCKET_H_
 #define SOCKET_H_
 
@@ -62,6 +55,7 @@ public:
 	int getFD();
 	void setInfo(struct sockaddr* sock );
 	struct addrinfo* getInfo();
+
 private:
 	int sockFD; //File descriptor asociado al socket
 	const char *puerto;

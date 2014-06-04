@@ -27,10 +27,10 @@ Socket::Socket(const char* puerto, int sockfd) {
 	this->puerto = puerto;
 	this->sockFD = sockfd;
 	this->activo = true;
+	this->info = NULL;
 }
 
 Socket::~Socket() {
-	//freeaddrinfo(this->info);
 	close(this->sockFD);
 }
 
@@ -57,10 +57,8 @@ int Socket::EnlazarYEscuchar(int cantMaxCon){
 int Socket::escuchar(int cantMaxCon){
 	int l = listen(this->sockFD, cantMaxCon);
 	if (l == -1) {
-			//loguear error todo
-	//		perror("listen");
-	//		exit(3);
-			return -1;
+		//loguear error todo
+		return -1;
 	}
 	return l;
 }
@@ -77,7 +75,6 @@ int Socket::aceptar(){
 	if (nuevoFD == -1) {
 		//loguear error todo
 		close(nuevoFD);
-		//perror("accept");
 	}
 	return nuevoFD;
 
@@ -103,7 +100,3 @@ int Socket::recibir(char* buffer, int longBuffer){
 int Socket::getFD(){
 	return this->sockFD;
 }
-
-
-
-

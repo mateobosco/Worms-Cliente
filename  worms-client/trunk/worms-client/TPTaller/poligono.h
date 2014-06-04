@@ -18,7 +18,6 @@ class Poligono : public Figura {
 		int dibujar(Dibujador* un_dibujador);
 		b2Vec2* getVertices();
 
-
 	private:
 		float32 radio; // longitud desde el centro al vertice (radio)
 		b2PolygonShape* shapePoligono;

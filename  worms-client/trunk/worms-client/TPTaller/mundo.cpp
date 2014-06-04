@@ -210,11 +210,9 @@ bool Mundo::destruir_cuerpo(b2Body* cuerpo){
 	return false;
 }
 
-
 int Mundo::GetCantVerticesTierra(){
 	return cantidad_vertices_tierra;
 }
-
 
 b2Vec2* Mundo::GetVerticesTierra(){
 	return vertices_tierra;
@@ -222,7 +220,6 @@ b2Vec2* Mundo::GetVerticesTierra(){
 b2Vec2 Mundo::GetEscalas(){
 	return escalas;
 }
-
 
 void Mundo::setFiguras(Figura** vect_figuras, int cant_figuras){
 	figuras = vect_figuras;

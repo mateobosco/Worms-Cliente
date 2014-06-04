@@ -25,12 +25,12 @@ int mainCliente(int argc, char* argv[]){
 	}
 	char* name = new char[MAX_NAME_USER];
 	memset(name,0,MAX_NAME_USER);
-	char* nombre = argv[POS_NAME_USER]; //inicializar todo
+	char* nombre = argv[POS_NAME_USER];
 	strcpy(name,nombre);
 
 	char* ip_sv = new char[20];
 	memset(ip_sv,0,20);
-	char* ip = argv[POS_IP]; //inicializar todo
+	char* ip = argv[POS_IP];
 	strcpy(ip_sv,ip);
 
 	char* puerto = new char[10];
@@ -47,8 +47,7 @@ int mainCliente(int argc, char* argv[]){
 		return EXIT_FAILURE;
 	}
 
-	while (!cliente->getPaqueteInicial()){
-	}
+	while (!cliente->getPaqueteInicial());
 
 	structInicial* paqueteInicial = (structInicial*) cliente->getPaqueteInicial();
 	if(paqueteInicial->cliente_aceptado){
@@ -69,9 +68,7 @@ int mainCliente(int argc, char* argv[]){
 		Agua* agua = new Agua(paqueteInicial->nivel_agua, pathAgua);
 		dibujador->iniciarFondo(agua, pathCielo, pathTierra);
 		dibujador->dibujarFondo();
-
 		SDL_Delay(2000);
-
 		int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
 		memset(posicion_mouse_click,'\0',2);
 		int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*3);
@@ -93,18 +90,10 @@ int mainCliente(int argc, char* argv[]){
 			keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
 			escalador->moverVentana(posicion_mouse_movimiento);
 			escalador->hacerZoom(posicion_mouse_scroll);
-			//if(posicion_mouse_scroll[2] == 1){
-			//	dibujador->hacerZoom(posicion_mouse_scroll);
-			//}
-			//if(posicion_mouse_scroll[2] == -1){
-			//	dibujador->alejarZoom(posicion_mouse_scroll);
-			//}
-
 			paquete = (structPaquete*) cliente->getPaquete();
 			cliente->setID(paquete->id);
-			//keyboard(event, posicion_mouse_movimiento, posicion_mouse_click, posicion_mouse_scroll);
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez);
-			if (evento){
+			if ((evento)){
 				cliente->actualizarPaquete(evento);
 			}
 			if(evento){
@@ -116,14 +105,15 @@ int mainCliente(int argc, char* argv[]){
 			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
 			if(!cliente->getServidorConectado()){
 				cliente->dibujarMensajeDesconexion();
+				if(cliente->getContadorCerrarse() == -1){
+					break;
+				}
 			}
-
 			dibujador->dibujar_agua(agua);
 			dibujador->actualizar();
 			posicion_mouse_scroll[2] = 0;
 			delete[] paquete;
 		}
-
 		delete paqueteInicial;
 		delete agua;
 		delete[] name;

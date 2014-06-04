@@ -1,5 +1,6 @@
 #ifndef MAIN_SERVER_H_
 #define MAIN_SERVER_H_
+
 #include "Juego.h"
 #include "Funciones.h"
 #include "Servidor.h"
@@ -53,7 +54,6 @@ int main_server(int argc,char* argv[]){
 	juego->getMundo()->step(0.1,1,1);
 
 	SDL_Delay(2000);
-	//TODO ACA ES DONDE TERMINA EL CODIGO INNECESARIO.
 
 	SDL_mutex *un_mutex = SDL_CreateMutex();
 	while(!servidor->getFinalizar()){
@@ -62,13 +62,10 @@ int main_server(int argc,char* argv[]){
 
 			if (clientes[i] != -1 && juego->getJugadores()[i] == NULL){
 				SDL_Delay(500);
-
 				Cliente* clienteActual = servidor->getClientes()[i];
 				char* nombre = clienteActual->getNombre();
 				Jugador* jug = juego->agregarJugador(i, nombre);
-
 				clienteActual->setJugador(jug);
-
 			}
 		}
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
@@ -78,12 +75,9 @@ int main_server(int argc,char* argv[]){
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 
 		destruirPaqueteCiclo(paqueteCiclo);
-
 		structEvento* evento =NULL;
 	    //while(evento == NULL){
-	    //	SDL_LockMutex(un_mutex);
 	    	evento = (structEvento*) servidor->desencolarPaquete();
-		//SDL_UnlockMutex(un_mutex);
 	    //}
 
 	    if(evento!=NULL) {
@@ -91,12 +85,9 @@ int main_server(int argc,char* argv[]){
 	    	free(evento);
 	    }
 	    SDL_Delay(5);
-
 		juego->getMundo()->step(0.01,100,100);
 		juego->getMundo()->comprobar_nivel_agua();
-
 	}
-
 
 	logFile.close();
 	delete juego;

@@ -1,10 +1,3 @@
-/*
- * Personaje.h
- *
- *  Created on: 24/04/2014
- *      Author: juanmahidalgo
- */
-
 #ifndef PERSONAJE_H_
 #define PERSONAJE_H_
 
@@ -22,14 +15,10 @@
 
 #include "mundo.h"
 
-
-
 class Personaje {
 public:
 	Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_cliente);
 	void mover(b2Vec2 direccion);
-	void saltar(b2Vec2 direccion);
-	void dejar_quieto();
 	SDL_Texture* dibujar(Dibujador* el_dibujador);
 	void leermovimiento(int direccion, int id_jugador);
 	void setSeleccionado(bool seleccion, int id_jugador);
@@ -54,7 +43,6 @@ public:
 	int getNrojugador();
 	virtual ~Personaje();
 	bool* getSeleccion();
-
 
 private:
 	char* dir_imagen;

@@ -15,9 +15,6 @@
 #include "Paquete.h"
 #include "Constantes.h"
 
-
-//extern ofstream logFile;
-
 using namespace std;
 using namespace YAML;
 
@@ -61,11 +58,6 @@ class Cargador{
 		float32 obtenerAlto(Node nodo,size_t i);
 
 };
-
-
-
-
-
 
 #endif /* CARGADOR_H_ */
 

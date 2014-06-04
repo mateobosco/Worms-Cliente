@@ -1,24 +1,17 @@
-/*
- * Personaje.cpp
- *
- *  Created on: 24/04/2014
- *      Author: juanmahidalgo
- */
-
 #include "Personaje.h"
 
-int random( int n ) // TODO
-{
-    static std::mt19937 generator( std::time(0) ) ;
-    std::uniform_int_distribution<> distribution( 0, n-1 ) ;
-    return distribution(generator) ;
+int random(int n){
+    static std::mt19937 generator(std::time(0));
+    std::uniform_int_distribution<> distribution(0, n-1);
+    return distribution(generator);
 }
 
 Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	conectado = 1;
 	nombre_cliente = nombre_client;
 	muerto = false;
-
+	this->radio = 0;
+	this->shape = NULL;
 	dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 	nro_jugador = numero_jugador;
 	b2Vec2 escalas = mundo->GetEscalas();
@@ -29,7 +22,6 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	b2Vec2 posicion;
 	while (!posicion_correcta){
 		int indice = random( (mundo->GetCantVerticesTierra()));
-	//int indice = 250;
 		posicion = vertices_tierra[indice] - b2Vec2(0,alto/2);
 		if (posicion.y < mundo->getAgua()->GetNivel()){
 			posicion_correcta=true;
@@ -43,37 +35,26 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 	body = world->CreateBody(&bodyDef);
 
 	b2MassData massData = b2MassData();
-
 	massData.mass = 0.1;
 	massData.center = b2Vec2(0, 0);
 	massData.I = RECT_INERCIA_ROT;
 	body->SetMassData(&massData);
-
-//	b2PolygonShape* polygonShape = new b2PolygonShape(); // creo una shape
-//	polygonShape->SetAsBox(ancho/2 , alto/2) ;
 	shape2 = new b2CircleShape();
 	shape2->m_radius = ancho/2;
 
-
 	b2Filter filtro = b2Filter();
 	filtro.groupIndex = INDICE_GRUPO;
-
 	b2FixtureDef fd; // creo un fixture
 	fd.filter = filtro;
 	fd.restitution = 0;
 	fd.friction = 0.5;
-	//fd.density = 100;
 	fd.shape = shape2;
-//	fd.shape = polygonShape; // le pongo el shape creado
 	body->CreateFixture(&fd); // al body le pongo la fixture creada
-//	shape = polygonShape;
 	body->SetAwake(false);
-	//seleccionado = false;
 	for (int i = 0 ; i<4; i++){
 		seleccionado[i] = false;
 	}
 	orientacion = 1;
-
 }
 
 Personaje::~Personaje() {
@@ -83,27 +64,15 @@ Personaje::~Personaje() {
 
 void Personaje::mover(b2Vec2 direccion){
 	float32 modulo = 0.20;
-	b2Vec2 fuerza = b2Vec2(modulo * direccion.x, modulo* direccion.y ); // TODO ver cuanto aplicarle
+	b2Vec2 fuerza = b2Vec2(modulo * direccion.x, modulo * direccion.y);
 	if (direccion.x > 0) orientacion = 1;
 	if (direccion.x < 0) orientacion = -1;
-	//body->ApplyForceToCenter(fuerza, true );
 	body->ApplyLinearImpulse(fuerza, body->GetWorldCenter(), true );
-}
-
-void Personaje::dejar_quieto(){
-
-}
-
-
-void Personaje::saltar(b2Vec2 direccion){
-	//TODO
-
 }
 
 SDL_Texture* Personaje::dibujar(Dibujador* el_dibujador){
 	return el_dibujador->dibujarPersonaje2(this);
 }
-
 
 b2Vec2* Personaje::getVertices(){
 	int cantidad = 4;
@@ -118,8 +87,6 @@ b2Vec2* Personaje::getVertices(){
 	return verticesGlobales;
 }
 
-
-
 float32* Personaje::getVecX(){
 	int cantidad = 4;
 	float32* vector_x = new float32[cantidad];
@@ -129,10 +96,8 @@ float32* Personaje::getVecX(){
 		vector_x[i] = vertices[i].x;
 	}
 	delete[] vertices;
-	//free(vertices);
 	return vector_x;
 }
-
 
 float32* Personaje::getVecY(){
 	int cantidad = 4;
@@ -143,13 +108,11 @@ float32* Personaje::getVecY(){
 		vector_y[i] = vertices[i].y;
 	}
 	delete[] vertices;
-	//free(vertices);
 	return vector_y;
 }
 
 void Personaje::leermovimiento(int direccion, int id_jugador){
 	if (this->nro_jugador == id_jugador&& seleccionado[id_jugador]){
-
 		if (direccion == 3 && body->GetLinearVelocity().x < 0.7){ // para la derecha
 			dir_imagen = "TPTaller/imagenes/gusanitoderecha.png";
 			orientacion=1;
@@ -235,4 +198,3 @@ void Personaje::conectar(){
 char* Personaje::getNombreCliente(){
 	return this->nombre_cliente;
 }
-

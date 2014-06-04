@@ -20,10 +20,9 @@ Servidor::Servidor(int maxCon){
 		vector_clientes[i]=0;
 		clientes[i] = NULL;
 	}
-
-	printf( "Socket SV: %i \n", this->getSocket()->getFD());
+	this->escuchar = NULL;
+	this->aceptar = NULL;
 }
-
 
 Servidor::~Servidor() {
 	this->finalizar = true;
@@ -43,9 +42,7 @@ void Servidor::setPaqueteInicial(char paquete[MAX_PACK]){
 
 void Servidor::actualizarPaquete(char paquete[MAX_PACK]){
 	this->enviar=true;
-	//SDL_LockMutex(mutex);
 	memcpy(this->paqueteEnviar, paquete, MAX_PACK);
-	//SDL_UnlockMutex(mutex);
 }
 
 void* Servidor::desencolarPaquete(){
@@ -69,7 +66,6 @@ int runSendInfo(void* par){
 	Cliente* cliente = cliente_servidor->cliente;
 	Servidor* servidor = cliente_servidor->servidor;
 	int retorno = servidor->runEnviarInfo(cliente);
-	printf("Sale del Hilo SV-Enviar al Cliente: %s\n", cliente->getNombre());
 	return retorno;
 }
 
@@ -78,7 +74,6 @@ int runRecvInfo(void* par){
 	Cliente* cliente = cliente_servidor->cliente;
 	Servidor* servidor = cliente_servidor->servidor;
 	int retorno = servidor->runRecibirInfo(cliente);
-	printf("Sale del Hilo SV-Recibir del Cliente: %s\n", cliente->getNombre());
 	return retorno;
 }
 
@@ -92,9 +87,6 @@ int Servidor::validarSocket(int sock){
 			if(fd != fdSock) salida = 0;
 			else return 1;
 		}
-//		int fd = this->clientes[i]->getSocket()->getFD();
-//		if(fd != fdSock) salida = 0;
-//		else return 1;
 	}
 	return salida;
 }
@@ -103,16 +95,14 @@ int Servidor::aceptarConexiones(){
 	int sockCliente = this->listener->aceptar();
 	//Se crea un cliente y un thread asociado a el y se invoca el método run.
 	if(sockCliente > 0){
-
 		Cliente* cliente = new Cliente(sockCliente);
 		bool recibio_nombre = false;
-		//SDL_LockMutex(this->mutex);
 		while (!recibio_nombre){
 			int bytes = this->recibirNombre(cliente);
 			if(bytes > 0 ) recibio_nombre = true;
 			if(bytes <= 0){
 				printf("Error al recibir nombre del cliente\n");
-				return EXIT_FAILURE;// TODO Verificar qué pasa si la # de Bytes es -1 o 0;
+				return EXIT_FAILURE;
 			}
 		}
 		if(recibio_nombre){
@@ -135,7 +125,7 @@ int Servidor::aceptarConexiones(){
 					}
 					this->setAceptado(true);
 					cliente->activar();
-					if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
+					if (this->runEnviarInfoInicial(cliente) <= 0 ){} /*log Error todo */
 					conexion_t par;
 					par.cliente = cliente;
 					par.servidor = this;
@@ -158,8 +148,7 @@ int Servidor::aceptarConexiones(){
 				}else {
 					this->setAceptado(false);
 					printf("Cliente Rechazado\n");
-					//this->runEnviarInfoInicial(cliente);
-					if (this->runEnviarInfoInicial(cliente) <= 0 ) /*log Error todo */;
+					if (this->runEnviarInfoInicial(cliente) <= 0 ){} /*log Error todo */
 					delete cliente;
 					return EXIT_FAILURE;
 				}
@@ -204,16 +193,13 @@ int Servidor::runEnviarInfo(Cliente* cliente){
 		memset(envio,0,MAX_PACK);
 		char envio2[MAX_PACK];
 		memset(envio2,0,MAX_PACK);
-		//SDL_LockMutex(this->mutex);
 		memcpy(envio, this->paqueteEnviar, MAX_PACK);
-		//SDL_UnlockMutex(this->mutex);
 		structPaquete* paqueteCiclo = (structPaquete*) envio;
 		paqueteCiclo->id=cliente->getID();
 		memcpy(envio2, paqueteCiclo, MAX_PACK);
 		if (setsockopt (cliente->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
 			sizeof(timeout)) < 0) return ERROR;
 		int enviados = cliente->getSocket()->enviar(envio2, MAX_PACK);
-
 		if (enviados > 0){
 			this->enviar = false;
 		}
@@ -235,29 +221,21 @@ int Servidor::runEnviarInfoInicial(Cliente* cliente){
 	SDL_Delay(25);
 	char envio[MAX_PACK];
 	memset(envio,0,MAX_PACK);
-	//SDL_LockMutex(this->mutex);
 	memcpy(envio, this->paqueteInicial, MAX_PACK);
-	//SDL_UnlockMutex(this->mutex);
-
 	struct timeval timeout;
 	timeout.tv_sec = 10;
 	timeout.tv_usec = 0;
-
     if (setsockopt (cliente->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
                 sizeof(timeout)) < 0) return ERROR;
-
 	int enviados = cliente->getSocket()->enviar(envio, MAX_PACK);
-
 	if (enviados > 0){
 		this->enviar = false;
 	}
 	if(enviados == 0){
-		printf("SV-EnviarInicial: 0b = Cliente %s desconectado \n", cliente->getNombre());
 		showTime();
 		cliente->desactivar();
 	}
 	if(enviados == -1){ // no se pudo enviar
-		printf("SV-EnviarInicial: Error -1 Cliente %s\n", cliente->getNombre());
 		showTime();
 		cliente->desactivar();
 	}
@@ -281,7 +259,6 @@ int Servidor::runRecibirInfo(void* cliente){
 		if(cantidad >0){
 			structEvento* evento = (structEvento*) paquete;
 			void* novedad = malloc (MAX_PACK);
-			//SDL_LockMutex(this->mutex);
 			memcpy(novedad, paquete, MAX_PACK); //todo ver como determinar el tamaño del paquete
 			SDL_LockMutex(this->mutex);
 			if (this->paquetesRecibir.empty()) this->paquetesRecibir.push(novedad);
@@ -292,14 +269,12 @@ int Servidor::runRecibirInfo(void* cliente){
 			if (anterior == NULL) continue;
 			if (anterior->aleatorio != evento->aleatorio){
 				if (evento->click_mouse.x == -1 && evento->direccion==-9 && evento->click_mouse.y == -1 ){
-				}
-				else{
+				} else{
 					this->paquetesRecibir.push(novedad);
 				}
 			}
 		}
 		else if(cantidad == 0){
-			printf("SV-Recibir: Se ha desconectado el cliente %s.\n", client->getNombre());
 			showTime();
 			loguear();
 			logFile << "Cliente: " << client->getNombre() << "desconectado "<< endl;
@@ -308,15 +283,12 @@ int Servidor::runRecibirInfo(void* cliente){
 			strcpy(mensaje, "Se ha desconectado el cliente: ");
 			strcat(mensaje, client->getNombre());
 			this->setMensajeMostrar(mensaje);
-
 		}
 		else if(cantidad ==-1){
-			printf("SV-Recibir: Error -1 Cliente: %s\n", client->getNombre());
 			showTime();
 			client->desactivar();
 			loguear();
 			logFile << "Error al recibir información del cliente: " << client->getNombre() << endl;
-//			break;
 		}
 	}
 	return EXIT_SUCCESS;
@@ -327,12 +299,10 @@ int Servidor::runEscucharConexiones(){
 	try{
 		conexiones = this->getSocket()->EnlazarYEscuchar(this->cantidadMaxConexiones);
 	}catch(exception &e){
-		//loguear error
 		loguear();
 		logFile << "No se pudo enlazar y escuchar" << endl;
 		close(this->listener->getFD());
 		return EXIT_FAILURE;
-
 	}
 	while(!this->finalizar){
 		while((!this->finalizar) && (this->cantClientes < this->cantidadMaxConexiones)){

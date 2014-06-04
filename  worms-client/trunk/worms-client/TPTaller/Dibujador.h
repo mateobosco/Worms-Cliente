@@ -46,7 +46,7 @@ public:
 	void iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra);
 	void dibujarFondo();
 	int dibujarPaqueteFigura(structFigura paquete);
-	int dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux);
+	void dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux);
 	SDL_Texture* RenderText(std::string message, std::string fontFile,  SDL_Color color, int fontSize);
 	bool init();
 	void close();
@@ -65,7 +65,6 @@ protected:
 	float32 escalado_x, escalado_y;
 
 private:
-
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 	SDL_Texture* textureCielo;
 	SDL_Texture* textureAgua;
@@ -81,8 +80,6 @@ private:
 	int escalaZoom;
 	int corrimientoX;
 	int corrimientoY;
-
 };
-
 
 #endif /* DIBUJADOR_H_ */

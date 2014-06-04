@@ -1,12 +1,9 @@
-
-
 #include "Paquete.h"
 
 structFigura* crearPaqueteFigura(Figura* figura){
 	structFigura* paquete = new structFigura;
 	int tipo = figura->tipo;
 	paquete->color= figura->getColor();
-	//b2Vec2* vector1;
 
 	if (tipo == 0){ //ES UN CIRCULO
 		Circulo* circulo = (Circulo*) figura;
@@ -37,14 +34,14 @@ structFigura* crearPaqueteFigura(Figura* figura){
 structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 	structPersonaje* paquete = new structPersonaje;
 	b2Vec2 pos = personaje->getPosition();
-	int dir;
-	b2Body* body = personaje->getBody();
-	if (body->GetLinearVelocity().x > 0.5 ){
-		dir = 1;
-	}
-	else{
-		dir = -1;
-	}
+//	int dir;
+//	b2Body* body = personaje->getBody();
+//	if (body->GetLinearVelocity().x > 0.5 ){
+//		dir = 1;
+//	}
+//	else{
+//		dir = -1;
+//	}
 	paquete->direccion = personaje->getOrientacion();
 	paquete->posicion = pos;
 	paquete->tamano.x = personaje->getAncho();
@@ -61,10 +58,8 @@ structPersonaje* crearPaquetePersonaje(Personaje* personaje){
 			paquete->seleccionado[i]=0;
 		}
 	}
-
 	return paquete;
 }
-
 
 void destruirPaqueteFigura(structFigura* paquete){
 	delete paquete;
@@ -74,17 +69,14 @@ void destruirPaquetePersonaje(structPersonaje* paquete){
 	delete paquete;
 }
 
-
-
 structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
-	structEvento* paquete = new structEvento; //todo
+	structEvento* paquete = new structEvento;
 	b2Vec2 posicion(click[0],click[1]);
 	b2Vec2 posicionEscalada = escalador->escalarPosicion(posicion);
 	paquete->click_mouse = posicionEscalada;
 	paquete->direccion = -9; //DIRECION NO VALIDA
 	paquete->nro_jugador = cliente;
 	paquete->aleatorio = random();
-
 	return paquete;
 }
 
@@ -106,18 +98,9 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 			paquete->direccion = 1;
 		}
 	}
-	//if ((KEYS[100] && KEYS[102])){ // arriba a la derecha
-	//		paquete->direccion = 4;
-	//}
-	//if ((KEYS[102] && KEYS[101])){ // para arriba a la izquierda
-	//	paquete->direccion = 5;
-	//}
-
-
 	paquete->nro_jugador = id_jugador;
 	paquete->click_mouse = b2Vec2( -1, -1 );
 	paquete->aleatorio = random();
-	//printf(" MANDO UN PAQUETE MOVER con la direccion %d \n", paquete->direccion);
 	return paquete;
 }
 
@@ -147,21 +130,18 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 			return crearPaqueteVacio();
 		}
 
-	}
-	else if (click[0] != -1){
-
-		paquete = crearPaqueteClick(click, escalador, cliente);
-		//printf(" MANDO UN MAQUETE CLICK con las posiciones : (%f, %f) \n", paquete->click_mouse.x, paquete->click_mouse.y);
-	}
-	else {
-		paquete = crearPaqueteVacio();
+	} else{
+		if (click[0] != -1){
+			paquete = crearPaqueteClick(click, escalador, cliente);
+		} else {
+			paquete = crearPaqueteVacio();
+		}
 	}
 	return paquete;
-
 }
 
 structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int nro_jugador){
-	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);//sizeof(structPaquete)
+	structPaquete* paquete = (structPaquete*) malloc(MAX_PACK);
 	paquete->tipo = 1;
 
 	Personaje** vector_personajes = mundo->getPersonajes();
@@ -183,7 +163,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int nro_jugador){
 	if (mensaje != NULL){
 		strcpy(paquete->mensaje_mostrar, mensaje);
 	}
-
 	return paquete;
 }
 

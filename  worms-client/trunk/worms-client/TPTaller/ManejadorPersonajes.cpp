@@ -1,14 +1,6 @@
-/*
- * ManejadorPersonajes.cpp
- *
- *  Created on: 26/04/2014
- *      Author: juanmahidalgo
- */
-
 #include "ManejadorPersonajes.h"
 #include <Box2D/Box2D.h>
 #include <SDL2/SDL.h>
-
 
 #define RADIOMOUSE 1
 
@@ -29,14 +21,12 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 	shapeMouse->m_radius = RADIOMOUSE;
 	b2Transform transformMouse = b2Transform(posicion, b2Rot(0) );
 
-	//for (int i = 0; i < this->personajesMax * this->cantidad_jugadores ; i++){
 	for (int i = 0; i < this->cantidad_actual_personajes ; i++){
 		printf("CANTIDAD ACTUAL DE JUGADORES %d \n", this->cantidad_actual_personajes);
 
 		Personaje* personaje = this->vector_personajes[i];
 		b2Body* body_actual = personaje->getBody();
 		b2Transform transformada_actual = body_actual->GetTransform();
-		//b2PolygonShape* shape_actual = personaje->getShape();
 		b2CircleShape* shape_actual = personaje->getShape();
 
 		bool resultado = b2TestOverlap(shape_actual,0, shapeMouse , 0,  transformada_actual, transformMouse);
@@ -52,7 +42,7 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 			if (id_jugador == dueno) printf ("SELECCIONO UN PERSONAJE PROPIO _____________-----------------_________________ \n");
 		}
 	}
-	delete shapeMouse; //todo
+	delete shapeMouse;
 }
 
 //TODO hay que borrarlo
@@ -60,7 +50,6 @@ void ManejadorPersonajes::AgregarJugador(Mundo* mundo, int id_jugador, Personaje
 	for(int i=0 ; i <this->personajesMax; i++){
 		this->vector_personajes[i+this->cantidad_actual_personajes] = vectorPersonajes[i];
 	}
-	//this->cantidad_actual_personajes += this->personajesMax;
 	this->cantidad_jugadores+=1;
 }
 
@@ -71,15 +60,6 @@ Personaje** ManejadorPersonajes::getPersonajes(){
 int ManejadorPersonajes::getCantidadPersonajes(){
 	return this->cantidad_actual_personajes;
 }
-
-//void ManejadorPersonajes::moverPersonaje(SDL_Event event, bool* KEYS,int id_jugador){
-//	for (int j = 0; j < personajesMax * cantidad_jugadores; j++){
-//		Personaje* personaje_actual = vector_personajes[j];
-//		if (! personaje_actual->getMuerto()){
-//			personaje_actual->leermovimiento(event, KEYS, id_jugador);
-//		}
-//	}
-//}
 
 void ManejadorPersonajes::moverPersonaje(int direccion,int id_jugador){
 	for (int j = 0; j < this->cantidad_actual_personajes; j++){
@@ -93,11 +73,8 @@ void ManejadorPersonajes::moverPersonaje(int direccion,int id_jugador){
 void ManejadorPersonajes::agregarPersonaje(Personaje *personaje, uint8 numero_jugador){
 	this->vector_personajes[this->cantidad_actual_personajes] = personaje;
 	this->cantidad_actual_personajes++;
-	//this->cantidad_jugadores = numero_jugador;
 }
 
 int ManejadorPersonajes::getCantidadJugadores(){
 	return this->cantidad_jugadores;
 }
-
-

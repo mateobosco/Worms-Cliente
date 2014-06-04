@@ -231,8 +231,8 @@ void Escalador::moverAbajo(int n){
 int Escalador::zoomAlejar(){
 	int zom = zoom - VELZOOM;
 	if (zom <= 10) return -5;
-	int offX = (offsetX - centroX) / ((float32) (100 + VELZOOM) /100) + centroX;
-	int offY = (offsetY - centroY) / ((float32) (100 + VELZOOM) /100) + centroY;
+	int offX = (offsetX -centroX ) / ((float32) (100 - VELZOOM) /100) + centroX * ((float32) (100 - VELZOOM) /100);
+	int offY = (offsetY -centroY ) / ((float32) (100 - VELZOOM) /100) + centroY * ((float32) (100 - VELZOOM) /100);
 
 
 //
@@ -268,10 +268,11 @@ int Escalador::zoomAlejar(){
 }
 
 int Escalador::zoomAcercar(){
-	if (zoom >= 1000) return -5;
+	if (zoom >= 200) return -5;
 	int zom = zoom + VELZOOM;
-	int offX = (offsetX - centroX) * ((float32) (100 + VELZOOM) /100) + centroX;
-	int offY = (offsetY - centroY) * ((float32) (100 + VELZOOM) /100) + centroY;
+	int offX = (offsetX -centroX ) / ((float32) (100 + VELZOOM) /100) + centroX * ((float32) (100 + VELZOOM) /100);
+	int offY = (offsetY -centroY ) / ((float32) (100 + VELZOOM) /100) + centroY * ((float32) (100 + VELZOOM) /100);
+
 
 
 //	if (offX < 0) return -1;
@@ -279,17 +280,17 @@ int Escalador::zoomAcercar(){
 //	if ((offX + ventanaX)/((float32) zom/100) > pixelesX ) return -1;
 //	if ((offY + ventanaY)/((float32) zom/100) > pixelesY ) return -1;
 
-	while (offX < 0){
+	while (offX < 0 && offX < 20){
 		offX ++;
 	}
-	while (offY < 0){
+	while (offY < 0 && offY < 20){
 		offY ++;
 	}
-	while ((offX + ventanaX)/((float32) zom/100) > pixelesX ){
+	while ((offX + ventanaX)/((float32) zom/100) > pixelesX-20 ){
 		offX --;
 		if (offX < 1) return -1;
 	}
-	while ((offY + ventanaY)/((float32) zom/100) > pixelesY ){
+	while ((offY + ventanaY)/((float32) zom/100) > pixelesY-20 ){
 		if (offY < 1) return -1;
 		offY --;
 	}
@@ -312,32 +313,26 @@ void Escalador::hacerZoom(int* posicion_mouse_scroll){
 
 
 	if (posicion_mouse_scroll[2] == 1){
-		centroX = abs(ventanaX - posicion_mouse_scroll[0]);
-		centroY = abs(ventanaY - posicion_mouse_scroll[1]);
-//		centroX = this->ventanaX/2;
-//		centroY = this->ventanaY/2;
+//		centroX = abs(ventanaX - posicion_mouse_scroll[0]);
+//		centroY = abs(ventanaY - posicion_mouse_scroll[1]);
+		centroX = posicion_mouse_scroll[0];
+		centroY = posicion_mouse_scroll[1];
+
 		int resultado = this->zoomAcercar();
-//		if (resultado != 0){
-//			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100)  - offsetX;
-//			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100)  - offsetY;
-//			resultado = this->zoomAcercar();
-//		}
+
 
 
 
 
 	}
 	if (posicion_mouse_scroll[2] == -1){
-		centroX = abs(ventanaX - posicion_mouse_scroll[0]);
-		centroY = abs(ventanaY - posicion_mouse_scroll[1]);
+//		centroX = abs(ventanaX - posicion_mouse_scroll[0]);
+//		centroY = abs(ventanaY - posicion_mouse_scroll[1]);
+		centroX = posicion_mouse_scroll[0];
+		centroY = posicion_mouse_scroll[1];
 
 
 		int resultado = this->zoomAlejar();
-//		if (resultado != 0){
-//			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100) + ventanaX/2 - offsetX;
-//			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100) + ventanaY/2 - offsetY;
-//			this->zoomAlejar();
-//		}
 		if (resultado == 0) return;
 
 	}
@@ -370,6 +365,6 @@ void Escalador::moverVentana(int* posicion_mouse){
 	if (posicion_mouse[1] <  BORDE2 && posicion_mouse[1]>=0 ){
 		this->moverArriba(VEL2);
 	}
-	printf("los offset son %d %d y el zoom %d \n", offsetX, offsetY, zoom);
+	printf("los offset son %d %d y el zoom %d  y los CENTROS SON %d %d \n", offsetX, offsetY, zoom, centroX,centroY);
 
 }

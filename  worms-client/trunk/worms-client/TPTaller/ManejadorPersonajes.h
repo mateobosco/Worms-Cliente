@@ -1,10 +1,3 @@
-/*
- * ManejadorPersonajes.h
- *
- *  Created on: 26/04/2014
- *      Author: juanmahidalgo
- */
-
 #ifndef MANEJADORPERSONAJES_H_
 #define MANEJADORPERSONAJES_H_
 

@@ -85,6 +85,4 @@ class Cliente{
 		int getContadorCerrarse();
 };
 
-
-
 #endif /* CLIENTE_H_ */

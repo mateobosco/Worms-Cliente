@@ -16,8 +16,8 @@ Escalador::Escalador(int ventanaX, int ventanaY, float32 escalaX, float32 escala
 	this->ventanaY = ventanaY;
 	this->escalaX = escalaX;
 	this->escalaY = escalaY;
-	this->offsetX = centroX - ventanaX/2;
-	this->offsetY = centroY - ventanaY/2;
+	this->offsetX = (pixelesX - ventanaX)/2;
+	this->offsetY = (pixelesY - ventanaY)/2;
 	this->zoom = 100;
 }
 
@@ -53,8 +53,8 @@ float32 Escalador::getEscalaY(){
 
 b2Vec2 Escalador::escalarPosicion(b2Vec2 posicionPixel){
 
-	float32 escaladoX = ((posicionPixel.x+offsetX -centroX) *((float)100/zoom) + centroX) * ((float)escalaX/pixelesX);
-	float32 escaladoY = ((posicionPixel.y+offsetY -centroY) *((float)100/zoom) + centroY) * ((float)escalaY/pixelesY);
+	float32 escaladoX = ((posicionPixel.x+offsetX ) *((float)100/zoom) ) * ((float)escalaX/pixelesX);
+	float32 escaladoY = ((posicionPixel.y+offsetY ) *((float)100/zoom) ) * ((float)escalaY/pixelesY);
 	b2Vec2 escalado = b2Vec2(escaladoX,escaladoY);
 	return escalado;
 }
@@ -165,25 +165,25 @@ int Escalador::aplicarZoomY(float32 valor){
 }
 
 int Escalador::aplicarZoomXaEscala(float32 valor){
-	int n = (int) ((valor *(pixelesX/escalaX))-centroX)*((float32)zoom/100) +centroX;
+	int n = (int) ((valor *(pixelesX/escalaX)))*((float32)zoom/100) ;
 	n = n - offsetX;
 	return n;
 }
 
 int Escalador::aplicarZoomYaEscala(float32 valor){
-	int n = (int) ((valor *(pixelesY/escalaY))-centroY)*((float32)zoom/100) +centroY;
+	int n = (int) ((valor *(pixelesY/escalaY)))*((float32)zoom/100) ;
 	n = n - offsetY;
 	return n;
 }
 
 int Escalador::aplicarZoomXaPix(int valor){
-	int n = (int) (valor-centroX)*((float32)zoom/100) +centroX;
+	int n = (int) (valor)*((float32)zoom/100) ;
 	n = n - offsetX;
 	return n;
 }
 
 int Escalador::aplicarZoomYaPix(int valor){
-	int n = (int) (valor-centroY)*((float32)zoom/100) +centroY;
+	int n = (int) (valor)*((float32)zoom/100);
 	n = n - offsetY;
 	return n;
 }
@@ -204,41 +204,63 @@ b2Vec2* Escalador::aplicarZoomPosicion(b2Vec2 posicionEscalar){
 }
 
 void Escalador::moverDerecha(int n){
-	if (((((offsetX + ventanaX-centroX)*(float)100/zoom))+centroX) >= pixelesX-5) return;
+//	if (((((offsetX + ventanaX-centroX)*(float)100/zoom))+centroX) >= pixelesX-5) return;
+	if ((offsetX + ventanaX)/((float32) zoom/100) > pixelesX -5) return;
 	offsetX += n;
 }
 
 void Escalador::moverIzquierda(int n){
-	if (((((offsetX+centroX)*(float32)zoom/100))-centroX) <= 5) return;
+//	if (((((offsetX+centroX)*(float32)zoom/100))-centroX) <= 5) return;
+	if (offsetX < 5) return;
 	offsetX -=n;
 }
 
 void Escalador::moverArriba(int n){
-	if (((((offsetY+centroY)*(float32)zoom/100))-centroY) <= 5) return;
+//	if (((((offsetY+centroY)*(float32)zoom/100))-centroY) <= 5) return;
+	if (offsetY<5) return;
 	offsetY -=n;
 }
 
 void Escalador::moverAbajo(int n){
-	if (((((offsetY + ventanaY-centroY)*(float32)100/zoom))+centroY) >= pixelesY-5) return;
+//	if (((((offsetY + ventanaY-centroY)*(float32)100/zoom))+centroY) >= pixelesY-5) return;
+	if ((offsetY + ventanaY)/((float32) zoom/100) > pixelesY -5) return;
+
 	offsetY +=n;
 }
 
 int Escalador::zoomAlejar(){
 	int zom = zoom - VELZOOM;
 	if (zom <= 10) return -5;
+	int offX = (offsetX - centroX) / ((float32) (100 + VELZOOM) /100) + centroX;
+	int offY = (offsetY - centroY) / ((float32) (100 + VELZOOM) /100) + centroY;
 
-	if (((((offsetX + centroX) * (float32)zom/100)) - centroX) <= 5){
-		return -1;
+
+//
+//	if (offX < 0) return -1;
+//	if (offY < 0) return -1;
+//	if ((offX + ventanaX)/((float32) zom/100) > pixelesX -5) return -1;
+//	if ((offY + ventanaY)/((float32) zom/100) > pixelesY -5) return -1;
+
+	while (offX < 0){
+		offX ++;
 	}
-	if (((((offsetY + centroY) * (float32)zom/100)) - centroY) <= 5){
-		return -4;
+	while (offY < 0){
+		offY ++;
 	}
-	if (((((offsetX + ventanaX - centroX) * (float32)100/zom)) + centroX) >= pixelesX-5){
-		return -3;
+	while ((offX + ventanaX)/((float32) zom/100) > pixelesX ){
+		offX --;
+		if (offX < 1) return -1;
 	}
-	if (((((offsetY + ventanaY - centroY) * (float32)100/zom)) + centroY) >= pixelesY-5){
-		return -2;
+	while ((offY + ventanaY)/((float32) zom/100) > pixelesY ){
+		if (offY < 1) return -1;
+		offY --;
 	}
+
+
+
+
+	offsetX = offX;
+	offsetY = offY;
 
 
 	zoom -= VELZOOM;
@@ -248,20 +270,34 @@ int Escalador::zoomAlejar(){
 int Escalador::zoomAcercar(){
 	if (zoom >= 1000) return -5;
 	int zom = zoom + VELZOOM;
+	int offX = (offsetX - centroX) * ((float32) (100 + VELZOOM) /100) + centroX;
+	int offY = (offsetY - centroY) * ((float32) (100 + VELZOOM) /100) + centroY;
 
-	if (((((offsetX + centroX) * (float32)zom/100)) - centroX) <= 5){
-		return -1;
+
+//	if (offX < 0) return -1;
+//	if (offY < 0) return -1;
+//	if ((offX + ventanaX)/((float32) zom/100) > pixelesX ) return -1;
+//	if ((offY + ventanaY)/((float32) zom/100) > pixelesY ) return -1;
+
+	while (offX < 0){
+		offX ++;
 	}
-	if (((((offsetY + centroY) * (float32)zom/100)) - centroY) <= 5){
-		return -4;
+	while (offY < 0){
+		offY ++;
 	}
-	if (((((offsetX + ventanaX - centroX) * (float32)100/zom)) + centroX) >= pixelesX-5){
-		return -3;
+	while ((offX + ventanaX)/((float32) zom/100) > pixelesX ){
+		offX --;
+		if (offX < 1) return -1;
 	}
-	if (((((offsetY + ventanaY - centroY) * (float32)100/zom)) + centroY) >= pixelesY-5){
-		return -2;
+	while ((offY + ventanaY)/((float32) zom/100) > pixelesY ){
+		if (offY < 1) return -1;
+		offY --;
 	}
 
+
+
+	offsetX = offX;
+	offsetY = offY;
 
 	this->zoom += VELZOOM;
 	return 0;
@@ -276,32 +312,32 @@ void Escalador::hacerZoom(int* posicion_mouse_scroll){
 
 
 	if (posicion_mouse_scroll[2] == 1){
-		centroX = posicion_mouse_scroll[0];
-		centroY = posicion_mouse_scroll[1];
+		centroX = abs(ventanaX - posicion_mouse_scroll[0]);
+		centroY = abs(ventanaY - posicion_mouse_scroll[1]);
 //		centroX = this->ventanaX/2;
 //		centroY = this->ventanaY/2;
 		int resultado = this->zoomAcercar();
-		if (resultado != 0){
-			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100)  - offsetX;
-			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100)  - offsetY;
-			resultado = this->zoomAcercar();
-		}
+//		if (resultado != 0){
+//			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100)  - offsetX;
+//			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100)  - offsetY;
+//			resultado = this->zoomAcercar();
+//		}
 
 
 
 
 	}
 	if (posicion_mouse_scroll[2] == -1){
-		centroX = ventanaX - posicion_mouse_scroll[0];
-		centroY = ventanaY - posicion_mouse_scroll[1];
+		centroX = abs(ventanaX - posicion_mouse_scroll[0]);
+		centroY = abs(ventanaY - posicion_mouse_scroll[1]);
 
 
 		int resultado = this->zoomAlejar();
-		if (resultado != 0){
-			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100) + ventanaX/2 - offsetX;
-			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100) + ventanaY/2 - offsetY;
-			this->zoomAlejar();
-		}
+//		if (resultado != 0){
+//			centroX = ((pixelesX/2 ) - ventanaX/2) * ((float32) zoom/100) + ventanaX/2 - offsetX;
+//			centroY = ((pixelesY/2 ) - ventanaY/2) * ((float32) zoom/100) + ventanaY/2 - offsetY;
+//			this->zoomAlejar();
+//		}
 		if (resultado == 0) return;
 
 	}
@@ -334,5 +370,6 @@ void Escalador::moverVentana(int* posicion_mouse){
 	if (posicion_mouse[1] <  BORDE2 && posicion_mouse[1]>=0 ){
 		this->moverArriba(VEL2);
 	}
+	printf("los offset son %d %d y el zoom %d \n", offsetX, offsetY, zoom);
 
 }

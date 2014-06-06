@@ -31,8 +31,6 @@ Dibujador::Dibujador(){
 	this->contador_cerrarse = 10;
 	this->oscilaragua = 0;
 	this->escalaZoom = 100;
-	this->corrimientoX = 0;
-	this->corrimientoY = 0;
 	bazooka = loadTexture("TPTaller/imagenes/bazooka", this->renderizador);
 	granada = loadTexture("TPTaller/imagenes/granada", this->renderizador);
 	dinamita = loadTexture("TPTaller/imagenes/dinamita", this->renderizador);
@@ -58,10 +56,6 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->contador_cerrarse = 10;
 	this->oscilaragua = 0;
 	this->escalaZoom = 100;
-	this->corrimientoX = 0;
-	this->corrimientoY = 0;
-
-
 }
 
 Dibujador::~Dibujador(){
@@ -216,20 +210,36 @@ void Dibujador::renderTexture2(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 	}
 }
 
-void Dibujador::renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo){
+void Dibujador::renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2){
 	SDL_Rect dst;
 	dst.x = x;
 	dst.y = y;
 	dst.w = w;
 	dst.h = h;
 	SDL_Point point;
-	point.x=0;
-	point.y=h/2;
+	point.x=punto1;
+	point.y=punto2;
 	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, &point,SDL_FLIP_NONE)!=0){
 		loguear();
 		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
 	}
 }
+
+void Dibujador::renderTexture5(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2){
+	SDL_Rect dst;
+	dst.x = x + cos(angulo * PI/180) * this->escalaZoom;
+	dst.y = y + sin(angulo * PI/180) * this->escalaZoom;
+	dst.w = w;
+	dst.h = h;
+	SDL_Point point;
+	point.x=punto1;
+	point.y=punto2;
+	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, &point,SDL_FLIP_NONE)!=0){
+		loguear();
+		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+	}
+}
+
 void Dibujador::renderTexture4(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo){
 	SDL_Rect dst;
 	dst.x = x;
@@ -428,9 +438,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
 		printf(" El angulo del arma es %d \n", paquete.angulo_arma);
-		renderTexture3(bazooka, this->renderizador,x+12,y-5,w+5,h+5, paquete.angulo_arma);
-
-		renderTexture4(mira, this->renderizador, x+60,y-25,w+5,h+5, paquete.angulo_arma);
+		renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
 		if(bazooka) SDL_DestroyTexture(bazooka);
 		//if(mira) SDL_DestroyTexture(mira);
 	}
@@ -497,7 +507,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 
 bool Dibujador::init(){
 	bool success = true;
-	if(SDL_Init(SDL_INIT_VIDEO) < 0){
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0){
 		loguear();
 		logFile << "    Error   " << "\t  SDL No pudo inicializar! SDL Error: " <<  SDL_GetError()<< endl;
 		success = false;
@@ -527,6 +537,9 @@ bool Dibujador::init(){
 					loguear();
 					logFile << "    Error   " << "\t  SDL_image no puedo ser inicializado! SDL_image Error: " <<  SDL_GetError()<< endl;
 					success = false;
+				}
+				if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) < 0){
+					printf("Error: %s\n", Mix_GetError());
 				}
 			}
 		}
@@ -561,19 +574,6 @@ void Dibujador::dibujarMensaje(){
 int Dibujador::getContadorCerrarse(){
 	return this->contador_cerrarse;
 }
-
-void Dibujador::hacerZoom(int* posicion_mouse){
-	escalaZoom += 10;
-	corrimientoX = posicion_mouse[0];
-	corrimientoY = posicion_mouse[1];
-}
-
-void Dibujador::alejarZoom(int* posicion_mouse){
-	escalaZoom-=10;
-	corrimientoX = posicion_mouse[0];
-	corrimientoY = posicion_mouse[1];
-}
-
 
 void Dibujador::mostrarCartelTurno(int nro_jugador, char* nombre){
 	char mensaje[90];

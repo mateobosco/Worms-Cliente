@@ -1,27 +1,28 @@
-/*
- * Arma.h
- *
- *  Created on: 30/05/2014
- *      Author: juanmahidalgo
- */
-
 #ifndef ARMA_H_
 #define ARMA_H_
 
+#include "Constantes.h"
+#include "figura.h"
+#include "Personaje.h"
 
+class Arma{
+	private:
+		char* dir_imagen;
+		b2Body* body;
+		b2PolygonShape* shape;
+		int danio;
+		float fuerza;
+		int angulo;
 
-class Arma {
-public:
-	Arma();
-	virtual ~Arma();
-	//void Disparar(b2Vec2 objetivo);
+		b2Vec2* definirImpulso(b2Vec2 destino);
 
-
-
-private:
-	int velocidad;
-
-
+	public:
+		Arma();
+		virtual ~Arma();
+		void disparar();
+		int checkImpacto(Mundo *mundo);
+		bool setFuerza();
+		void setAngulo(int un_angulo);
 };
 
 #endif /* ARMA_H_ */

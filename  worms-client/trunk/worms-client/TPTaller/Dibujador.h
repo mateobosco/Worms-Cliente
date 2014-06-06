@@ -5,7 +5,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_pixels.h>
 #include <stdexcept>
-
+#include <SDL2/SDL_mixer.h>
 
 #include "Agua.h"
 //#include "Funciones.h"
@@ -62,7 +62,8 @@ public:
 	void mostrarCartelEsperar();
 	void mostrarCartel(char* mensaje, int posx, int posy, int x, int y);
 	void mostrarReloj(int reloj);
-	void renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
+	void renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2);
+	void renderTexture5(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2);
 	void renderTexture4(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
 
 protected:
@@ -92,8 +93,6 @@ private:
 	float32 oscilaragua;
 	int contador_cerrarse;
 	int escalaZoom;
-	int corrimientoX;
-	int corrimientoY;
 };
 
 #endif /* DIBUJADOR_H_ */

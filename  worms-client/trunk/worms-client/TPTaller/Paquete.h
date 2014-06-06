@@ -64,13 +64,14 @@ typedef struct structEvento{
 	int aleatorio = 0;
 	int arma_seleccionada = 0;
 	int angulo_arma = 0;
+	int fuerza = 0;
 
 } structEvento;
 
 structFigura* crearPaqueteFigura(Figura* figura);
 structPersonaje* crearPaquetePersonaje(Personaje* personaje);
 structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador);
-structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez);
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando);
 
 void destruirPaqueteFigura(structFigura* paquete);
 void destruirPaquetePersonaje(structPersonaje* paquete);

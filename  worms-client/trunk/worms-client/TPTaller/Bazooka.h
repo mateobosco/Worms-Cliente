@@ -1,10 +1,3 @@
-/*
- * Bazooka.h
- *
- *  Created on: 30/05/2014
- *      Author: juanmahidalgo
- */
-
 #ifndef BAZOOKA_H_
 #define BAZOOKA_H_
 

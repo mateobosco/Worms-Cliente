@@ -71,7 +71,20 @@ void destruirPaquetePersonaje(structPersonaje* paquete){
 	delete paquete;
 }
 
-structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
+bool checkDisparando(structEvento *paquete, bool *KEYS, bool &disparando){
+	if(!KEYS[SDLK_v]){
+		if(disparando){
+			disparando = false;
+			paquete->fuerza = 2;
+			return true;
+		} else{
+			paquete->fuerza = 0;
+		}
+	}
+	return false;
+}
+
+structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente, bool *KEYS, bool &disparando){
 	structEvento* paquete = new structEvento;
 	b2Vec2 posicion(click[0],click[1]);
 	b2Vec2 posicionEscalada = escalador->escalarPosicion(posicion);
@@ -79,10 +92,11 @@ structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente){
 	paquete->direccion = -9; //DIRECION NO VALIDA
 	paquete->nro_jugador = cliente;
 	paquete->aleatorio = random();
+	checkDisparando(paquete, KEYS, disparando);
 	return paquete;
 }
 
-structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
+structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador, bool &disparando){
 	structEvento* paquete = new structEvento;
 
 	if ((KEYS[102] || KEYS[SDLK_SPACE])){ // para arriba
@@ -108,18 +122,28 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 	if(KEYS[SDLK_c]){
 		paquete->angulo_arma=-5;
 	}
+	if(KEYS[SDLK_v]){
+		disparando = true;
+		paquete->fuerza = 1;
+	}
+	checkDisparando(paquete, KEYS, disparando);
 	paquete->nro_jugador = id_jugador;
 	paquete->click_mouse = b2Vec2( -1, -1 );
 	paquete->aleatorio = random();
 	return paquete;
 }
 
-structEvento* crearPaqueteVacio(){
+structEvento* crearPaqueteVacio(bool *KEYS, bool &disparando){
 	structEvento* paquete = new structEvento;
 	paquete->click_mouse = b2Vec2 (-1,-1);
 	paquete->direccion = -9;
 	paquete->nro_jugador = MAX_CANT_JUGADORES;
 	paquete->aleatorio = random();
+	bool termino_disparando = checkDisparando(paquete, KEYS, disparando);
+	if(termino_disparando)
+		paquete->nro_jugador = -1;
+	else
+		paquete->nro_jugador = MAX_CANT_JUGADORES;
 	return paquete;
 }
 
@@ -128,24 +152,22 @@ bool aceptarNuevaTecla(timeval act_time, timeval key_pressed_time){
 			           + act_time.tv_usec) - key_pressed_time.tv_usec) > 150000);
 }
 
-structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez){
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando){
 	structEvento* paquete;
-	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE] || KEYS[SDLK_x] || KEYS[SDLK_c]){ // no es un click, es un movimiento
+	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE] || KEYS[SDLK_x] || KEYS[SDLK_c] || KEYS[SDLK_v]){ // no es un click, es un movimiento
 		timeval tiempo_actual;
 		gettimeofday(&tiempo_actual, 0x0);
 		if(aceptarNuevaTecla(tiempo_actual, ultima_vez)){
-			paquete = crearPaqueteMovimiento(KEYS, cliente);
+			paquete = crearPaqueteMovimiento(KEYS, cliente, disparando);
 			gettimeofday(&ultima_vez, 0x0);
 		} else{
-			return crearPaqueteVacio();
+			paquete = crearPaqueteVacio(KEYS, disparando);
 		}
 
 	} else{
 		if (click[0] != -1){
-			paquete = crearPaqueteClick(click, escalador, cliente);
+			paquete = crearPaqueteClick(click, escalador, cliente, KEYS, disparando);
 			printf(" LLEGA HSTA ACA \n");
-			int ventanadoX = escalador->ventanarEnX(paquete->click_mouse.x);
-			int ventanadoY = escalador->ventanarEnY(paquete->click_mouse.y);
 			//printf(" MANDO UN MAQUETE CLICK con las posiciones : (%d, %d) \n", click[0], click[1]);
 			//printf(" Los ventanado son %d , %d \n", ventanadoX, ventanadoY);
 			if (click[0] > 600 &&  click[0] < 700 && click[1] > 100 && click[1] < 200){
@@ -172,13 +194,16 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 				printf(" Selecciona patada \n");
 				paquete->arma_seleccionada=6;
 			}
-
-
-
 		}
-
 		else {
-			paquete = crearPaqueteVacio();
+			paquete = crearPaqueteVacio(KEYS, disparando);
+		}
+	}
+	if(!paquete){
+		paquete = crearPaqueteVacio(KEYS, disparando);
+		if(paquete->nro_jugador == -1){
+			delete paquete;
+			paquete = NULL;
 		}
 	}
 	return paquete;

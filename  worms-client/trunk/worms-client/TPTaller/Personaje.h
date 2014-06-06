@@ -43,6 +43,7 @@ public:
 	int getNrojugador();
 	virtual ~Personaje();
 	bool* getSeleccion();
+	void quitarEnergia(int descontar);
 
 private:
 	char* dir_imagen;
@@ -60,7 +61,7 @@ private:
 
 	b2CircleShape* shape2;
 	float32 radio;
-
+	int energia;
 };
 
 #endif /* PERSONAJE_H_ */

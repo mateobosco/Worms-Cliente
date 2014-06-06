@@ -55,6 +55,7 @@ Personaje::Personaje(Mundo* mundo, Uint8 numero_jugador, char* nombre_client) {
 		seleccionado[i] = false;
 	}
 	orientacion = 1;
+	energia = ENERGIA_WORM;
 }
 
 Personaje::~Personaje() {
@@ -197,4 +198,11 @@ void Personaje::conectar(){
 
 char* Personaje::getNombreCliente(){
 	return this->nombre_cliente;
+}
+
+void Personaje::quitarEnergia(int descontar){
+	energia -= descontar;
+	if(energia <= 0){
+		this->setMuerto();
+	}
 }

@@ -92,6 +92,7 @@ int mainCliente(int argc, char* argv[]){
 		}
 		int aux3 = 0 ;
 
+		bool disparando = false;
 		while(KEYS[SDLK_ESCAPE] == false){
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
@@ -101,7 +102,7 @@ int mainCliente(int argc, char* argv[]){
 			escalador->hacerZoom(posicion_mouse_scroll);
 			paquete = (structPaquete*) cliente->getPaquete();
 			cliente->setID(paquete->id);
-			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez);
+			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando);
 
 
 			if ((evento)){

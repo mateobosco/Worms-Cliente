@@ -1,5 +1,7 @@
 #include "Paquete.h"
 
+//# define M_PI 3.1415
+
 structFigura* crearPaqueteFigura(Figura* figura){
 	structFigura* paquete = new structFigura;
 	int tipo = figura->tipo;
@@ -98,6 +100,14 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador){
 			paquete->direccion = 1;
 		}
 	}
+
+	if(KEYS[SDLK_x]){
+		printf(" LE MANDO EN EL PAQUETE EL ANGULO con 5 \n");
+		paquete->angulo_arma=5;
+	}
+	if(KEYS[SDLK_c]){
+		paquete->angulo_arma=-5;
+	}
 	paquete->nro_jugador = id_jugador;
 	paquete->click_mouse = b2Vec2( -1, -1 );
 	paquete->aleatorio = random();
@@ -120,7 +130,7 @@ bool aceptarNuevaTecla(timeval act_time, timeval key_pressed_time){
 
 structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez){
 	structEvento* paquete;
-	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE]){ // no es un click, es un movimiento
+	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE] || KEYS[SDLK_x] || KEYS[SDLK_c]){ // no es un click, es un movimiento
 		timeval tiempo_actual;
 		gettimeofday(&tiempo_actual, 0x0);
 		if(aceptarNuevaTecla(tiempo_actual, ultima_vez)){
@@ -133,7 +143,41 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 	} else{
 		if (click[0] != -1){
 			paquete = crearPaqueteClick(click, escalador, cliente);
-		} else {
+			printf(" LLEGA HSTA ACA \n");
+			int ventanadoX = escalador->ventanarEnX(paquete->click_mouse.x);
+			int ventanadoY = escalador->ventanarEnY(paquete->click_mouse.y);
+			//printf(" MANDO UN MAQUETE CLICK con las posiciones : (%d, %d) \n", click[0], click[1]);
+			//printf(" Los ventanado son %d , %d \n", ventanadoX, ventanadoY);
+			if (click[0] > 600 &&  click[0] < 700 && click[1] > 100 && click[1] < 200){
+				printf(" selecciona una bazooka \n");
+				paquete->arma_seleccionada=1;
+			}
+			else if (click[0] > 700  && click[1] > 100 && click[1] <200){
+				printf(" selecciona una granada \n");
+				paquete->arma_seleccionada=2;
+			}
+			else if (click[0] > 600 &&  click[0] < 700 && click[1] > 200 && click[1] < 300){
+				printf(" Selecciona una dinamita \n");
+				paquete->arma_seleccionada=3;
+			}
+			else if (click[0] > 700 && click[1] > 200 && click[1] < 300){
+				printf(" Selecciona una holy \n");
+				paquete->arma_seleccionada=4;
+			}
+			else if (click[0] > 600  && click[0] < 700 && click[1] > 300 && click[1] < 400){
+				printf(" Selecciona kamikaze \n");
+				paquete->arma_seleccionada=5;
+			}
+			else if (click[0] > 700 && click[1] > 300 && click[1] <400){
+				printf(" Selecciona patada \n");
+				paquete->arma_seleccionada=6;
+			}
+
+
+
+		}
+
+		else {
 			paquete = crearPaqueteVacio();
 		}
 	}

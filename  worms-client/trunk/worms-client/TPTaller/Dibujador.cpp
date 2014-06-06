@@ -10,6 +10,8 @@
 #include <string>
 #include <sstream>
 
+#define PI 3.14159265
+
 extern void loguear();
 
 Dibujador::Dibujador(){
@@ -31,6 +33,12 @@ Dibujador::Dibujador(){
 	this->escalaZoom = 100;
 	this->corrimientoX = 0;
 	this->corrimientoY = 0;
+	bazooka = loadTexture("TPTaller/imagenes/bazooka", this->renderizador);
+	granada = loadTexture("TPTaller/imagenes/granada", this->renderizador);
+	dinamita = loadTexture("TPTaller/imagenes/dinamita", this->renderizador);
+	holy = loadTexture("TPTaller/imagenes/holy", this->renderizador);
+	kamikaze = loadTexture("TPTaller/imagenes/kamikaze", this->renderizador);
+	patada = loadTexture("TPTaller/imagenes/patada", this->renderizador);
 }
 
 Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
@@ -52,6 +60,8 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->escalaZoom = 100;
 	this->corrimientoX = 0;
 	this->corrimientoY = 0;
+
+
 }
 
 Dibujador::~Dibujador(){
@@ -206,6 +216,37 @@ void Dibujador::renderTexture2(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 	}
 }
 
+void Dibujador::renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo){
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	dst.w = w;
+	dst.h = h;
+	SDL_Point point;
+	point.x=0;
+	point.y=h/2;
+	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, &point,SDL_FLIP_NONE)!=0){
+		loguear();
+		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+	}
+}
+void Dibujador::renderTexture4(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo){
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	dst.w = w;
+	dst.h = h;
+	SDL_Point point;
+	point.x=-w/2;
+	point.y=h/2;
+	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, &point,SDL_FLIP_NONE)!=0){
+		loguear();
+		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+	}
+}
+
+
+
 SDL_Texture* Dibujador::dibujar_cielo(Escalador* escalador, std::string path, int hasta){
 	SDL_Texture *background = loadTexture(path.c_str(), this->renderizador);
 	if(background == NULL){
@@ -265,6 +306,13 @@ SDL_Texture* Dibujador::loadTexture(const std::string &path, SDL_Renderer *ren){
 }
 
 void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra){
+	bazooka = loadTexture("TPTaller/imagenes/bazooka.png", this->renderizador);
+	granada = loadTexture("TPTaller/imagenes/granada.png", this->renderizador);
+	dinamita = loadTexture("TPTaller/imagenes/dinamita.png", this->renderizador);
+	holy = loadTexture("TPTaller/imagenes/holy.png", this->renderizador);
+	kamikaze = loadTexture("TPTaller/imagenes/kamikaze.png", this->renderizador);
+	patada = loadTexture("TPTaller/imagenes/patada3.png", this->renderizador);
+	mira = loadTexture("TPTaller/imagenes/mira.png", this->renderizador);
 	float nivelAgua = escalador->aplicarZoomY(agua->GetNivel()) - escalador->getOffsetY();
 	this->dibujar_tierra(escalador, pathTierra);
 	this->dibujarAgua(escalador, agua);
@@ -274,7 +322,7 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 
 void Dibujador::dibujarFondo(){
 	this->renderTexture(textureCielo, renderizador,0  , 0 , escalador->getPixelX(), escalador->getPixelY() );
-	this->renderTexture(textureTierra, renderizador, 0 - this->corrimientoX , 0 , escalador->getPixelX() , escalador->getPixelY() );
+	this->renderTexture(textureTierra, renderizador, 0 , 0 , escalador->getPixelX() , escalador->getPixelY() );
 }
 
 void Dibujador::dibujar_agua(Agua* agua){
@@ -363,19 +411,58 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 	std::string nombre_a_imprimir = string(paquete.nombre_cliente);
 	image = RenderText(paquete.nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[paquete.id_jugador], 20); // despues preguntar el nombre de cada uno
-	renderTexture2(image, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100) ,y - 30 , 80 , 30 );
+
+	renderTexture2(image, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100) ,y - 50 , 80 , 30 );
 	if (image) SDL_DestroyTexture(image);
 	if(paquete.seleccionado[cliente_id] == 1){
 		this->
-		renderTexture2(flechitaroja, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100), ((y)*aux/100)+(y-120), 80, 80);
+		renderTexture2(flechitaroja, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100), ((y)*aux/100)+(y-140), 80, 80);
 	}
+
+	char energia[10];
+	sprintf(energia,"%d", paquete.energia);
+	SDL_Texture* energiatext = RenderText(energia, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[3], 20); // despues preguntar el nombre de cada uno
+
+	renderTexture2(energiatext, this->renderizador, x - anchoPX+10 ,y - 30 , 50 , 30 );
 	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
+	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
+		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
+		printf(" El angulo del arma es %d \n", paquete.angulo_arma);
+		renderTexture3(bazooka, this->renderizador,x+12,y-5,w+5,h+5, paquete.angulo_arma);
+
+		renderTexture4(mira, this->renderizador, x+60,y-25,w+5,h+5, paquete.angulo_arma);
+		if(bazooka) SDL_DestroyTexture(bazooka);
+		//if(mira) SDL_DestroyTexture(mira);
+	}
+	if(paquete.arma_seleccionada == 1 && paquete.direccion == -1){
+		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
+		renderTexture2(bazooka, this->renderizador,x,y,w,h);
+		if(bazooka) SDL_DestroyTexture(bazooka);
+	}
+	//printf(" RECIBE EL ARMAAAA %d \n", paquete.arma_seleccionada);
+	if(paquete.arma_seleccionada == 3){
+		printf(" ENTRA ACAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+		SDL_Texture* dinamita = loadTexture("TPTaller/imagenes/dinamitaa2.png", this->renderizador);
+		if(paquete.direccion == -1){
+			renderTexture2(dinamita, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y,w,h);
+		}
+		if (paquete.direccion == 1){
+			renderTexture2(dinamita, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y,w,h);
+		}
+		if(dinamita) SDL_DestroyTexture(dinamita);
+	}
+	SDL_DestroyTexture(energiatext);
 	delete posicionVentanada;
 }
 
-void Dibujador::dibujarMenuArmas(int x, int y){
-	SDL_Texture* menu = loadTexture("TPTaller/imagenes/menuarmas.png", this->renderizador);
-	renderTexture2(menu, this->renderizador, x, y, 80,80);
+void Dibujador::mostrarMenuArmas(int x, int y){
+	//SDL_Texture* menu = loadTexture("TPTaller/imagenes/armas2.png", this->renderizador);
+	renderTexture2(bazooka, this->renderizador, x - 100, y, 100,100);
+	renderTexture2(granada, this->renderizador, x  , y, 100,100);
+	renderTexture2(dinamita, this->renderizador, x - 100, y + 100, 100,100);
+	renderTexture2(holy, this->renderizador, x , y +  100, 100,100);
+	renderTexture2(kamikaze, this->renderizador, x - 100 , y + 200, 100,100);
+	renderTexture2(patada, this->renderizador, x , y +200, 100,100);
 }
 
 void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int cliente_id, float aux){
@@ -388,10 +475,10 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	SDL_Color color = {0,0,0};
 	SDL_Texture* nombre = RenderText(nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
 	renderTexture2(nombre, this->renderizador, 0 , 0 , 100, 30 );
+	SDL_DestroyTexture(nombre);
 
 	if (paquete->mensaje_mostrar[0] != NULL){
 		char mensaje[50];
-
 		SDL_Texture* cartel = RenderText(paquete->mensaje_mostrar, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
 		renderTexture2(cartel, this->renderizador, 0 , this->escalado_x/2 , 200, 30 );
 		SDL_DestroyTexture(cartel);
@@ -486,3 +573,53 @@ void Dibujador::alejarZoom(int* posicion_mouse){
 	corrimientoX = posicion_mouse[0];
 	corrimientoY = posicion_mouse[1];
 }
+
+
+void Dibujador::mostrarCartelTurno(int nro_jugador, char* nombre){
+	char mensaje[90];
+	sprintf (mensaje, "Es el turno de : %s ", nombre);
+	SDL_Color color = {0,0,0};
+	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
+	renderTexture2(mensaje_final, this->renderizador, (this->escalado_x / 2)*2.5  , 0 , 500, 50 );
+	SDL_DestroyTexture(mensaje_final);
+
+}
+void Dibujador::mostrarCartelEsperar(){
+	char mensaje[90];
+	sprintf (mensaje, "Esperando a que se conecten otros jugadores");
+	SDL_Color color = {0,0,0};
+	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
+	renderTexture2(mensaje_final, this->renderizador, (this->escalado_x / 2)*2.5  , 0 , 500, 50 );
+	SDL_DestroyTexture(mensaje_final);
+
+}
+
+void Dibujador::mostrarCartel(char* mensaje, int posx, int posy, int x, int y){
+	SDL_Color color = {0,0,0};
+	if (posx == -1){
+		posx = (this->escalado_x /2)*2.5;
+	}
+	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
+	renderTexture2(mensaje_final, this->renderizador, posx  , posy , x, y );
+	SDL_DestroyTexture(mensaje_final);
+
+}
+
+void Dibujador::mostrarReloj(int reloj){
+	reloj=reloj/1000;
+	int aux=60;
+	aux-=reloj;
+	SDL_Color color = {0,0,0};
+	char mensaje[3];
+	sprintf(mensaje,"%d", aux);
+	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
+	renderTexture2(mensaje_final, this->renderizador, (this->escalador->getVentanaX())-40 , 0 ,40 , 40 );
+	SDL_DestroyTexture(mensaje_final);
+
+}
+
+
+
+
+
+

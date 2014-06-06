@@ -83,6 +83,15 @@ int mainCliente(int argc, char* argv[]){
 
 		timeval ultima_vez;
 		gettimeofday(&ultima_vez, 0x0);
+		int* aux = (int*)malloc (sizeof(int)*3);
+		aux[2]=1;
+		aux[0]=escalador->getVentanaX()/2;
+		aux[1]=escalador->getVentanaY()/2;
+		for(int i=0; i <20; i++){
+			escalador->hacerZoom(aux);
+		}
+		int aux3 = 0 ;
+
 		while(KEYS[SDLK_ESCAPE] == false){
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
@@ -93,6 +102,8 @@ int mainCliente(int argc, char* argv[]){
 			paquete = (structPaquete*) cliente->getPaquete();
 			cliente->setID(paquete->id);
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez);
+
+
 			if ((evento)){
 				cliente->actualizarPaquete(evento);
 			}
@@ -109,9 +120,31 @@ int mainCliente(int argc, char* argv[]){
 					break;
 				}
 			}
+			char mensaje[90];
 			dibujador->dibujar_agua(agua);
+			if (paquete->comenzar == 1){
+				if (paquete->turno_jugador == cliente->getID()){
+					strcpy(mensaje, "Es tu turno");
+					dibujador->mostrarCartel(mensaje, 300 ,0,300, 50);
+				}
+				else{
+					//printf(" RECIBE EL NOMBRE %s \n", paquete->nombre_jugador_actual);
+					dibujador->mostrarCartelTurno(paquete->turno_jugador, paquete->nombre_jugador_actual);
+
+				}
+			}
+			else{
+				strcpy(mensaje, "Esperando a que se conecten jugadores");
+				dibujador->mostrarCartel(mensaje, -1, 0, 500,50);
+			}
+			if(KEYS[SDLK_z]){
+				dibujador->mostrarMenuArmas(escalador->getVentanaX()-100,100);
+			}
+			dibujador->mostrarReloj(paquete->reloj);
+
 			dibujador->actualizar();
 			posicion_mouse_scroll[2] = 0;
+
 			delete[] paquete;
 		}
 		delete paqueteInicial;

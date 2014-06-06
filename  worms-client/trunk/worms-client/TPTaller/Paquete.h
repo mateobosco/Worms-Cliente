@@ -22,9 +22,13 @@ typedef struct structPersonaje {
 	b2Vec2 posicion;
 	b2Vec2 tamano;
 	int direccion; // 0 derecha, 1 izquierda
-} structPersonaje;
+	int energia;
+	int arma_seleccionada;
+	int angulo_arma;
+}structPersonaje;
 
 typedef struct structPaquete{
+	int comenzar;
 	int tipo = 0;
 	structFigura vector_figuras[10];
 	int cantidad_figuras = 0;
@@ -33,7 +37,10 @@ typedef struct structPaquete{
 	int id;
 	char mensaje_mostrar[MAX_MENSAJE];
 	int turno_jugador;
-} structPaquete;
+	int reloj;
+	char nombre_jugador_actual[MAX_MENSAJE];
+
+}structPaquete;
 
 typedef struct structInicial{
 	bool cliente_aceptado = false;
@@ -55,6 +62,9 @@ typedef struct structEvento{
 	int direccion; // -1 izquierda, 0 arriba, 1 derecha //todo
 	int nro_jugador = 0; //Identificador del cliente
 	int aleatorio = 0;
+	int arma_seleccionada = 0;
+	int angulo_arma = 0;
+
 } structEvento;
 
 structFigura* crearPaqueteFigura(Figura* figura);

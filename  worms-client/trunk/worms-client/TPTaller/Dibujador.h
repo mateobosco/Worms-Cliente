@@ -57,7 +57,13 @@ public:
 	int getContadorCerrarse();
 	void hacerZoom(int* pos);
 	void alejarZoom(int* pos);
-	void dibujarMenuArmas(int x, int y);
+	void mostrarMenuArmas(int x, int y);
+	void mostrarCartelTurno(int nro_jugador, char* nombre);
+	void mostrarCartelEsperar();
+	void mostrarCartel(char* mensaje, int posx, int posy, int x, int y);
+	void mostrarReloj(int reloj);
+	void renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
+	void renderTexture4(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
 
 protected:
 	Escalador* escalador;
@@ -70,6 +76,14 @@ private:
 	SDL_Texture* textureAgua;
 	SDL_Texture* textureTierra;
 	SDL_Texture* flechitaroja;
+	SDL_Texture* bazooka;
+	SDL_Texture* granada;
+	SDL_Texture* dinamita;
+	SDL_Texture* holy;
+	SDL_Texture* kamikaze;
+	SDL_Texture* patada;
+	SDL_Texture* mira;
+
 	SDL_Window* window;
 	SDL_Texture* texturederecha;
 	SDL_Texture* textureizquierda;

@@ -10,15 +10,15 @@
 Escalador::Escalador(int ventanaX, int ventanaY, float32 escalaX, float32 escalaY, int ancho_esc, int alto_esc) {
 	this->pixelesX = ancho_esc;
 	this->pixelesY = alto_esc;
-	this->centroX = pixelesX/2;
-	this->centroY = pixelesY/2;
+	this->centroX = 700;
+	this->centroY = 700;
 	this->ventanaX = ventanaX;
 	this->ventanaY = ventanaY;
 	this->escalaX = escalaX;
 	this->escalaY = escalaY;
 	this->offsetX = (pixelesX - ventanaX)/2;
 	this->offsetY = (pixelesY - ventanaY)/2;
-	this->zoom = 100;
+	this->zoom = 150;
 }
 
 Escalador::~Escalador() {
@@ -365,6 +365,5 @@ void Escalador::moverVentana(int* posicion_mouse){
 	if (posicion_mouse[1] <  BORDE2 && posicion_mouse[1]>=0 ){
 		this->moverArriba(VEL2);
 	}
-	printf("los offset son %d %d y el zoom %d  y los CENTROS SON %d %d \n", offsetX, offsetY, zoom, centroX,centroY);
 
 }

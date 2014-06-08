@@ -6,7 +6,7 @@
 using namespace std;
 
 // Coeficientes de:
-#define PI 3.1415
+//#define PI 3.1415
 const int TILE_SIZE = 40;
 const float M2P=20;
 const float P2M=1/M2P;

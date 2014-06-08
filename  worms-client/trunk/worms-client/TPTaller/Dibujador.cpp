@@ -10,8 +10,6 @@
 #include <string>
 #include <sstream>
 
-#define PI 3.14159265
-
 extern void loguear();
 
 Dibujador::Dibujador(){
@@ -220,6 +218,18 @@ void Dibujador::renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 	point.x=punto1;
 	point.y=punto2;
 	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, &point,SDL_FLIP_NONE)!=0){
+		loguear();
+		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+	}
+}
+
+void Dibujador::renderTextureCenter(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo){
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	dst.w = w;
+	dst.h = h;
+	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo-45, NULL, SDL_FLIP_NONE)!=0){
 		loguear();
 		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
 	}
@@ -465,6 +475,27 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	delete posicionVentanada;
 }
 
+void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio){
+	if(tipo_proyectil){
+		b2Vec2 posicion = posicion_proyectil;
+		b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion);
+		int anchoPX = escalador->aplicarZoomX( tamanio.x);
+		int altoPX = escalador->aplicarZoomY( tamanio.y);
+		int x = posicionVentanada->x - anchoPX/2;
+		int y = posicionVentanada->y - altoPX/2;
+		int w = anchoPX;
+		int h = altoPX;
+		int angulo = 0; //  = calcularAngulo(direccion_proyectil);
+		switch(tipo_proyectil){
+			case 1:{
+				SDL_Texture* misil = loadTexture("TPTaller/imagenes/bazooka_misil.png", this->renderizador);
+				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo);
+				if(bazooka) SDL_DestroyTexture(bazooka);
+			}
+		}
+	}
+}
+
 void Dibujador::mostrarMenuArmas(int x, int y){
 	//SDL_Texture* menu = loadTexture("TPTaller/imagenes/armas2.png", this->renderizador);
 	renderTexture2(bazooka, this->renderizador, x - 100, y, 100,100);
@@ -502,6 +533,10 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 		else{
 			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux); // no es propio
 		}
+	}
+
+	if(paquete->show_proyectil){
+		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil);
 	}
 }
 

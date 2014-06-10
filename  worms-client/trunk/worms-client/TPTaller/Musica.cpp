@@ -6,6 +6,9 @@
  */
 
 #include "Musica.h"
+extern void loguear();
+extern ofstream logFile;
+
 
 
 Musica::Musica() {
@@ -54,7 +57,8 @@ void Musica::playSonido(int id){
 			this->s_select = Mix_LoadWAV("TPTaller/sonido/select.WAV");
 			if(this->s_select == NULL){
 				loguear();
-				logFile << "No se cargó sonido " << Mix_GetError() << endl;
+			//	logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
+
 				printf("No cargó WAV, %s", Mix_GetError());
 			}
 			Mix_PlayChannel(-1, this->s_select, 0);
@@ -64,7 +68,7 @@ void Musica::playSonido(int id){
 			this->s_jump = Mix_LoadWAV("TPTaller/sonido/Jump1.wav");
 			if(this->s_jump == NULL){
 				loguear();
-				logFile << "No se cargó sonido " << Mix_GetError() << endl;
+			//	logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
 				printf("No cargó WAV, %s", Mix_GetError());
 			}
 			Mix_PlayChannel(-1, this->s_jump, 0);
@@ -74,7 +78,7 @@ void Musica::playSonido(int id){
 			this->s_time = Mix_LoadWAV("TPTaller/sonido/TickTock.wav");
 			if(this->s_time == NULL){
 				loguear();
-				logFile << "No se cargó sonido " << Mix_GetError() << endl;
+			//	logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
 				printf("No cargó WAV, %s", Mix_GetError());
 			}
 			Mix_PlayChannel(-1, this->s_time, 0);
@@ -85,7 +89,7 @@ void Musica::playSonido(int id){
 			this->s_bazooka = Mix_LoadWAV("TPTaller/sonido/Bazooka.wav");
 			if(this->s_bazooka == NULL){
 				loguear();
-				logFile << "No se cargó sonido " << Mix_GetError() << endl;
+			//	logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
 				printf("No cargó WAV, %s", Mix_GetError());
 				
 			}
@@ -97,7 +101,8 @@ void Musica::playSonido(int id){
 			this->s_granada = Mix_LoadWAV("TPTaller/sonido/ExplosionGrenade.wav");
 			if(this->s_granada == NULL){
 				loguear();
-				logFile << "No se cargó sonido " << Mix_GetError() << endl;				printf("No cargó WAV, %s", Mix_GetError());
+			//	logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
+				printf("No cargó WAV, %s", Mix_GetError());
 			}
 			Mix_PlayChannel(-1, this->s_granada, 0);
 			break;

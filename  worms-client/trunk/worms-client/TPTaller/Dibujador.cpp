@@ -54,8 +54,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->contador_cerrarse = 10;
 	this->oscilaragua = 0;
 	this->escalaZoom = 100;
-	//this->music = new Musica();
-	//this->music->playMusic();
+
 }
 
 Dibujador::~Dibujador(){
@@ -67,8 +66,7 @@ Dibujador::~Dibujador(){
 	if (this->textureizquierda) SDL_DestroyTexture(textureizquierda);
 	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO);
 	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
-	//if(this->music) Mix_FreeMusic(this->music->getMusica());
-	//this->music->stopMusic();
+
 	this->close();
 }
 
@@ -581,7 +579,7 @@ bool Dibujador::init(){
 				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) < 0 )
 				{
 					loguear();
-					logFile << "SDL_mixer no pudo ser inicializado! SDL_mixer Error: %s\n" << Mix_GetError() << endl;
+					logFile << "SDL_mixer no pudo ser inicializado! SDL_mixer Error: %s" << Mix_GetError() << endl;
 					success = false;
 				}
 				if ((Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3) != MIX_INIT_MP3){

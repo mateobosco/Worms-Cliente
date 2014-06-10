@@ -39,7 +39,7 @@ Cargador::~Cargador(){
 		logFile << "    Warning" << "\t El archivo de escenario no se pudo cerrar." << endl;
 	}
 	this->nodo_inicial = NULL;
-	//delete this->datos; todo
+	delete this->datos; //todo
 }
 
 Node Cargador::getNodo(){

@@ -45,10 +45,12 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 
 Cliente::~Cliente(){
 	this->activo = false;
+	delete[] this->name_client;
 	SDL_WaitThread(this->hilos.enviar, 0);
 	SDL_WaitThread(this->hilos.recibir, 0);
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
+	//delete this->paqueteInicial;
 	Cliente::cant_clientes--;
 }
 

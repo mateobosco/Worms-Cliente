@@ -9,6 +9,7 @@
 #include <string>
 #include <sys/socket.h>
 #include <netinet/tcp.h>
+#include "Musica.h"
 
 extern void abrirLog();
 
@@ -56,6 +57,8 @@ int mainCliente(int argc, char* argv[]){
 				paqueteInicial->ancho_escenario,paqueteInicial->alto_escenario);
 		Dibujador* dibujador =new Dibujador(NULL, escalador);
 		dibujador->init();
+		Musica* music = new Musica();
+		dibujador->setMusica(music);
 		SDL_Event event;
 		for(int i = 0; i < 322; i++) { // inicializa todas en falso
 		   KEYS[i] = false;
@@ -98,6 +101,12 @@ int mainCliente(int argc, char* argv[]){
 			posicion_mouse_click[1] = -1;
 			dibujador->dibujarFondo();
 			keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
+			if(KEYS[102]==true){
+				music->playSonido(UP);
+			}
+			if((posicion_mouse_click[0]!=-1)&&(posicion_mouse_click[1]!=-1)){
+				music->playSonido(SELECT);
+			}
 			escalador->moverVentana(posicion_mouse_movimiento);
 			escalador->hacerZoom(posicion_mouse_scroll);
 			paquete = (structPaquete*) cliente->getPaquete();
@@ -133,6 +142,9 @@ int mainCliente(int argc, char* argv[]){
 					dibujador->mostrarCartelTurno(paquete->turno_jugador, paquete->nombre_jugador_actual);
 
 				}
+				if(paquete->reloj < 10){
+					music->playSonido(TIME);
+				}
 			}
 			else{
 				strcpy(mensaje, "Esperando a que se conecten jugadores");
@@ -148,6 +160,7 @@ int mainCliente(int argc, char* argv[]){
 
 			delete[] paquete;
 		}
+
 		delete paqueteInicial;
 		delete agua;
 		delete[] name;

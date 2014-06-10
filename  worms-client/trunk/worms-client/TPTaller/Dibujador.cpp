@@ -54,6 +54,8 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->contador_cerrarse = 10;
 	this->oscilaragua = 0;
 	this->escalaZoom = 100;
+	//this->music = new Musica();
+	//this->music->playMusic();
 }
 
 Dibujador::~Dibujador(){
@@ -65,6 +67,8 @@ Dibujador::~Dibujador(){
 	if (this->textureizquierda) SDL_DestroyTexture(textureizquierda);
 	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO);
 	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
+	//if(this->music) Mix_FreeMusic(this->music->getMusica());
+	//this->music->stopMusic();
 	this->close();
 }
 
@@ -573,9 +577,25 @@ bool Dibujador::init(){
 					logFile << "    Error   " << "\t  SDL_image no puedo ser inicializado! SDL_image Error: " <<  SDL_GetError()<< endl;
 					success = false;
 				}
-				if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) < 0){
-					printf("Error: %s\n", Mix_GetError());
+			 //Initialize SDL_mixer
+				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) < 0 )
+				{
+					loguear();
+					logFile << "SDL_mixer no pudo ser inicializado! SDL_mixer Error: %s\n" << Mix_GetError() << endl;
+					success = false;
 				}
+				if ((Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3) != MIX_INIT_MP3){
+					  loguear();
+					  logFile << "Error   \t Mix_Init: %s " << Mix_GetError() << endl;
+				      success = false;
+				}
+				int frec, chan;
+				Uint16 formato;
+				if(Mix_QuerySpec(&frec, &formato, &chan) == 0){
+					loguear();
+					logFile << "Error" << endl;
+				}
+				printf("Frecuencia iniciada: %d, Formato: %d, Channel: %d",frec,formato, chan);
 			}
 		}
 	}
@@ -590,6 +610,7 @@ bool Dibujador::init(){
 void Dibujador::close(){
 	SDL_DestroyRenderer(renderizador);
 	SDL_DestroyWindow(window);
+	Mix_CloseAudio();
 	SDL_Quit();
 }
 
@@ -651,6 +672,10 @@ void Dibujador::mostrarReloj(int reloj){
 	renderTexture2(mensaje_final, this->renderizador, (this->escalador->getVentanaX())-40 , 0 ,40 , 40 );
 	SDL_DestroyTexture(mensaje_final);
 
+}
+
+void Dibujador::setMusica(Musica* musica){
+	this->music = musica;
 }
 
 

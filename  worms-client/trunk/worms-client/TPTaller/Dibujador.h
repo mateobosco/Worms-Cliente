@@ -6,7 +6,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_pixels.h>
 #include <stdexcept>
-#include <SDL2/SDL_mixer.h>
+//#include <SDL2/SDL_mixer.h>
 
 #include "Agua.h"
 #include "Musica.h"
@@ -68,6 +68,8 @@ public:
 	void renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2);
 	void renderTexture5(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2);
 	void renderTexture4(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
+	void borrarExplosion(b2Vec2 pos, float32 radio);
+
 
 	void dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio);
 	void renderTextureCenter(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
@@ -84,6 +86,7 @@ private:
 	SDL_Texture* textureCielo;
 	SDL_Texture* textureAgua;
 	SDL_Texture* textureTierra;
+	SDL_Surface* surfaceTierra;
 	SDL_Texture* flechitaroja;
 	SDL_Texture* bazooka;
 	SDL_Texture* granada;

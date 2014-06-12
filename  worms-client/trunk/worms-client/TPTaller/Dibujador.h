@@ -83,6 +83,7 @@ protected:
 
 private:
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
+	SDL_Texture* loadTextureTierra(const std::string &path, SDL_Renderer *ren);
 	SDL_Texture* textureCielo;
 	SDL_Texture* textureAgua;
 	SDL_Texture* textureTierra;

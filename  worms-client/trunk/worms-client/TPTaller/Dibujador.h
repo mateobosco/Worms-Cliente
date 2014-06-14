@@ -9,6 +9,7 @@
 //#include <SDL2/SDL_mixer.h>
 
 #include "Agua.h"
+
 #include "Musica.h"
 
 #define PI 3.14159265
@@ -74,6 +75,10 @@ public:
 	void dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio);
 	void renderTextureCenter(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
 	void setMusica(Musica* musica);
+	//void borrarExplosion(b2Vec2 posicion, float32 radio);
+	SDL_Texture* loadTextureTierra(const std::string &path, SDL_Renderer *ren);
+
+
 
 protected:
 	Escalador* escalador;
@@ -83,7 +88,7 @@ protected:
 
 private:
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
-	SDL_Texture* loadTextureTierra(const std::string &path, SDL_Renderer *ren);
+	//SDL_Texture* loadTextureTierra(const std::string &path, SDL_Renderer *ren);
 	SDL_Texture* textureCielo;
 	SDL_Texture* textureAgua;
 	SDL_Texture* textureTierra;
@@ -96,7 +101,7 @@ private:
 	SDL_Texture* kamikaze;
 	SDL_Texture* patada;
 	SDL_Texture* mira;
-
+	//SDL_Surface* surfaceTierra;
 	SDL_Window* window;
 	SDL_Texture* texturederecha;
 	SDL_Texture* textureizquierda;

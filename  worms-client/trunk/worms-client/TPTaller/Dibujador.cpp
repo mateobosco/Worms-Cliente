@@ -5,6 +5,9 @@
 #include "Personaje.h"
 #include "Paquete.h"
 
+#include "Juego.h"
+
+
 #include "SDL2/SDL_ttf.h"
 #include <stdio.h>
 #include <string>
@@ -66,6 +69,7 @@ Dibujador::~Dibujador(){
 	if (this->textureizquierda) SDL_DestroyTexture(textureizquierda);
 	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO);
 	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
+
 	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
 	this->close();
 }
@@ -296,7 +300,7 @@ SDL_Texture* Dibujador::dibujarAgua(Escalador* escalador, Agua* agua ){
 }
 
 SDL_Texture* Dibujador::dibujar_tierra(Escalador* escalador, std::string path){
-	SDL_Texture *background = loadTexture(path.c_str(), this->renderizador);
+	SDL_Texture *background = loadTextureTierra(path.c_str(), this->renderizador);
 	if(background == NULL){
 		loguear();
 		logFile << "    Error    " <<"\t No se pudo cargar textura de fondo " << endl;
@@ -467,7 +471,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
 	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
-		printf(" El angulo del arma es %d \n", paquete.angulo_arma);
+		//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
 		renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
@@ -481,7 +485,6 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	}
 	//printf(" RECIBE EL ARMAAAA %d \n", paquete.arma_seleccionada);
 	if(paquete.arma_seleccionada == 3){
-		printf(" ENTRA ACAAAAAAAAAAAAAAAAAAAAAAAAA\n");
 		SDL_Texture* dinamita = loadTexture("TPTaller/imagenes/dinamitaa2.png", this->renderizador);
 		if(paquete.direccion == -1){
 			renderTexture2(dinamita, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y,w,h);
@@ -510,7 +513,7 @@ void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, 
 			case 1:{
 				SDL_Texture* misil = loadTexture("TPTaller/imagenes/bazooka_misil.png", this->renderizador);
 				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo);
-				if(bazooka) SDL_DestroyTexture(bazooka);
+				if(misil) SDL_DestroyTexture(misil);
 			}
 		}
 	}
@@ -593,6 +596,7 @@ bool Dibujador::init(){
 					logFile << "    Error   " << "\t  SDL_image no puedo ser inicializado! SDL_image Error: " <<  SDL_GetError()<< endl;
 					success = false;
 				}
+
 			 //Initialize SDL_mixer
 				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) < 0 )
 				{
@@ -727,6 +731,7 @@ void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
         break;
     }
 }
+
 
 
 

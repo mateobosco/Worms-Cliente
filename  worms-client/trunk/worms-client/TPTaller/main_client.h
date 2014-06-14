@@ -86,14 +86,14 @@ int mainCliente(int argc, char* argv[]){
 
 		timeval ultima_vez;
 		gettimeofday(&ultima_vez, 0x0);
-		int* aux = (int*)malloc (sizeof(int)*3);
-		aux[2]=1;
-		aux[0]=escalador->getVentanaX()/2;
-		aux[1]=escalador->getVentanaY()/2;
-		for(int i=0; i <20; i++){
-			escalador->hacerZoom(aux);
-		}
-		int aux3 = 0 ;
+//		int* aux = (int*)malloc (sizeof(int)*3);
+//		aux[2]=1;
+//		aux[0]=escalador->getVentanaX()/2;
+//		aux[1]=escalador->getVentanaY()/2;
+//		for(int i=0; i <20; i++){
+//			escalador->hacerZoom(aux);
+//		}
+//		int aux3 = 0 ;
 
 		bool disparando = false;
 		while(KEYS[SDLK_ESCAPE] == false){
@@ -113,7 +113,10 @@ int mainCliente(int argc, char* argv[]){
 			cliente->setID(paquete->id);
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando);
 
-
+//			if(evento->click_mouse.x != -1 && evento->click_mouse.x != 0){
+//							printf("entra aca\n");
+//							dibujador->borrarExplosion(evento->click_mouse, 3);
+//						}
 			if ((evento)){
 				cliente->actualizarPaquete(evento);
 			}
@@ -154,6 +157,14 @@ int mainCliente(int argc, char* argv[]){
 				dibujador->mostrarMenuArmas(escalador->getVentanaX()-100,100);
 			}
 			dibujador->mostrarReloj(paquete->reloj);
+
+
+
+			//printf(" RECIBO %d \n", paquete->radio_explosion);
+			if(paquete->radio_explosion != -1 && paquete->radio_explosion != 0){
+				printf(" ENTRA EN BORRAE EXPLOSION\n");
+				dibujador->borrarExplosion(paquete->posicion_proyectil, paquete->radio_explosion);
+			}
 
 			dibujador->actualizar();
 			posicion_mouse_scroll[2] = 0;

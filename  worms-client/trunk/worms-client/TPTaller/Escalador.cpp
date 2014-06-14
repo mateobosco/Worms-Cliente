@@ -10,15 +10,15 @@
 Escalador::Escalador(int ventanaX, int ventanaY, float32 escalaX, float32 escalaY, int ancho_esc, int alto_esc) {
 	this->pixelesX = ancho_esc;
 	this->pixelesY = alto_esc;
-	this->centroX = 700;
-	this->centroY = 700;
+	this->centroX = pixelesX/2;
+	this->centroY = pixelesY/2;
 	this->ventanaX = ventanaX;
 	this->ventanaY = ventanaY;
 	this->escalaX = escalaX;
 	this->escalaY = escalaY;
 	this->offsetX = (pixelesX - ventanaX)/2;
 	this->offsetY = (pixelesY - ventanaY)/2;
-	this->zoom = 150;
+	this->zoom = 100;
 }
 
 Escalador::~Escalador() {

@@ -440,10 +440,16 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 	SDL_Texture* gusanito;
 	if (dir ==1){
-		gusanito = this->texturederecha;
+		if(paquete.arma_seleccionada == 5)
+			gusanito = loadTexture("TPTaller/imagenes/suicidader.png", this->renderizador);
+		else
+			gusanito = this->texturederecha;
 	}
 	if (dir == -1){
-		gusanito = this->textureizquierda;
+		if(paquete.arma_seleccionada == 5)
+			gusanito = loadTexture("TPTaller/imagenes/suicidaizq.png", this->renderizador);
+		else
+			gusanito = this->textureizquierda;
 	}
 	if (dir ==1 && paquete.conectado == 0){
 		gusanito = this->texturederechaNEGRO;
@@ -563,7 +569,6 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}
-
 
 
 	//printf(" RECIBE EL ARMAAAA %d \n", paquete.arma_seleccionada);

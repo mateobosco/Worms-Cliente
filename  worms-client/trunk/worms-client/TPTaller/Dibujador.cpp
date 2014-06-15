@@ -480,9 +480,31 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 	char energia[10];
 	sprintf(energia,"%d", paquete.energia);
-	SDL_Texture* energiatext = RenderText(energia, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[3], 20); // despues preguntar el nombre de cada uno
+//	Sint16* vecX = new Sint16();
+//	Sint16* vecY = new Sint16();
+//	Sint16* vecXventanado = this->escalador->aplicarZoomXVector(vecX , 4);
+//	Sint16* vecYventanado = this->escalador->aplicarZoomYVector(vecY , 4);
+	SDL_Texture* energiatext = RenderText(energia, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[0], 15); // despues preguntar el nombre de cada uno
+//	Sint16* vecX = 100;
+//	Sint16* vecY = 100;
+//	vecX[0]=x;
+//	vecX[1]=x;
+//	vecX[2]=2*x;
+//	vecX[3]=2*x;
+//	vecY[0]=y;
+//	vecY[1]=y;
+//	vecY[2]=2*y;
+//	vecY[3]=2*y;
+//	int retorno = filledPolygonRGBA(this->renderizador,vecX, vecY, 4, 255, 0, 0, RECT_OPACIDAD);
 
-	renderTexture2(energiatext, this->renderizador, x - anchoPX+10 ,y - 30 , 50 , 30 );
+	SDL_Texture* vida_roja = loadTexture("TPTaller/imagenes/roja.png", this->renderizador);
+	SDL_Texture* vida_verde = loadTexture("TPTaller/imagenes/verde.png", this->renderizador);
+	renderTexture2(vida_roja, this->renderizador, x-w/2,y-h*2, w*2,h*2);
+	renderTexture2(vida_verde, this->renderizador, x-w/2, y-h*2, w*2 * paquete.energia/100 ,h*2);
+	renderTexture2(energiatext, this->renderizador,  x+w/3,y-h*1.2, w/2,h/2 );
+	if(vida_roja) SDL_DestroyTexture(vida_roja);
+	if(vida_verde) SDL_DestroyTexture(vida_verde);
+
 	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
 	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);

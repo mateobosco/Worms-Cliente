@@ -478,11 +478,57 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		if(bazooka) SDL_DestroyTexture(bazooka);
 		//if(mira) SDL_DestroyTexture(mira);
 	}
+	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
+			SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
+			//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
+			renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
+			if(bazooka) SDL_DestroyTexture(bazooka);
+			//if(mira) SDL_DestroyTexture(mira);
+	}
 	if(paquete.arma_seleccionada == 1 && paquete.direccion == -1){
-		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
-		renderTexture2(bazooka, this->renderizador,x,y,w,h);
+		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazookaizq.png", this->renderizador);
+		renderTexture3(bazooka, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture5(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+
 		if(bazooka) SDL_DestroyTexture(bazooka);
 	}
+	if(paquete.arma_seleccionada == 2 && paquete.direccion ==1){
+			SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadader.png", this->renderizador);
+			//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
+			renderTexture3(granada, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
+			if(granada) SDL_DestroyTexture(granada);
+			//if(mira) SDL_DestroyTexture(mira);
+	}
+	if(paquete.arma_seleccionada == 2 && paquete.direccion == -1){
+		SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadaizq.png", this->renderizador);
+		renderTexture3(granada, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture5(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+
+		if(granada) SDL_DestroyTexture(granada);
+	}
+	if(paquete.arma_seleccionada == 4 && paquete.direccion ==1){
+			SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyder.png", this->renderizador);
+			//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
+			renderTexture3(granadaholy, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
+			if(granadaholy) SDL_DestroyTexture(granadaholy);
+			//if(mira) SDL_DestroyTexture(mira);
+	}
+	if(paquete.arma_seleccionada == 4 && paquete.direccion == -1){
+		SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyizq.png", this->renderizador);
+		renderTexture3(granadaholy, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture5(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+
+		if(granadaholy) SDL_DestroyTexture(granadaholy);
+	}
+
+
+
 	//printf(" RECIBE EL ARMAAAA %d \n", paquete.arma_seleccionada);
 	if(paquete.arma_seleccionada == 3){
 		SDL_Texture* dinamita = loadTexture("TPTaller/imagenes/dinamitaa2.png", this->renderizador);
@@ -500,6 +546,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio){
 	if(tipo_proyectil){
+		printf(" RECIBE EL TIPO DE PROYECTIL %d \n", tipo_proyectil);
 		b2Vec2 posicion = posicion_proyectil;
 		b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion);
 		int anchoPX = escalador->aplicarZoomX( tamanio.x);
@@ -509,16 +556,45 @@ void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, 
 		int w = anchoPX;
 		int h = altoPX;
 		int angulo = 0; //  = calcularAngulo(direccion_proyectil);
-		switch(tipo_proyectil){
-			case 1:{
-				SDL_Texture* misil = loadTexture("TPTaller/imagenes/bazooka_misil.png", this->renderizador);
+		SDL_Texture* misil;
+		if(tipo_proyectil==1){
+				//SDL_Texture* misil;
+				if(direccion_proyectil.x>0){
+					misil= loadTexture("TPTaller/imagenes/bazooka_misil.png", this->renderizador);
+				}
+				else{
+					misil=loadTexture("TPTaller/imagenes/bazooka_misilizq.png", this->renderizador);
+				}
 				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo);
 				if(misil) SDL_DestroyTexture(misil);
-			}
 		}
+
+		if(tipo_proyectil==2){
+				//SDL_Texture* misil;
+				if(direccion_proyectil.x>0){
+					misil= loadTexture("TPTaller/imagenes/granadader.png", this->renderizador);
+				}
+				else{
+					misil=loadTexture("TPTaller/imagenes/granadaizq.png", this->renderizador);
+				}
+				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo);
+				if(misil) SDL_DestroyTexture(misil);
+		}
+		if(tipo_proyectil==4){
+				//SDL_Texture* misil;
+
+				if(direccion_proyectil.x>0){
+					misil= loadTexture("TPTaller/imagenes/granadaholyder.png", this->renderizador);
+				}
+				else{
+					misil=loadTexture("TPTaller/imagenes/granadaholyizq.png", this->renderizador);
+				}
+				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo);
+				if(misil) SDL_DestroyTexture(misil);
+		}
+
 	}
 }
-
 void Dibujador::mostrarMenuArmas(int x, int y){
 	//SDL_Texture* menu = loadTexture("TPTaller/imagenes/armas2.png", this->renderizador);
 	renderTexture2(bazooka, this->renderizador, x - 100, y, 100,100);
@@ -624,6 +700,7 @@ bool Dibujador::init(){
 	this->texturederechaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
 	this->textureizquierdaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
 	this->flechitaroja = loadTexture("TPTaller/imagenes/flechitaroja.png", this->renderizador);
+	this->textureexplosion = loadTexture("TPTaller/imagenes/explosion.png", this->renderizador);
 	return success;
 }
 
@@ -760,7 +837,7 @@ void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 
 			float32 x = (( ((float32) i*i) / ((float32) rad[0]*rad[0])));
 			float32 y = (( ((float32) j*j) / ((float32) rad[1]*rad[1])));
-			printf(" LOS PUNTOS SON %d, %d y %d,%d y dan x=%f y=%f x+y = %f \n", i,j,rad[0],rad[1],x,y,x+y);
+			//printf(" LOS PUNTOS SON %d, %d y %d,%d y dan x=%f y=%f x+y = %f \n", i,j,rad[0],rad[1],x,y,x+y);
 			if ( (x+y) <= 1) {
 				putpixel(surfaceTierra,pixel[0],pixel[1],0);
 			}
@@ -770,6 +847,41 @@ void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 
 }
 
+void Dibujador::dibujarExplosion(){
+	printf(" dibuja la explosion \n");
+	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion_explosion);
+	//int anchoPX = escalador->aplicarZoomX( tam.x);
+	//int altoPX = escalador->aplicarZoomY(tam.y);
+	int x = posicionVentanada->x - 100/2;
+	int y = posicionVentanada->y - 100/2;
+	renderTexture2(textureexplosion, this->renderizador, x, y, 100, 100 );
+	//renderTexture(textureexplosion, this->renderizador, 500, 500, 50, 50 );
+
+}
+
+void Dibujador::setPosicionExplosion(b2Vec2 pos){
+	b2Vec2 posicion_nueva = pos;
+	this->posicion_explosion=posicion_nueva;
+	this->contador_explosion=50;
+}
+
+bool Dibujador::dibujar_explosion(){
+//	if(this->contador_explosion==300){
+//		this->contador_explosion=0;
+//		return false;
+//	}
+	if(this->contador_explosion > 0){
+		this->contador_explosion--;
+		return true;
+
+	}
+	else{
+
+		return false;
+	}
+	//return this->explosion;
+	//contador_explosicion++;
+}
 
 
 

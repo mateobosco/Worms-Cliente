@@ -17,6 +17,8 @@
 #include "Socket.h"
 #include "Paquete.h"
 #include "Jugador.h"
+#include <queue>
+
 
 extern ofstream logFile;
 extern void loguear();
@@ -45,6 +47,8 @@ class Cliente{
 		comThreads hilos;
 		Jugador* jugador;
 		Dibujador* dibujador;
+
+
 
 
 	public:
@@ -78,11 +82,15 @@ class Cliente{
 
 		void setHilos(comThreads hilos_server);
 		comThreads getHilos();
+		queue<structPaquete*> cola_explosiones;
 		int recibirConfiguracion();
-
+		void desencolarExplosion();
 		SDL_mutex* getMutex();
 		void setJugador(Jugador* jug);
 		int getContadorCerrarse();
+		size_t getTamanioColaExplosiones();
+		structPaquete* getPaqueteColaExplosiones();
+
 };
 
 #endif /* CLIENTE_H_ */

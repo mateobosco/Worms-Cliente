@@ -180,6 +180,15 @@ int Cliente::runRecibirInfo(){
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 		if (recibidos > 0){
 			memcpy(this->paquete_recibir, buffer, MAX_PACK);
+			structPaquete* paquete = (structPaquete*)this->paquete_recibir;
+
+			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1){
+				structPaquete* paqueteencolar = (structPaquete*) malloc (MAX_PACK);
+				memcpy(paqueteencolar, this->paquete_recibir, MAX_PACK);
+				printf(" EN EL RECIBIR DE CLIENTE LO RECIBEEE \n");
+				printf(" RECIBE como radio %d y posiciones %f ,  %f \n", paqueteencolar->radio_explosion, paqueteencolar->posicion_proyectil.x, paqueteencolar->posicion_proyectil.y);
+				cola_explosiones.push(paqueteencolar);
+			}
 		}
 		else if(recibidos ==0){
 			this->servidor_conectado = false;
@@ -279,3 +288,22 @@ void Cliente::setServidorConectado(bool estado){
 int Cliente::getContadorCerrarse(){
 	return this->dibujador->getContadorCerrarse();
 }
+
+size_t Cliente::getTamanioColaExplosiones(){
+	return cola_explosiones.size();
+}
+
+
+structPaquete* Cliente::getPaqueteColaExplosiones(){
+	structPaquete* paquete;
+	paquete = this->cola_explosiones.front();
+	//cola_explosiones.pop();
+	return paquete;
+
+}
+
+void Cliente::desencolarExplosion(){
+	cola_explosiones.pop();
+}
+
+

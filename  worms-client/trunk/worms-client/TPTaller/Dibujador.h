@@ -77,8 +77,10 @@ public:
 	void setMusica(Musica* musica);
 	//void borrarExplosion(b2Vec2 posicion, float32 radio);
 	SDL_Texture* loadTextureTierra(const std::string &path, SDL_Renderer *ren);
-
-
+	void dibujarExplosion();
+	bool explosion;
+	void setPosicionExplosion(b2Vec2 posicion);
+	bool dibujar_explosion();
 
 protected:
 	Escalador* escalador;
@@ -101,6 +103,7 @@ private:
 	SDL_Texture* kamikaze;
 	SDL_Texture* patada;
 	SDL_Texture* mira;
+	SDL_Texture* textureexplosion;
 	//SDL_Surface* surfaceTierra;
 	SDL_Window* window;
 	SDL_Texture* texturederecha;
@@ -110,6 +113,9 @@ private:
 	float32 oscilaragua;
 	int contador_cerrarse;
 	int escalaZoom;
+	b2Vec2 posicion_explosion;
+	int contador_explosion;
+
 };
 
 #endif /* DIBUJADOR_H_ */

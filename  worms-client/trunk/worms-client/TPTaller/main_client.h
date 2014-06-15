@@ -161,10 +161,27 @@ int mainCliente(int argc, char* argv[]){
 
 
 			//printf(" RECIBO %d \n", paquete->radio_explosion);
-			if(paquete->radio_explosion != -1 && paquete->radio_explosion != 0){
-				printf(" ENTRA EN BORRAE EXPLOSION\n");
-				dibujador->borrarExplosion(paquete->posicion_proyectil, paquete->radio_explosion);
+//			if(paquete->radio_explosion != -1 && paquete->radio_explosion != 0){
+//				printf(" ENTRA EN BORRAR EXPLOSION\n");
+//				dibujador->borrarExplosion(paquete->posicion_proyectil, paquete->radio_explosion);
+//				dibujador->setPosicionExplosion(paquete->posicion_proyectil);
+//				//dibujador->dibujarExplosion(paquete->posicion_proyectil, paquete->radio_explosion);
+//			}
+			if(cliente->getTamanioColaExplosiones() ==1){
+				printf(" LO LEE DESDE LA COLA \n");
+				structPaquete* paquetecola = cliente->getPaqueteColaExplosiones();
+				printf(" //////////// RECIBE como radio %d y posiciones %f ,  %f \n", paquetecola->radio_explosion, paquetecola->posicion_proyectil.x, paquetecola->posicion_proyectil.y);
+				dibujador->borrarExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
+				dibujador->setPosicionExplosion(paquetecola->posicion_proyectil);
+				cliente->desencolarExplosion();
+
 			}
+			if(dibujador->dibujar_explosion() == true){
+				printf(" SE ROMPE ACA \n");
+				dibujador->dibujarExplosion();
+
+			}
+
 
 			dibujador->actualizar();
 			posicion_mouse_scroll[2] = 0;

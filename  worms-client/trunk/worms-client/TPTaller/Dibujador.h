@@ -70,6 +70,7 @@ public:
 	void renderTexture5(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2);
 	void renderTexture4(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
 	void borrarExplosion(b2Vec2 pos, float32 radio);
+	void renderTexture6(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2);
 
 
 	void dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio);
@@ -79,7 +80,7 @@ public:
 	SDL_Texture* loadTextureTierra(const std::string &path, SDL_Renderer *ren);
 	void dibujarExplosion();
 	bool explosion;
-	void setPosicionExplosion(b2Vec2 posicion);
+	void setPosicionExplosion(b2Vec2 posicion, int radio);
 	bool dibujar_explosion();
 
 protected:
@@ -113,6 +114,7 @@ private:
 	float32 oscilaragua;
 	int contador_cerrarse;
 	int escalaZoom;
+	int radio_explosion;
 	b2Vec2 posicion_explosion;
 	int contador_explosion;
 

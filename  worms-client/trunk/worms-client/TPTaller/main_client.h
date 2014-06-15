@@ -172,7 +172,7 @@ int mainCliente(int argc, char* argv[]){
 				structPaquete* paquetecola = cliente->getPaqueteColaExplosiones();
 				printf(" //////////// RECIBE como radio %d y posiciones %f ,  %f \n", paquetecola->radio_explosion, paquetecola->posicion_proyectil.x, paquetecola->posicion_proyectil.y);
 				dibujador->borrarExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
-				dibujador->setPosicionExplosion(paquetecola->posicion_proyectil);
+				dibujador->setPosicionExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
 				cliente->desencolarExplosion();
 
 			}

@@ -256,6 +256,21 @@ void Dibujador::renderTexture5(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 	}
 }
 
+void Dibujador::renderTexture6(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2){
+	SDL_Rect dst;
+	dst.x = x - cos(angulo * PI/180) * this->escalaZoom;
+	dst.y = y - sin(angulo * PI/180) * this->escalaZoom;
+	dst.w = w;
+	dst.h = h;
+	SDL_Point point;
+	point.x=punto1;
+	point.y=punto2;
+	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, &point,SDL_FLIP_NONE)!=0){
+		loguear();
+		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+	}
+}
+
 void Dibujador::renderTexture4(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo){
 	SDL_Rect dst;
 	dst.x = x;
@@ -489,8 +504,8 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	}
 	if(paquete.arma_seleccionada == 1 && paquete.direccion == -1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazookaizq.png", this->renderizador);
-		renderTexture3(bazooka, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		renderTexture5(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture3(bazooka, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
+		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 
 		if(bazooka) SDL_DestroyTexture(bazooka);
 	}
@@ -505,8 +520,8 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	}
 	if(paquete.arma_seleccionada == 2 && paquete.direccion == -1){
 		SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadaizq.png", this->renderizador);
-		renderTexture3(granada, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		renderTexture5(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture3(granada, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
+		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 
 		if(granada) SDL_DestroyTexture(granada);
 	}
@@ -521,8 +536,8 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	}
 	if(paquete.arma_seleccionada == 4 && paquete.direccion == -1){
 		SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyizq.png", this->renderizador);
-		renderTexture3(granadaholy, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		renderTexture5(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture3(granadaholy, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
+		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 
 		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}
@@ -850,19 +865,22 @@ void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 void Dibujador::dibujarExplosion(){
 	printf(" dibuja la explosion \n");
 	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion_explosion);
-	//int anchoPX = escalador->aplicarZoomX( tam.x);
-	//int altoPX = escalador->aplicarZoomY(tam.y);
+//	int anchoPX = escalador->aplicarZoomX( tam.x);
+//	int altoPX = escalador->aplicarZoomY(tam.y);
 	int x = posicionVentanada->x - 100/2;
 	int y = posicionVentanada->y - 100/2;
+//	renderTexture2(textureexplosion, this->renderizador, x, y, this->radio_explosion *25, this->radio_explosion * 15 );
+
 	renderTexture2(textureexplosion, this->renderizador, x, y, 100, 100 );
 	//renderTexture(textureexplosion, this->renderizador, 500, 500, 50, 50 );
 
 }
 
-void Dibujador::setPosicionExplosion(b2Vec2 pos){
+void Dibujador::setPosicionExplosion(b2Vec2 pos, int radio){
 	b2Vec2 posicion_nueva = pos;
 	this->posicion_explosion=posicion_nueva;
 	this->contador_explosion=50;
+	this->radio_explosion = radio;
 }
 
 bool Dibujador::dibujar_explosion(){

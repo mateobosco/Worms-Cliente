@@ -1,0 +1,6 @@
+Log File. Ejecución Worms
+   Fecha  | Hora |  Gravedad  | 	 Mensaje 
+17/06/2014 18:51Error   	 Mix_Init: %s Mixer not built with MP3 support
+17/06/2014 18:51  Warning 	 Imagen de agua no fue cargada. Path incorrecto. Por defecto se carga imagen de agua de:TPTaller/imagenes/aguaAzul.png
+17/06/2014 18:51No se pudo cargar la imagen: TPTaller/imagenes/fondoNegro.png! SDL_image Error: Couldn't open TPTaller/imagenes/fondoNegro.png
+17/06/2014 18:51    Error    	 No se pudo cargar textura de fondo del cielo. Se carga por defecto el cielo de ubicación 'TPTaller/imagenes/cieloN.jpg'.

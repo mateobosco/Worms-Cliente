@@ -437,27 +437,20 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 	int dir = paquete.direccion;
 	b2Vec2 tam = paquete.tamano;
-	
+
 	SDL_Texture* gusanito;
 	if (dir ==1){
-		if(paquete.arma_seleccionada == 3)
-			gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_der.png", this->renderizador);
-		else{
-			if(paquete.arma_seleccionada == 5)
-				gusanito = loadTexture("TPTaller/imagenes/suicidader.png", this->renderizador);
-			else
-				gusanito = this->texturederecha;
-		}
+		if(paquete.arma_seleccionada == 3) gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_der.png", this->renderizador);
+		else if(paquete.arma_seleccionada == 5) gusanito = loadTexture("TPTaller/imagenes/suicidader.png", this->renderizador);
+		else if(paquete.arma_seleccionada == 6) gusanito = loadTexture("TPTaller/imagenes/patadaDER.png", this->renderizador);
+		else gusanito = this->texturederecha;
+
 	}
 	if (dir == -1){
-		if(paquete.arma_seleccionada == 3)
-			gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_izq.png", this->renderizador);
-		else{
-			if(paquete.arma_seleccionada == 5)
-				gusanito = loadTexture("TPTaller/imagenes/suicidaizq.png", this->renderizador);
-			else
-				gusanito = this->textureizquierda;
-		}
+		if(paquete.arma_seleccionada == 3) gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_izq.png", this->renderizador);
+		else if(paquete.arma_seleccionada == 5) gusanito = loadTexture("TPTaller/imagenes/suicidaizq.png", this->renderizador);
+		else if(paquete.arma_seleccionada == 6) gusanito = loadTexture("TPTaller/imagenes/patadaIZQ.png", this->renderizador);
+		else gusanito = this->textureizquierda;
 	}
 	if (dir ==1 && paquete.conectado == 0){
 		gusanito = this->texturederechaNEGRO;
@@ -579,7 +572,6 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}
 
-
 	SDL_DestroyTexture(energiatext);
 	delete posicionVentanada;
 }
@@ -667,7 +659,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	int personajes = paquete->cantidad_personajes;
 	for (int i = 0 ; i < figuras ; i++ ){
 		structFigura* vector = paquete->vector_figuras;
-		this->dibujarPaqueteFigura(vector[i]);
+//		this->dibujarPaqueteFigura(vector[i]);
 	}
 	SDL_Color color = {0,0,0};
 	SDL_Texture* nombre = RenderText(nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
@@ -735,12 +727,12 @@ bool Dibujador::init(){
 				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) < 0 )
 				{
 					loguear();
-					logFile << "  SDL_mixer no pudo ser inicializado! SDL_mixer Error: %s" << Mix_GetError() << endl;
+					logFile << "SDL_mixer no pudo ser inicializado! SDL_mixer Error: %s" << Mix_GetError() << endl;
 					success = false;
 				}
 				if ((Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3) != MIX_INIT_MP3){
 					  loguear();
-					  logFile << "    Error   \t Mix_Init:  " << Mix_GetError() << endl;
+					  logFile << "Error   \t Mix_Init: %s " << Mix_GetError() << endl;
 				      success = false;
 				}
 				int frec, chan;
@@ -749,6 +741,7 @@ bool Dibujador::init(){
 					loguear();
 					logFile << "Error" << endl;
 				}
+				printf("Frecuencia iniciada: %d, Formato: %d, Channel: %d",frec,formato, chan);
 			}
 		}
 	}
@@ -915,6 +908,7 @@ void Dibujador::dibujarExplosion(){
 
 	renderTexture2(textureexplosion, this->renderizador, x, y, 100, 100 );
 	//renderTexture(textureexplosion, this->renderizador, 500, 500, 50, 50 );
+	delete posicionVentanada;
 
 }
 

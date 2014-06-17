@@ -86,14 +86,6 @@ int mainCliente(int argc, char* argv[]){
 
 		timeval ultima_vez;
 		gettimeofday(&ultima_vez, 0x0);
-//		int* aux = (int*)malloc (sizeof(int)*3);
-//		aux[2]=1;
-//		aux[0]=escalador->getVentanaX()/2;
-//		aux[1]=escalador->getVentanaY()/2;
-//		for(int i=0; i <20; i++){
-//			escalador->hacerZoom(aux);
-//		}
-//		int aux3 = 0 ;
 
 		bool disparando = false;
 		while(KEYS[SDLK_ESCAPE] == false){
@@ -105,20 +97,14 @@ int mainCliente(int argc, char* argv[]){
 				music->playSonido(UP);
 			}
 			if((posicion_mouse_click[0]!=-1)&&(posicion_mouse_click[1]!=-1)){
-				music->playSonido(SELECT); //Ver para que lo haga una unica vezz cuando recibe el paquete que usa para renderizar la flecha
+				music->playSonido(SELECT);
 			}
 			escalador->moverVentana(posicion_mouse_movimiento);
 			escalador->hacerZoom(posicion_mouse_scroll);
 			paquete = (structPaquete*) cliente->getPaquete();
-
-
 			cliente->setID(paquete->id);
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando);
 
-//			if(evento->click_mouse.x != -1 && evento->click_mouse.x != 0){
-//							printf("entra aca\n");
-//							dibujador->borrarExplosion(evento->click_mouse, 3);
-//						}
 			if ((evento)){
 				cliente->actualizarPaquete(evento);
 			}
@@ -138,7 +124,6 @@ int mainCliente(int argc, char* argv[]){
 			char mensaje[90];
 			dibujador->dibujar_agua(agua);
 			if (paquete->comenzar == 1){
-				music->playMusic();
 				if (paquete->turno_jugador == cliente->getID()){
 					strcpy(mensaje, "Es tu turno");
 					dibujador->mostrarCartel(mensaje, 300 ,0,300, 50);
@@ -148,54 +133,33 @@ int mainCliente(int argc, char* argv[]){
 					dibujador->mostrarCartelTurno(paquete->turno_jugador, paquete->nombre_jugador_actual);
 
 				}
-
+				if(paquete->reloj < 10){
+					music->playSonido(TIME);
+				}
 			}
 			else{
 				strcpy(mensaje, "Esperando a que se conecten jugadores");
 				dibujador->mostrarCartel(mensaje, -1, 0, 500,50);
 			}
-			if(paquete->cantidad_personajes == 1 ){
-				printf("Cantidad de personajes = 1 \n");
-				char mensaje[90];
-				strcpy(mensaje, "Partida finalizada. \n Presione R para volver a empezar.");
-				dibujador->mostrarCartel(mensaje, 300 ,70,600, 50);
-
-			}
 			if(KEYS[SDLK_z]){
 				dibujador->mostrarMenuArmas(escalador->getVentanaX()-100,100);
 			}
 			dibujador->mostrarReloj(paquete->reloj);
-			if((paquete->reloj >= 50*1000) &&(paquete->reloj < 60*1000)){
-				music->stopMusic();
-				music->playSonido(TIME);
-			}
 
 
-			//printf(" RECIBO %d \n", paquete->radio_explosion);
-//			if(paquete->radio_explosion != -1 && paquete->radio_explosion != 0){
-//				printf(" ENTRA EN BORRAR EXPLOSION\n");
-//				dibujador->borrarExplosion(paquete->posicion_proyectil, paquete->radio_explosion);
-//				dibujador->setPosicionExplosion(paquete->posicion_proyectil);
-//				//dibujador->dibujarExplosion(paquete->posicion_proyectil, paquete->radio_explosion);
-//			}
 			if(cliente->getTamanioColaExplosiones() ==1){
-				printf(" LO LEE DESDE LA COLA \n");
 				structPaquete* paquetecola = cliente->getPaqueteColaExplosiones();
-				printf(" //////////// RECIBE como radio %d y posiciones %f ,  %f \n", paquetecola->radio_explosion, paquetecola->posicion_proyectil.x, paquetecola->posicion_proyectil.y);
-				dibujador->borrarExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
+				if (paquetecola->tipo_proyectil != 6) dibujador->borrarExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
 				dibujador->setPosicionExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
 				cliente->desencolarExplosion();
 
 			}
 			if(dibujador->dibujar_explosion() == true){
-				printf(" SE ROMPE ACA \n");
 				dibujador->dibujarExplosion();
-				music->playSonido(EXPLOSION);
-
 			}
 
 
-			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca
+			dibujador->actualizar();
 			posicion_mouse_scroll[2] = 0;
 
 			delete[] paquete;

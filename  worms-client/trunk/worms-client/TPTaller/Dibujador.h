@@ -50,7 +50,7 @@ public:
 	void iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra);
 	void dibujarFondo();
 	int dibujarPaqueteFigura(structFigura paquete);
-	void dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux);
+	void dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux, int potencia);
 	SDL_Texture* RenderText(std::string message, std::string fontFile,  SDL_Color color, int fontSize);
 	bool init();
 	void close();
@@ -82,6 +82,7 @@ public:
 	bool explosion;
 	void setPosicionExplosion(b2Vec2 posicion, int radio);
 	bool dibujar_explosion();
+	void dibujarPotencia(int potencia);
 
 protected:
 	Escalador* escalador;

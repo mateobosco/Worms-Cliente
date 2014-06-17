@@ -433,7 +433,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 	return retorno;
 }
 
-void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux){
+void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux, int potencia){
 
 	int dir = paquete.direccion;
 	b2Vec2 tam = paquete.tamano;
@@ -518,6 +518,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
 		renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		this->dibujarPotencia(potencia);
 		//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
 		if(bazooka) SDL_DestroyTexture(bazooka);
 		//if(mira) SDL_DestroyTexture(mira);
@@ -528,6 +529,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 			renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
+			this->dibujarPotencia(potencia);
 			if(bazooka) SDL_DestroyTexture(bazooka);
 			//if(mira) SDL_DestroyTexture(mira);
 	}
@@ -535,6 +537,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazookaizq.png", this->renderizador);
 		renderTexture3(bazooka, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
 		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		this->dibujarPotencia(potencia);
 
 		if(bazooka) SDL_DestroyTexture(bazooka);
 	}
@@ -544,6 +547,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 			renderTexture3(granada, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
+			this->dibujarPotencia(potencia);
 			if(granada) SDL_DestroyTexture(granada);
 			//if(mira) SDL_DestroyTexture(mira);
 	}
@@ -551,7 +555,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadaizq.png", this->renderizador);
 		renderTexture3(granada, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
 		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-
+		this->dibujarPotencia(potencia);
 		if(granada) SDL_DestroyTexture(granada);
 	}
 
@@ -561,6 +565,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 			renderTexture3(granadaholy, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
+			this->dibujarPotencia(potencia);
 			if(granadaholy) SDL_DestroyTexture(granadaholy);
 			//if(mira) SDL_DestroyTexture(mira);
 	}
@@ -568,7 +573,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyizq.png", this->renderizador);
 		renderTexture3(granadaholy, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
 		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-
+		this->dibujarPotencia(potencia);
 		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}
 
@@ -674,19 +679,30 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 
 	}
 	structPersonaje* vector1 = paquete->vector_personajes;
+	int potencia = paquete->potencia;
 	for (int j = 0 ; j < personajes ; j ++){
 		if (cliente_id == vector1[j].id_jugador){
 			//if(paquete->show_proyectil) vector1[j].arma_seleccionada = 0; todo
-			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux ); // es propio
+
+			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux, potencia ); // es propio
 		}
 		else{
-			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux); // no es propio
+			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux, potencia); // no es propio
 		}
 	}
 
+
 	if(paquete->show_proyectil){
 		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil, paquete->contador_segundos);
+
 	}
+}
+
+
+void Dibujador::dibujarPotencia(int potencia){
+	if (potencia < 0 ) return;
+	boxRGBA(this->renderizador, 20 , escalador->getVentanaY()-50, 20 + potencia, escalador->getVentanaY()-20,255,0,0,255);
+	rectangleRGBA(this->renderizador, 20 , escalador->getVentanaY()-50, 121, escalador->getVentanaY()-20,0,0,0,255);
 }
 
 bool Dibujador::init(){

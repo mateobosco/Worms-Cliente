@@ -158,7 +158,6 @@ int mainCliente(int argc, char* argv[]){
 				dibujador->dibujarExplosion();
 			}
 
-
 			dibujador->actualizar();
 			posicion_mouse_scroll[2] = 0;
 

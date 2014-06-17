@@ -437,7 +437,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 	int dir = paquete.direccion;
 	b2Vec2 tam = paquete.tamano;
-
+	
 	SDL_Texture* gusanito;
 	if (dir ==1){
 		if(paquete.arma_seleccionada == 3)
@@ -735,12 +735,12 @@ bool Dibujador::init(){
 				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) < 0 )
 				{
 					loguear();
-					logFile << "SDL_mixer no pudo ser inicializado! SDL_mixer Error: %s" << Mix_GetError() << endl;
+					logFile << "  SDL_mixer no pudo ser inicializado! SDL_mixer Error: %s" << Mix_GetError() << endl;
 					success = false;
 				}
 				if ((Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3) != MIX_INIT_MP3){
 					  loguear();
-					  logFile << "Error   \t Mix_Init: %s " << Mix_GetError() << endl;
+					  logFile << "    Error   \t Mix_Init:  " << Mix_GetError() << endl;
 				      success = false;
 				}
 				int frec, chan;
@@ -749,7 +749,6 @@ bool Dibujador::init(){
 					loguear();
 					logFile << "Error" << endl;
 				}
-				printf("Frecuencia iniciada: %d, Formato: %d, Channel: %d",frec,formato, chan);
 			}
 		}
 	}

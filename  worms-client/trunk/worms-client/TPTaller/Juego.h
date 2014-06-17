@@ -57,6 +57,7 @@ class Juego{
 		ManejadorPersonajes* getManejadorPersonajes();
 		int getJugadorActual();
 		void pasarTurno();
+		void cargarSiguienteNivel();
 };
 
 #endif /* JUEGO_H_ */

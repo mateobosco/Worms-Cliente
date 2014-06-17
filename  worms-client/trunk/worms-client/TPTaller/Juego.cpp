@@ -243,3 +243,7 @@ void Juego::pasarTurno(){
 		jugador_actual =0;
 	}
 }
+
+void Juego::cargarSiguienteNivel(){
+
+}

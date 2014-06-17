@@ -105,7 +105,8 @@ int Cliente::conectar(){
 		if(bytes > 0 ) envio_nombre = true;
 		if(bytes <= 0) {
 			printf("Error al enviar nombre");
-			// TODO LOGEAR
+			loguear();
+			logFile << "   Error al enviar nombre" << endl;
 			return EXIT_FAILURE;
 		}
 	}

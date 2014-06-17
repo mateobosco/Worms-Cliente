@@ -145,6 +145,9 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				else if (numero == SDLK_DOWN){
 					KEYS[103] = true;
 				}
+//				else if(numero == SDLK_r){
+//					KEYS[SDLK_r] = true;
+//				}
 				if(numero < 1000){ //todo keys se puede acceder hasta la 321
 					KEYS[numero] = true;
 				}

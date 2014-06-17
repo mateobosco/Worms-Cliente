@@ -105,11 +105,13 @@ int mainCliente(int argc, char* argv[]){
 				music->playSonido(UP);
 			}
 			if((posicion_mouse_click[0]!=-1)&&(posicion_mouse_click[1]!=-1)){
-				music->playSonido(SELECT);
+				music->playSonido(SELECT); //Ver para que lo haga una unica vezz cuando recibe el paquete que usa para renderizar la flecha
 			}
 			escalador->moverVentana(posicion_mouse_movimiento);
 			escalador->hacerZoom(posicion_mouse_scroll);
 			paquete = (structPaquete*) cliente->getPaquete();
+
+
 			cliente->setID(paquete->id);
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando);
 
@@ -136,6 +138,7 @@ int mainCliente(int argc, char* argv[]){
 			char mensaje[90];
 			dibujador->dibujar_agua(agua);
 			if (paquete->comenzar == 1){
+				music->playMusic();
 				if (paquete->turno_jugador == cliente->getID()){
 					strcpy(mensaje, "Es tu turno");
 					dibujador->mostrarCartel(mensaje, 300 ,0,300, 50);
@@ -145,19 +148,27 @@ int mainCliente(int argc, char* argv[]){
 					dibujador->mostrarCartelTurno(paquete->turno_jugador, paquete->nombre_jugador_actual);
 
 				}
-				if(paquete->reloj < 10){
-					music->playSonido(TIME);
-				}
+
 			}
 			else{
 				strcpy(mensaje, "Esperando a que se conecten jugadores");
 				dibujador->mostrarCartel(mensaje, -1, 0, 500,50);
 			}
+			if(paquete->cantidad_personajes == 1 ){
+				printf("Cantidad de personajes = 1 \n");
+				char mensaje[90];
+				strcpy(mensaje, "Partida finalizada. \n Presione R para volver a empezar.");
+				dibujador->mostrarCartel(mensaje, 300 ,70,600, 50);
+
+			}
 			if(KEYS[SDLK_z]){
 				dibujador->mostrarMenuArmas(escalador->getVentanaX()-100,100);
 			}
 			dibujador->mostrarReloj(paquete->reloj);
-
+			if((paquete->reloj >= 50*1000) &&(paquete->reloj < 60*1000)){
+				music->stopMusic();
+				music->playSonido(TIME);
+			}
 
 
 			//printf(" RECIBO %d \n", paquete->radio_explosion);
@@ -179,11 +190,12 @@ int mainCliente(int argc, char* argv[]){
 			if(dibujador->dibujar_explosion() == true){
 				printf(" SE ROMPE ACA \n");
 				dibujador->dibujarExplosion();
+				music->playSonido(EXPLOSION);
 
 			}
 
 
-			dibujador->actualizar();
+			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca
 			posicion_mouse_scroll[2] = 0;
 
 			delete[] paquete;

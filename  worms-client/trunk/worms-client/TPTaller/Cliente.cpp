@@ -105,8 +105,7 @@ int Cliente::conectar(){
 		if(bytes > 0 ) envio_nombre = true;
 		if(bytes <= 0) {
 			printf("Error al enviar nombre");
-			loguear();
-			logFile << "   Error al enviar nombre" << endl;
+			// TODO LOGEAR
 			return EXIT_FAILURE;
 		}
 	}
@@ -183,11 +182,9 @@ int Cliente::runRecibirInfo(){
 			memcpy(this->paquete_recibir, buffer, MAX_PACK);
 			structPaquete* paquete = (structPaquete*)this->paquete_recibir;
 
-			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1){
+			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1 && paquete->tipo_proyectil!=6){
 				structPaquete* paqueteencolar = (structPaquete*) malloc (MAX_PACK);
 				memcpy(paqueteencolar, this->paquete_recibir, MAX_PACK);
-				printf(" EN EL RECIBIR DE CLIENTE LO RECIBEEE \n");
-				printf(" RECIBE como radio %d y posiciones %f ,  %f \n", paqueteencolar->radio_explosion, paqueteencolar->posicion_proyectil.x, paqueteencolar->posicion_proyectil.y);
 				cola_explosiones.push(paqueteencolar);
 			}
 		}

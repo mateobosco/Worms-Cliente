@@ -153,14 +153,12 @@ bool aceptarNuevaTecla(timeval act_time, timeval key_pressed_time){
 }
 
 structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando){
-	int arma;
 	structEvento* paquete;
 	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE] || KEYS[SDLK_x] || KEYS[SDLK_c] || KEYS[SDLK_v]){ // no es un click, es un movimiento
 		timeval tiempo_actual;
 		gettimeofday(&tiempo_actual, 0x0);
 		if(aceptarNuevaTecla(tiempo_actual, ultima_vez)){
 			paquete = crearPaqueteMovimiento(KEYS, cliente, disparando);
-
 			gettimeofday(&ultima_vez, 0x0);
 		} else{
 			paquete = crearPaqueteVacio(KEYS, disparando);
@@ -175,12 +173,10 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 			if(KEYS[SDLK_z]){
 				if (click[0] > 600 &&  click[0] < 700 && click[1] > 100 && click[1] < 200){
 					printf(" selecciona una bazooka \n");
-					arma = BAZOOKA;
 					paquete->arma_seleccionada=1;
 				}
 				else if (click[0] > 700  && click[1] > 100 && click[1] <200){
 					printf(" selecciona una granada \n");
-					arma = GRANADA;
 					paquete->arma_seleccionada=2;
 				}
 				else if (click[0] > 600 &&  click[0] < 700 && click[1] > 200 && click[1] < 300){
@@ -189,22 +185,16 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 				}
 				else if (click[0] > 700 && click[1] > 200 && click[1] < 300){
 					printf(" Selecciona una holy \n");
-					arma = HOLY;
 					paquete->arma_seleccionada=4;
 				}
 				else if (click[0] > 600  && click[0] < 700 && click[1] > 300 && click[1] < 400){
 					printf(" Selecciona kamikaze \n");
-					arma = KAMIKAZE;
 					paquete->arma_seleccionada=5;
 				}
 				else if (click[0] > 700 && click[1] > 300 && click[1] <400){
 					printf(" Selecciona patada \n");
-					arma = PATADA;
 					paquete->arma_seleccionada=6;
 				}
-			}
-			if(KEYS[SDLK_r]){
-				paquete->reset = 1;
 			}
 		}
 		else {

@@ -73,7 +73,7 @@ public:
 	void renderTexture6(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2);
 
 
-	void dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio);
+	void dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos);
 	void renderTextureCenter(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
 	void setMusica(Musica* musica);
 	//void borrarExplosion(b2Vec2 posicion, float32 radio);

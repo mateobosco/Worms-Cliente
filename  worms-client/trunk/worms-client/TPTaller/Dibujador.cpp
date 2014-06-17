@@ -440,16 +440,24 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 	SDL_Texture* gusanito;
 	if (dir ==1){
-		if(paquete.arma_seleccionada == 5)
-			gusanito = loadTexture("TPTaller/imagenes/suicidader.png", this->renderizador);
-		else
-			gusanito = this->texturederecha;
+		if(paquete.arma_seleccionada == 3)
+			gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_der.png", this->renderizador);
+		else{
+			if(paquete.arma_seleccionada == 5)
+				gusanito = loadTexture("TPTaller/imagenes/suicidader.png", this->renderizador);
+			else
+				gusanito = this->texturederecha;
+		}
 	}
 	if (dir == -1){
-		if(paquete.arma_seleccionada == 5)
-			gusanito = loadTexture("TPTaller/imagenes/suicidaizq.png", this->renderizador);
-		else
-			gusanito = this->textureizquierda;
+		if(paquete.arma_seleccionada == 3)
+			gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_izq.png", this->renderizador);
+		else{
+			if(paquete.arma_seleccionada == 5)
+				gusanito = loadTexture("TPTaller/imagenes/suicidaizq.png", this->renderizador);
+			else
+				gusanito = this->textureizquierda;
+		}
 	}
 	if (dir ==1 && paquete.conectado == 0){
 		gusanito = this->texturederechaNEGRO;
@@ -553,6 +561,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 		if(granada) SDL_DestroyTexture(granada);
 	}
+
 	if(paquete.arma_seleccionada == 4 && paquete.direccion ==1){
 			SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyder.png", this->renderizador);
 			//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
@@ -571,22 +580,11 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	}
 
 
-	//printf(" RECIBE EL ARMAAAA %d \n", paquete.arma_seleccionada);
-	if(paquete.arma_seleccionada == 3){
-		SDL_Texture* dinamita = loadTexture("TPTaller/imagenes/dinamitaa2.png", this->renderizador);
-		if(paquete.direccion == -1){
-			renderTexture2(dinamita, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y,w,h);
-		}
-		if (paquete.direccion == 1){
-			renderTexture2(dinamita, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y,w,h);
-		}
-		if(dinamita) SDL_DestroyTexture(dinamita);
-	}
 	SDL_DestroyTexture(energiatext);
 	delete posicionVentanada;
 }
 
-void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio){
+void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos){
 	if(tipo_proyectil){
 		printf(" RECIBE EL TIPO DE PROYECTIL %d \n", tipo_proyectil);
 		b2Vec2 posicion = posicion_proyectil;
@@ -622,6 +620,23 @@ void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, 
 				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo);
 				if(misil) SDL_DestroyTexture(misil);
 		}
+
+		if(tipo_proyectil==3){
+
+				misil = loadTexture("TPTaller/imagenes/dinamita_chispa.png", this->renderizador);
+				renderTextureCenter(misil, this->renderizador, x, y, w-1,h-1, angulo);
+				SDL_Texture* segundos;
+				switch (contador_segundos){
+					case 3:	segundos = loadTexture("TPTaller/imagenes/segundo_tres.png", this->renderizador); break;
+					case 2: segundos = loadTexture("TPTaller/imagenes/segundo_tres.png", this->renderizador); break;
+					case 1: segundos = loadTexture("TPTaller/imagenes/segundo_dos.png", this->renderizador); break;
+					case 0: segundos = loadTexture("TPTaller/imagenes/segundo_uno.png", this->renderizador); break;
+					default: segundos = loadTexture("TPTaller/imagenes/segundo_cero.png", this->renderizador); break;
+				}
+				renderTextureCenter(segundos, this->renderizador, x+16, y-16, w-1,h-1, angulo+45);
+				if(misil) SDL_DestroyTexture(misil);
+		}
+
 		if(tipo_proyectil==4){
 				//SDL_Texture* misil;
 
@@ -669,6 +684,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	structPersonaje* vector1 = paquete->vector_personajes;
 	for (int j = 0 ; j < personajes ; j ++){
 		if (cliente_id == vector1[j].id_jugador){
+			//if(paquete->show_proyectil) vector1[j].arma_seleccionada = 0; todo
 			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux ); // es propio
 		}
 		else{
@@ -677,7 +693,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	}
 
 	if(paquete->show_proyectil){
-		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil);
+		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil, paquete->contador_segundos);
 	}
 }
 

@@ -699,7 +699,6 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 
 void Dibujador::dibujarPotencia(int potencia){
 
-	printf("LA FUERZA ES %d ------------------------------------------------------------\n", potencia);
 	rectangleRGBA(this->renderizador, 20 , escalador->getVentanaY()-50, 121, escalador->getVentanaY()-20,0,0,0,255);
 	if (potencia <= 0 || potencia > 100 ) return;
 	boxRGBA(this->renderizador, 20 , escalador->getVentanaY()-50, 20 + potencia, escalador->getVentanaY()-20,255,0,0,255);
@@ -916,16 +915,26 @@ void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 }
 
 void Dibujador::dibujarExplosion(){
-	printf(" dibuja la explosion \n");
 	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion_explosion);
-//	int anchoPX = escalador->aplicarZoomX( tam.x);
-//	int altoPX = escalador->aplicarZoomY(tam.y);
+
 	int x = posicionVentanada->x - 100/2;
 	int y = posicionVentanada->y - 100/2;
-//	renderTexture2(textureexplosion, this->renderizador, x, y, this->radio_explosion *25, this->radio_explosion * 15 );
 
-	renderTexture2(textureexplosion, this->renderizador, x, y, 100, 100 );
-	//renderTexture(textureexplosion, this->renderizador, 500, 500, 50, 50 );
+//	renderTexture2(textureexplosion, this->renderizador, x, y, escalador->getVentanaX()/8, escalador->getVentanaY()/6 );
+	renderTexture2(textureexplosion, this->renderizador, x-30, y-25, 120 , 100 );
+
+	delete posicionVentanada;
+
+}
+void Dibujador::dibujarExplosionHoly(){
+	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion_explosion);
+
+	int x = posicionVentanada->x - 100/2;
+	int y = posicionVentanada->y - 100/2;
+
+//	renderTexture2(textureexplosion, this->renderizador, x, y, escalador->getVentanaX()/4, escalador->getVentanaY()/3 );
+	renderTexture2(textureexplosion, this->renderizador, x-60, y-50, 240, 200 );
+
 	delete posicionVentanada;
 
 }

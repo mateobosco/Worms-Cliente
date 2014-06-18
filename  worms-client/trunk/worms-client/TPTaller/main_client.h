@@ -173,7 +173,14 @@ int mainCliente(int argc, char* argv[]){
 				free(paquetecola);
 			}
 			if(dibujador->dibujar_explosion() == true){
-				dibujador->dibujarExplosion();
+				if (paquete->tipo_proyectil != 0) dibujador->tipo_explosion = paquete->tipo_proyectil;
+				printf("tipo de proyectil en el paquete %d , tipo de proyectil en el dibujador %d",paquete->tipo_proyectil,dibujador->tipo_explosion);
+				if (dibujador->tipo_explosion == 4){
+					dibujador->dibujarExplosionHoly();
+				}
+				if (dibujador->tipo_explosion != 4) {
+					dibujador->dibujarExplosion();
+				}
 				if (play_explotar) {
 					music->playSonido(EXPLOSION);
 					play_explotar = false;

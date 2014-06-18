@@ -79,12 +79,14 @@ public:
 	//void borrarExplosion(b2Vec2 posicion, float32 radio);
 	SDL_Texture* loadTextureTierra(const std::string &path, SDL_Renderer *ren);
 	void dibujarExplosion();
+	void dibujarExplosionHoly();
 	bool explosion;
 	void setPosicionExplosion(b2Vec2 posicion, int radio);
 	bool dibujar_explosion();
 	void dibujarPotencia(int potencia);
 	void dibujarViento(float32 viento);
 	void resetearEscenario(std::string pathTierra);
+	int tipo_explosion;
 
 protected:
 	Escalador* escalador;
@@ -120,6 +122,7 @@ private:
 	int radio_explosion;
 	b2Vec2 posicion_explosion;
 	int contador_explosion;
+
 
 };
 

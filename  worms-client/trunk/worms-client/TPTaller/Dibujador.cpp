@@ -698,9 +698,12 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 
 
 void Dibujador::dibujarPotencia(int potencia){
-	if (potencia < 0 ) return;
-	boxRGBA(this->renderizador, 20 , escalador->getVentanaY()-50, 20 + potencia, escalador->getVentanaY()-20,255,0,0,255);
+
+	printf("LA FUERZA ES %d ------------------------------------------------------------\n", potencia);
 	rectangleRGBA(this->renderizador, 20 , escalador->getVentanaY()-50, 121, escalador->getVentanaY()-20,0,0,0,255);
+	if (potencia <= 0 || potencia > 100 ) return;
+	boxRGBA(this->renderizador, 20 , escalador->getVentanaY()-50, 20 + potencia, escalador->getVentanaY()-20,255,0,0,255);
+
 }
 
 bool Dibujador::init(){

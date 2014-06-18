@@ -229,13 +229,13 @@ void Dibujador::renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 	}
 }
 
-void Dibujador::renderTextureCenter(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo){
+void Dibujador::renderTextureCenter(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, double angulo){
 	SDL_Rect dst;
 	dst.x = x;
 	dst.y = y;
 	dst.w = w;
 	dst.h = h;
-	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo-45, NULL, SDL_FLIP_NONE)!=0){
+	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, NULL, SDL_FLIP_NONE)!=0){
 		loguear();
 		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
 	}
@@ -581,9 +581,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	delete posicionVentanada;
 }
 
-void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos){
+void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos, double angulo){
 	if(tipo_proyectil){
-		printf(" RECIBE EL TIPO DE PROYECTIL %d \n", tipo_proyectil);
+//		printf(" RECIBE EL TIPO DE PROYECTIL %d \n", tipo_proyectil);
 		b2Vec2 posicion = posicion_proyectil;
 		b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion);
 		int anchoPX = escalador->aplicarZoomX( tamanio.x);
@@ -592,59 +592,57 @@ void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, 
 		int y = posicionVentanada->y - altoPX/2;
 		int w = anchoPX;
 		int h = altoPX;
-		int angulo = 0; //  = calcularAngulo(direccion_proyectil);
 		SDL_Texture* misil;
+		SDL_Texture* segundos;
+
+		if((tipo_proyectil == 2) || (tipo_proyectil == 3) || (tipo_proyectil == 4)){
+			switch (contador_segundos){
+				case 5:	segundos = loadTexture("TPTaller/imagenes/segundo_cinco.png", this->renderizador); break;
+				case 4:	segundos = loadTexture("TPTaller/imagenes/segundo_cuatro.png", this->renderizador); break;
+				case 3:	segundos = loadTexture("TPTaller/imagenes/segundo_tres.png", this->renderizador); break;
+				case 2: segundos = loadTexture("TPTaller/imagenes/segundo_dos.png", this->renderizador); break;
+				case 1: segundos = loadTexture("TPTaller/imagenes/segundo_uno.png", this->renderizador); break;
+				case 0: segundos = loadTexture("TPTaller/imagenes/segundo_cero.png", this->renderizador); break;
+				default: segundos = loadTexture("TPTaller/imagenes/segundo_cero.png", this->renderizador); break;
+			}
+		}
+
 		if(tipo_proyectil==1){
-				//SDL_Texture* misil;
-				if(direccion_proyectil.x>0){
-					misil= loadTexture("TPTaller/imagenes/bazooka_misil.png", this->renderizador);
-				}
-				else{
-					misil=loadTexture("TPTaller/imagenes/bazooka_misilizq.png", this->renderizador);
-				}
-				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo);
-				if(misil) SDL_DestroyTexture(misil);
+			float32 angulo_aux = atan2( direccion_proyectil.y, direccion_proyectil.x );
+			angulo = angulo_aux * 180/PI;
+			if(direccion_proyectil.x>0){
+				misil= loadTexture("TPTaller/imagenes/bazooka_misil.png", this->renderizador);
+				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo-45);
+			}
+			else{
+				misil=loadTexture("TPTaller/imagenes/bazooka_misilizq.png", this->renderizador);
+				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo-135);
+			}
+			if(misil) SDL_DestroyTexture(misil);
 		}
 
 		if(tipo_proyectil==2){
-				//SDL_Texture* misil;
-				if(direccion_proyectil.x>0){
-					misil= loadTexture("TPTaller/imagenes/granadader.png", this->renderizador);
-				}
-				else{
-					misil=loadTexture("TPTaller/imagenes/granadaizq.png", this->renderizador);
-				}
-				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo);
-				if(misil) SDL_DestroyTexture(misil);
+			misil = loadTexture("TPTaller/imagenes/granadader.png", this->renderizador);
+			renderTextureCenter(misil, this->renderizador, x, y, w-1,h-1, angulo-45);
+			renderTextureCenter(segundos, this->renderizador, x+16, y-16, w-1,h-1, 0);
+			if(misil) SDL_DestroyTexture(misil);
+			if(segundos) SDL_DestroyTexture(segundos);
 		}
 
 		if(tipo_proyectil==3){
-
-				misil = loadTexture("TPTaller/imagenes/dinamita_chispa.png", this->renderizador);
-				renderTextureCenter(misil, this->renderizador, x, y, w-1,h-1, angulo);
-				SDL_Texture* segundos;
-				switch (contador_segundos){
-					case 3:	segundos = loadTexture("TPTaller/imagenes/segundo_tres.png", this->renderizador); break;
-					case 2: segundos = loadTexture("TPTaller/imagenes/segundo_tres.png", this->renderizador); break;
-					case 1: segundos = loadTexture("TPTaller/imagenes/segundo_dos.png", this->renderizador); break;
-					case 0: segundos = loadTexture("TPTaller/imagenes/segundo_uno.png", this->renderizador); break;
-					default: segundos = loadTexture("TPTaller/imagenes/segundo_cero.png", this->renderizador); break;
-				}
-				renderTextureCenter(segundos, this->renderizador, x+16, y-16, w-1,h-1, angulo+45);
-				if(misil) SDL_DestroyTexture(misil);
+			misil = loadTexture("TPTaller/imagenes/dinamita_chispa.png", this->renderizador);
+			renderTextureCenter(misil, this->renderizador, x, y, w-1,h-1, angulo-45);
+			renderTextureCenter(segundos, this->renderizador, x+16, y-16, w-1,h-1, 0);
+			if(misil) SDL_DestroyTexture(misil);
+			if(segundos) SDL_DestroyTexture(segundos);
 		}
 
 		if(tipo_proyectil==4){
-				//SDL_Texture* misil;
-
-				if(direccion_proyectil.x>0){
-					misil= loadTexture("TPTaller/imagenes/granadaholyder.png", this->renderizador);
-				}
-				else{
-					misil=loadTexture("TPTaller/imagenes/granadaholyizq.png", this->renderizador);
-				}
-				renderTextureCenter(misil, this->renderizador, x, y, w+5,h+5, angulo);
-				if(misil) SDL_DestroyTexture(misil);
+			misil = loadTexture("TPTaller/imagenes/granadaholyder.png", this->renderizador);
+			renderTextureCenter(misil, this->renderizador, x, y, w-1,h-1, angulo-45);
+			renderTextureCenter(segundos, this->renderizador, x+16, y-16, w-1,h-1, 0);
+			if(misil) SDL_DestroyTexture(misil);
+			if(segundos) SDL_DestroyTexture(segundos);
 		}
 
 	}
@@ -682,8 +680,8 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	int potencia = paquete->potencia;
 	for (int j = 0 ; j < personajes ; j ++){
 		if (cliente_id == vector1[j].id_jugador){
-			//if(paquete->show_proyectil) vector1[j].arma_seleccionada = 0; todo
-
+			if(paquete->show_proyectil) vector1[j].arma_seleccionada = 0;
+			
 			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux, potencia ); // es propio
 		}
 		else{
@@ -693,8 +691,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 
 
 	if(paquete->show_proyectil){
-		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil, paquete->contador_segundos);
-
+		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil, paquete->contador_segundos, paquete->angulo);
 	}
 }
 
@@ -954,7 +951,7 @@ bool Dibujador::dibujar_explosion(){
 
 void Dibujador::dibujarViento(float32 viento){
 	SDL_Color color = {0,0,0};
-	char mensaje[25];//se permiten hasta 5 dígitos para la velocidad.
+	char mensaje[33];//se permiten hasta 5 dígitos para la velocidad.
 	if(viento > 0){
 		sprintf(mensaje,"Viento oeste a %3.2f km por hora", viento);
 	}

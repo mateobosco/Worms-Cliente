@@ -180,9 +180,14 @@ int mainCliente(int argc, char* argv[]){
 				}
 			}
 
+			if(((structPaquete*) cliente->getPaquete())->ganador[0] != '\0'){
+				char mensaje_ganador[50];
+				sprintf(mensaje_ganador, "El ganador es: %s", ((structPaquete*) cliente->getPaquete())->ganador);
+				dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
+			}
+
 			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca
 			posicion_mouse_scroll[2] = 0;
-
 			delete[] paquete;
 		}
 		delete music;

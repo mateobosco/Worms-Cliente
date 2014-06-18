@@ -35,6 +35,7 @@ typedef struct structPaquete{
 	structPersonaje vector_personajes[20];
 	int cantidad_personajes = 0;
 	int id;
+	int id_ganador;
 	char mensaje_mostrar[MAX_MENSAJE];
 	int turno_jugador;
 	int reloj;
@@ -45,7 +46,7 @@ typedef struct structPaquete{
 	b2Vec2 posicion_proyectil;
 	b2Vec2 direccion_proyectil;
 	b2Vec2 tamanio_proyectil;
-	int radio_explosion=0;
+	int radio_explosion = 0;
 	int contador_segundos = 0;
 	int potencia = -1;
 

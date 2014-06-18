@@ -664,7 +664,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	int personajes = paquete->cantidad_personajes;
 	for (int i = 0 ; i < figuras ; i++ ){
 		structFigura* vector = paquete->vector_figuras;
-//		this->dibujarPaqueteFigura(vector[i]);
+		this->dibujarPaqueteFigura(vector[i]);
 	}
 	SDL_Color color = {0,0,0};
 	SDL_Texture* nombre = RenderText(nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
@@ -743,7 +743,7 @@ bool Dibujador::init(){
 				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) < 0 )
 				{
 					loguear();
-					logFile << "SDL_mixer no pudo ser inicializado! SDL_mixer Error: %s" << Mix_GetError() << endl;
+					logFile << "  SDL_mixer no pudo ser inicializado! SDL_mixer Error: " << Mix_GetError() << endl;
 					success = false;
 				}
 				if ((Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3) != MIX_INIT_MP3){
@@ -757,7 +757,6 @@ bool Dibujador::init(){
 					loguear();
 					logFile << "Error" << endl;
 				}
-				printf("Frecuencia iniciada: %d, Formato: %d, Channel: %d",frec,formato, chan);
 			}
 		}
 	}

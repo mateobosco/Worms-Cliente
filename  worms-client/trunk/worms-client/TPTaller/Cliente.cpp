@@ -188,6 +188,8 @@ int Cliente::runRecibirInfo(){
 				memcpy(paqueteencolar, this->paquete_recibir, MAX_PACK);
 				cola_explosiones.push(paqueteencolar);
 			}
+			if (paquete->resetear) this->resetearNivel = true;
+
 		}
 		else if(recibidos ==0){
 			this->servidor_conectado = false;

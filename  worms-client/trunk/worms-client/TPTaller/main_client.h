@@ -187,6 +187,10 @@ int mainCliente(int argc, char* argv[]){
 			}
 
 			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca
+			if (cliente->resetearNivel){
+				dibujador->resetearEscenario(pathTierra);
+				cliente->resetearNivel = false;
+			}
 			posicion_mouse_scroll[2] = 0;
 			delete[] paquete;
 		}

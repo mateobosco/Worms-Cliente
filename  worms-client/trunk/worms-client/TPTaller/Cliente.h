@@ -90,6 +90,7 @@ class Cliente{
 		int getContadorCerrarse();
 		size_t getTamanioColaExplosiones();
 		structPaquete* getPaqueteColaExplosiones();
+		bool resetearNivel;
 
 };
 

@@ -975,3 +975,7 @@ void Dibujador::dibujarViento(float32 viento){
 	SDL_DestroyTexture(mensaje_final);
 }
 
+void Dibujador::resetearEscenario(std::string pathTierra){
+	SDL_FreeSurface(this->surfaceTierra);
+	this->dibujar_tierra(escalador,pathTierra);
+}

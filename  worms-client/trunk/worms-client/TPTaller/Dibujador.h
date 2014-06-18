@@ -84,6 +84,7 @@ public:
 	bool dibujar_explosion();
 	void dibujarPotencia(int potencia);
 	void dibujarViento(float32 viento);
+	void resetearEscenario(std::string pathTierra);
 
 protected:
 	Escalador* escalador;

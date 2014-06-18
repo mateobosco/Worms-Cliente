@@ -55,7 +55,8 @@ int mainCliente(int argc, char* argv[]){
 		Escalador* escalador = new Escalador(paqueteInicial->ancho_ventana , paqueteInicial->alto_ventana,
 				paqueteInicial->ancho_unidades, paqueteInicial->alto_unidades,
 				paqueteInicial->ancho_escenario,paqueteInicial->alto_escenario);
-		Dibujador* dibujador =new Dibujador(NULL, escalador);
+		float32 viento = paqueteInicial->viento;
+		Dibujador* dibujador = new Dibujador(NULL, escalador);
 		dibujador->init();
 		Musica* music = new Musica();
 		dibujador->setMusica(music);
@@ -145,7 +146,7 @@ int mainCliente(int argc, char* argv[]){
 				dibujador->mostrarMenuArmas(escalador->getVentanaX()-100,100);
 			}
 			dibujador->mostrarReloj(paquete->reloj);
-
+			dibujador->dibujarViento(viento);
 
 			if(cliente->getTamanioColaExplosiones() ==1){
 				structPaquete* paquetecola = cliente->getPaqueteColaExplosiones();

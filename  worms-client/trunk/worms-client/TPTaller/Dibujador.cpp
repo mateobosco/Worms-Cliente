@@ -953,5 +953,20 @@ bool Dibujador::dibujar_explosion(){
 	//contador_explosicion++;
 }
 
-
+void Dibujador::dibujarViento(float32 viento){
+	SDL_Color color = {0,0,0};
+	char mensaje[25];//se permiten hasta 5 dígitos para la velocidad.
+	if(viento > 0){
+		sprintf(mensaje,"Viento oeste a %3.2f km por hora", viento);
+	}
+	if(viento < 0){
+		sprintf(mensaje,"Viento este a %3.2f km por hora", -viento);
+	}
+	if(viento == 0){
+		sprintf(mensaje,"Viento de %3.2f km por hora", viento);
+	}
+	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
+	renderTexture2(mensaje_final, this->renderizador, (this->escalador->getVentanaX()) - 500 , 40 , 300 , 40 );
+	SDL_DestroyTexture(mensaje_final);
+}
 

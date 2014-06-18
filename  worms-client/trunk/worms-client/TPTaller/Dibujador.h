@@ -83,6 +83,7 @@ public:
 	void setPosicionExplosion(b2Vec2 posicion, int radio);
 	bool dibujar_explosion();
 	void dibujarPotencia(int potencia);
+	void dibujarViento(float32 viento);
 
 protected:
 	Escalador* escalador;

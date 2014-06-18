@@ -81,7 +81,11 @@ int mainCliente(int argc, char* argv[]){
 		memset(posicion_mouse_movimiento,'\0',2);
 		posicion_mouse_click[0] = -1;
 		posicion_mouse_click[1] = -1;
-
+		posicion_mouse_movimiento[0] = 0;//para q valgrind no joda
+		posicion_mouse_movimiento[1] = 0;//para q valgrind no joda
+		posicion_mouse_scroll[0] = 0;//para q valgrind no joda
+		posicion_mouse_scroll[1] = 0;//para q valgrind no joda
+		posicion_mouse_scroll[2] = 0;//para q valgrind no joda
 		structPaquete* paquete;
 		float aux2=0;
 
@@ -159,16 +163,21 @@ int mainCliente(int argc, char* argv[]){
 			dibujador->mostrarReloj(paquete->reloj);
 			dibujador->dibujarViento(viento);
 
+			bool play_explotar = false;
 			if(cliente->getTamanioColaExplosiones() ==1){
 				structPaquete* paquetecola = cliente->getPaqueteColaExplosiones();
 				if (paquetecola->tipo_proyectil != 6) dibujador->borrarExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
 				dibujador->setPosicionExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
+				play_explotar = true;
 				cliente->desencolarExplosion();
-
+				free(paquetecola);
 			}
 			if(dibujador->dibujar_explosion() == true){
 				dibujador->dibujarExplosion();
-				music->playSonido(EXPLOSION);
+				if (play_explotar) {
+					music->playSonido(EXPLOSION);
+					play_explotar = false;
+				}
 			}
 
 			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca
@@ -176,7 +185,7 @@ int mainCliente(int argc, char* argv[]){
 
 			delete[] paquete;
 		}
-
+		delete music;
 		delete paqueteInicial;
 		delete agua;
 		delete[] name;

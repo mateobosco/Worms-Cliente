@@ -17,9 +17,6 @@ Musica::Musica() {
 	         printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
 	     }
 //	  this->playMusic();
-
-
-
 }
 
 Musica::~Musica() {
@@ -59,7 +56,7 @@ void Musica::playSonido(int id){
 
 	switch(id){
 		case SELECT: {
-			this->s_select = Mix_LoadWAV("TPTaller/sonido/select.WAV");
+			if( !this->s_select ) this->s_select = Mix_LoadWAV("TPTaller/sonido/select.WAV");
 			if(this->s_select == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
@@ -70,7 +67,7 @@ void Musica::playSonido(int id){
 			break;
 		}
 		case UP: {
-			this->s_jump = Mix_LoadWAV("TPTaller/sonido/Jump1.wav");
+			if( !this->s_jump ) this->s_jump = Mix_LoadWAV("TPTaller/sonido/Jump1.wav");
 			if(this->s_jump == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
@@ -80,7 +77,7 @@ void Musica::playSonido(int id){
 			break;
 		}
 		case TIME: {
-			this->s_time = Mix_LoadWAV("TPTaller/sonido/clock-ticking-2.wav");
+			if( !this->s_time ) this->s_time = Mix_LoadWAV("TPTaller/sonido/clock-ticking-2.wav");
 			if(this->s_time == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
@@ -92,7 +89,7 @@ void Musica::playSonido(int id){
 		}
 
 		case BAZOOKA: {
-			this->s_bazooka = Mix_LoadWAV("TPTaller/sonido/Bazooka.wav");
+			if( !this->s_bazooka ) this->s_bazooka = Mix_LoadWAV("TPTaller/sonido/Bazooka.wav");
 			if(this->s_bazooka == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
@@ -104,7 +101,7 @@ void Musica::playSonido(int id){
 
 		}
 		case GRANADA:{
-			this->s_granada = Mix_LoadWAV("TPTaller/sonido/ExplosionGrenade.wav");
+			if( !this->s_granada ) this->s_granada = Mix_LoadWAV("TPTaller/sonido/ExplosionGrenade.wav");
 			if(this->s_granada == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
@@ -114,7 +111,7 @@ void Musica::playSonido(int id){
 			break;
 		}
 		case EXPLOSION:{
-			this->s_explosion = Mix_LoadWAV("TPTaller/sonido/Explosion1.wav");
+			if( !this->s_explosion ) this->s_explosion = Mix_LoadWAV("TPTaller/sonido/Explosion1.wav");
 			if(this->s_explosion == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;

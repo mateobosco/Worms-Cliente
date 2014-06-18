@@ -57,6 +57,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->contador_cerrarse = 10;
 	this->oscilaragua = 0;
 	this->escalaZoom = 100;
+	this->contador_explosion = 0;
 
 }
 
@@ -178,7 +179,7 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 		if (image) SDL_DestroyTexture(image);
 	}
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
-	delete[] posicionVentanada;
+	delete posicionVentanada;
 	if (gusanito) SDL_DestroyTexture(gusanito);
 	return gusanito;
 }
@@ -644,7 +645,7 @@ void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, 
 			if(misil) SDL_DestroyTexture(misil);
 			if(segundos) SDL_DestroyTexture(segundos);
 		}
-
+		delete posicionVentanada;
 	}
 }
 void Dibujador::mostrarMenuArmas(int x, int y){
@@ -927,24 +928,27 @@ void Dibujador::dibujarExplosion(){
 void Dibujador::setPosicionExplosion(b2Vec2 pos, int radio){
 	b2Vec2 posicion_nueva = pos;
 	this->posicion_explosion=posicion_nueva;
-	this->contador_explosion=50;
+	this->contador_explosion=SDL_GetTicks();
 	this->radio_explosion = radio;
 }
-
+// todo, cuando se LAGEA queda horrible que explote hasta que se termine el contador, xq tarda un monton
+// asi que lo hice intentando que sea en TIEMPO REAL. no sé si está bien hecho.
+// EDIT: Al final lo arregle en main de cliente, para que se ejecute una sola vez. [Nahue.]
 bool Dibujador::dibujar_explosion(){
-//	if(this->contador_explosion==300){
-//		this->contador_explosion=0;
+	if (contador_explosion == 0) return false;
+	int resultado = SDL_GetTicks() - contador_explosion;
+	if (resultado <= 3000) return true;
+	else return false;
+
+//	if(this->contador_explosion > 0){
+//		this->contador_explosion--;
+//		return true;
+//
+//	}
+//	else{
+//
 //		return false;
 //	}
-	if(this->contador_explosion > 0){
-		this->contador_explosion--;
-		return true;
-
-	}
-	else{
-
-		return false;
-	}
 	//return this->explosion;
 	//contador_explosicion++;
 }

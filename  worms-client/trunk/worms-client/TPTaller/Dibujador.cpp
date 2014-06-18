@@ -900,7 +900,9 @@ void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 		for (int j=0-rad[1]; j<rad[1]; j++){
 			pixel[0] = pos[0] + i;
 			pixel[1] = pos[1] + j;
-
+			if(pixel[0] > ancho){
+				continue;
+			}
 			float32 x = (( ((float32) i*i) / ((float32) rad[0]*rad[0])));
 			float32 y = (( ((float32) j*j) / ((float32) rad[1]*rad[1])));
 			//printf(" LOS PUNTOS SON %d, %d y %d,%d y dan x=%f y=%f x+y = %f \n", i,j,rad[0],rad[1],x,y,x+y);

@@ -71,6 +71,7 @@ int mainCliente(int argc, char* argv[]){
 		string pathCielo = string(paqueteInicial->cielo);
 		Agua* agua = new Agua(paqueteInicial->nivel_agua, pathAgua);
 		dibujador->iniciarFondo(agua, pathCielo, pathTierra);
+		dibujador->aplicarExplosiones(paqueteInicial);
 		dibujador->dibujarFondo();
 		SDL_Delay(2000);
 		int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);

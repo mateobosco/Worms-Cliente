@@ -8,13 +8,20 @@
 #include "rectangulo.h"
 #include <sys/time.h>
 
-typedef struct structFigura {
+
+typedef struct structFigura{
 	b2Vec2 vector_vertices[6] ;
 	int cantidad = 0;
 	SDL_Color color;
 } structFigura;
 
-typedef struct structPersonaje {
+typedef struct structExplosion{
+	b2Vec2 posicion = b2Vec2(-1,-1);
+	float32 radio = 0;
+}structExplosion;
+
+
+typedef struct structPersonaje{
 	char nombre_cliente[20];
 	int id_jugador;
 	int seleccionado[4];
@@ -26,6 +33,7 @@ typedef struct structPersonaje {
 	int arma_seleccionada;
 	int angulo_arma;
 }structPersonaje;
+
 
 typedef struct structPaquete{
 	int comenzar;
@@ -49,11 +57,11 @@ typedef struct structPaquete{
 	int radio_explosion = -1;
 	int contador_segundos = 0;
 	int potencia = -1;
-
 	double angulo = 0;
 	char ganador[20];
 	bool resetear = false;
 }structPaquete;
+
 
 typedef struct structInicial{
 	bool cliente_aceptado = false;
@@ -69,6 +77,8 @@ typedef struct structInicial{
 	float32 ancho_escenario = 0.0;
 	float32 alto_escenario = 0.0;
 	float32 viento = 0.0;
+	structExplosion explosiones[50];
+	int cantidadExplosiones = 0;
 } structInicial;
 
 typedef struct structEvento{

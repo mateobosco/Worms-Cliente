@@ -988,3 +988,12 @@ void Dibujador::resetearEscenario(std::string pathTierra){
 	SDL_FreeSurface(this->surfaceTierra);
 	this->dibujar_tierra(escalador,pathTierra);
 }
+
+void Dibujador::aplicarExplosiones(structInicial* paqueteInicial){
+	int cantidad = paqueteInicial->cantidadExplosiones;
+	for (int i = 0; i< cantidad; i++){
+		structExplosion explosion = paqueteInicial->explosiones[i];
+		this->borrarExplosion(explosion.posicion,explosion.radio);
+	}
+
+}

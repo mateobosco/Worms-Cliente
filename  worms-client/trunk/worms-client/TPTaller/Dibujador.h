@@ -25,6 +25,7 @@ class Personaje;
 struct structFigura;
 struct structPersonaje;
 struct structPaquete;
+struct structInicial;
 
 class Dibujador {
 
@@ -86,6 +87,7 @@ public:
 	void dibujarPotencia(int potencia);
 	void dibujarViento(float32 viento);
 	void resetearEscenario(std::string pathTierra);
+	void aplicarExplosiones(structInicial* paqueteInicial);
 	int tipo_explosion;
 
 protected:

@@ -50,7 +50,6 @@ Cliente::~Cliente(){
 	SDL_WaitThread(this->hilos.recibir, 0);
 	delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
-	//delete this->paqueteInicial;
 	Cliente::cant_clientes--;
 }
 
@@ -132,9 +131,11 @@ int Cliente::conectar(){
 
 int Cliente::runEnviarInfo(){
 	struct timeval timeout;
-	timeout.tv_sec = 5;
+	timeout.tv_sec = 10;
 	timeout.tv_usec = 0;
-
+	uint32 inicio = SDL_GetTicks();
+	uint32 limite = (timeout.tv_sec - 5) * 1000;
+	uint32 diferencia;
 	while(this->activo){
 		SDL_Delay(15);
 		if ( enviarpaquete == true){
@@ -143,6 +144,10 @@ int Cliente::runEnviarInfo(){
 			memcpy(buffer, this->paquete_enviar, MAX_PACK);
 		    if (setsockopt (this->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
 		        sizeof(timeout)) < 0) 	return ERROR;
+			structEvento* evento = (structEvento*) buffer;
+			diferencia = SDL_GetTicks() - inicio;
+			if ( ((evento == NULL) || estaVacio(evento)) && (diferencia < limite) )	continue;
+			inicio = SDL_GetTicks();
 			int enviados = this->enviar(buffer, MAX_PACK); //todo
 			if (enviados > 0){
 				enviarpaquete = false;
@@ -180,16 +185,16 @@ int Cliente::runRecibirInfo(){
 		memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);
 		if (recibidos > 0){
+			SDL_LockMutex(this->mutex);
 			memcpy(this->paquete_recibir, buffer, MAX_PACK);
 			structPaquete* paquete = (structPaquete*)this->paquete_recibir;
-
+			SDL_UnlockMutex(this->mutex);
 			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1 && paquete->tipo_proyectil!=6){
 				structPaquete* paqueteencolar = (structPaquete*) malloc (MAX_PACK);
 				memcpy(paqueteencolar, this->paquete_recibir, MAX_PACK);
 				cola_explosiones.push(paqueteencolar);
 			}
 			if (paquete->resetear) this->resetearNivel = true;
-
 		}
 		else if(recibidos ==0){
 			this->servidor_conectado = false;

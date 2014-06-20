@@ -516,7 +516,6 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
 	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
-		//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
 		renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		this->dibujarPotencia(potencia);
@@ -526,7 +525,6 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	}
 	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
 			SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
-			//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
 			renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
@@ -544,7 +542,6 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	}
 	if(paquete.arma_seleccionada == 2 && paquete.direccion ==1){
 			SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadader.png", this->renderizador);
-			//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
 			renderTexture3(granada, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
@@ -562,7 +559,6 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 	if(paquete.arma_seleccionada == 4 && paquete.direccion ==1){
 			SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyder.png", this->renderizador);
-			//printf(" El angulo del arma es %d \n", paquete.angulo_arma);
 			renderTexture3(granadaholy, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
@@ -584,7 +580,6 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos, double angulo){
 	if(tipo_proyectil){
-//		printf(" RECIBE EL TIPO DE PROYECTIL %d \n", tipo_proyectil);
 		b2Vec2 posicion = posicion_proyectil;
 		b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion);
 		int anchoPX = escalador->aplicarZoomX( tamanio.x);
@@ -780,7 +775,6 @@ void Dibujador::close(){
 void Dibujador::dibujarMensaje(){
 	char mensaje[90];
 	sprintf (mensaje, "Se cerro el server, la ventana se cerrara en: %d segundos", this->contador_cerrarse);
-	printf( " MENSAJE ES %s \n", mensaje);
 	this->contador_cerrarse--;
 	SDL_Color color = {0,0,0};
 	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
@@ -904,7 +898,6 @@ void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 			}
 			float32 x = (( ((float32) i*i) / ((float32) rad[0]*rad[0])));
 			float32 y = (( ((float32) j*j) / ((float32) rad[1]*rad[1])));
-			//printf(" LOS PUNTOS SON %d, %d y %d,%d y dan x=%f y=%f x+y = %f \n", i,j,rad[0],rad[1],x,y,x+y);
 			if ( (x+y) <= 1) {
 				putpixel(surfaceTierra,pixel[0],pixel[1],0);
 			}
@@ -926,6 +919,7 @@ void Dibujador::dibujarExplosion(){
 	delete posicionVentanada;
 
 }
+
 void Dibujador::dibujarExplosionHoly(){
 	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion_explosion);
 
@@ -995,5 +989,4 @@ void Dibujador::aplicarExplosiones(structInicial* paqueteInicial){
 		structExplosion explosion = paqueteInicial->explosiones[i];
 		this->borrarExplosion(explosion.posicion,explosion.radio);
 	}
-
 }

@@ -22,7 +22,6 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 	b2Transform transformMouse = b2Transform(posicion, b2Rot(0) );
 
 	for (int i = 0; i < this->cantidad_actual_personajes ; i++){
-		printf("CANTIDAD ACTUAL DE JUGADORES %d \n", this->cantidad_actual_personajes);
 
 		Personaje* personaje = this->vector_personajes[i];
 		b2Body* body_actual = personaje->getBody();
@@ -36,10 +35,6 @@ void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){
 				personaje_aux->setSeleccionado(false, id_jugador);
 			}
 			personaje->setSeleccionado(resultado, id_jugador);
-			printf("selecciono un personaje \n");
-			int dueno = personaje->getNrojugador();
-			printf("SELECCIONO UN PERSONAJE DEL JUGADOR %d Y YO SOY EL JUGADOR %d--------------- \n",dueno,id_jugador);
-			if (id_jugador == dueno) printf ("SELECCIONO UN PERSONAJE PROPIO _____________-----------------_________________ \n");
 		}
 	}
 	delete shapeMouse;

@@ -167,32 +167,23 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 	} else{
 		if (click[0] != -1){
 			paquete = crearPaqueteClick(click, escalador, cliente, KEYS, disparando);
-			printf(" LLEGA HSTA ACA \n");
-			//printf(" MANDO UN MAQUETE CLICK con las posiciones : (%d, %d) \n", click[0], click[1]);
-			//printf(" Los ventanado son %d , %d \n", ventanadoX, ventanadoY);
 			if(KEYS[SDLK_z]){
 				if (click[0] > 600 &&  click[0] < 700 && click[1] > 100 && click[1] < 200){
-					printf(" selecciona una bazooka \n");
 					paquete->arma_seleccionada=1;
 				}
 				else if (click[0] > 700  && click[1] > 100 && click[1] <200){
-					printf(" selecciona una granada \n");
 					paquete->arma_seleccionada=2;
 				}
 				else if (click[0] > 600 &&  click[0] < 700 && click[1] > 200 && click[1] < 300){
-					printf(" Selecciona una dinamita \n");
 					paquete->arma_seleccionada=3;
 				}
 				else if (click[0] > 700 && click[1] > 200 && click[1] < 300){
-					printf(" Selecciona una holy \n");
 					paquete->arma_seleccionada=4;
 				}
 				else if (click[0] > 600  && click[0] < 700 && click[1] > 300 && click[1] < 400){
-					printf(" Selecciona kamikaze \n");
 					paquete->arma_seleccionada=5;
 				}
 				else if (click[0] > 700 && click[1] > 300 && click[1] <400){
-					printf(" Selecciona patada \n");
 					paquete->arma_seleccionada=6;
 				}
 			}

@@ -102,7 +102,9 @@ int mainCliente(int argc, char* argv[]){
 			if((posicion_mouse_click[0]!=-1)&&(posicion_mouse_click[1]!=-1)){
 				music->playSonido(SELECT);  //Ver para que lo haga una unica vezz cuando recibe el paquete que usa para renderizar la flecha
 			}
-			escalador->moverVentana(posicion_mouse_movimiento);
+			if(!KEYS[SDLK_z]){
+				escalador->moverVentana(posicion_mouse_movimiento);
+			}
 			escalador->hacerZoom(posicion_mouse_scroll);
 			paquete = (structPaquete*) cliente->getPaquete();
 			if((KEYS[102]==true)){ //agregar condicion cuando esta seleccionado
@@ -110,7 +112,6 @@ int mainCliente(int argc, char* argv[]){
 			}
 			cliente->setID(paquete->id);
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando);
-
 			if ((evento)){
 				cliente->actualizarPaquete(evento);
 			}

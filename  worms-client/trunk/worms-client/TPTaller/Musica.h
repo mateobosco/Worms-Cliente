@@ -32,13 +32,13 @@
 using namespace std;
 class Musica {
 private:
-	Mix_Music *musica;
-	Mix_Chunk *s_select;
-	Mix_Chunk *s_jump;
-	Mix_Chunk *s_granada;
-	Mix_Chunk *s_bazooka;
-	Mix_Chunk* s_time;
-	Mix_Chunk* s_explosion;
+	Mix_Music *musica = NULL;
+	Mix_Chunk *s_select = NULL;
+	Mix_Chunk *s_jump = NULL;
+	Mix_Chunk *s_granada = NULL;
+	Mix_Chunk *s_bazooka = NULL;
+	Mix_Chunk* s_time = NULL;
+	Mix_Chunk* s_explosion = NULL;
 
 
 public:

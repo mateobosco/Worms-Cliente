@@ -169,6 +169,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 			paquete = crearPaqueteClick(click, escalador, cliente, KEYS, disparando);
 			if(KEYS[SDLK_z]){
 				if (click[0] > 600 &&  click[0] < 700 && click[1] > 100 && click[1] < 200){
+					printf(" SELECCIONA UN BAZOOKA\n");
 					paquete->arma_seleccionada=1;
 				}
 				else if (click[0] > 700  && click[1] > 100 && click[1] <200){

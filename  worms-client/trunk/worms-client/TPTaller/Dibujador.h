@@ -72,6 +72,9 @@ public:
 	void renderTexture4(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo);
 	void borrarExplosion(b2Vec2 pos, float32 radio);
 	void renderTexture6(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, int angulo, int punto1, int punto2);
+	const char* mostrarPantallaPrincial();
+	int loadFromRenderedText(SDL_Texture* texture, std::string textureText, SDL_Color textColor );
+	void mostrarLoading();
 
 
 	void dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos, double angulo);
@@ -118,6 +121,8 @@ private:
 	SDL_Texture* textureizquierda;
 	SDL_Texture* texturederechaNEGRO;
 	SDL_Texture* textureizquierdaNEGRO;
+	SDL_Texture* texturamuerto;
+	SDL_Texture* texturahundido;
 	float32 oscilaragua;
 	int contador_cerrarse;
 	int escalaZoom;

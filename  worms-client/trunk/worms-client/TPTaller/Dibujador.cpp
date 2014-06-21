@@ -58,6 +58,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->oscilaragua = 0;
 	this->escalaZoom = 100;
 	this->contador_explosion = 0;
+	this->surfaceTierra=NULL;
 
 }
 
@@ -74,6 +75,177 @@ Dibujador::~Dibujador(){
 	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
 	this->close();
 }
+
+
+int Dibujador::loadFromRenderedText(SDL_Texture* texture, std::string textureText, SDL_Color textColor )
+{
+	//Get rid of preexisting texture
+	//free();
+	//SDL_Texture* mTexture;
+	//Render text surface
+	TTF_Font* gFont = TTF_OpenFont( "TPTaller/imagenes/Hilarious.ttf", 28 );
+	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
+	if( textSurface != NULL )
+	{
+		//Create texture from surface pixels
+		texture = SDL_CreateTextureFromSurface( this->renderizador, textSurface );
+		if( texture == NULL )
+		{
+			printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+		}
+		else
+		{
+			//Get image dimensions
+			int mWeight = textSurface->w;
+			int mHeight = textSurface->h;
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface( textSurface );
+	}
+	else
+	{
+		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+	}
+
+	return textSurface->w;
+	//Return success
+	//return texture != NULL;
+}
+
+
+
+const char* Dibujador::mostrarPantallaPrincial(){
+	SDL_Texture* fondo = this->loadTexture("TPTaller/imagenes/principal2.png", this->renderizador);
+	bool quit = false;
+	SDL_Texture* Texture=NULL;
+	int ancho_text = 0;
+	//Event handler
+	SDL_Event e;
+	int contador=20;
+	//Set text color as black
+	SDL_Color textColor = { 0, 0, 0, 0xFF };
+
+	//The current input text.
+	std::string inputText = "";
+	char mensaje_nombre[40];
+	char mensaje_ip[40];
+
+	strcpy(mensaje_nombre, "Ingrese su nombre : ");
+	strcpy(mensaje_ip, "Ingrese la ip del servidor : ");
+	//this->mostrarCartel(mensaje_nombre,200,200,100,50 );
+	//this->mostrarCartel(mensaje_ip,200,400,100,50 );
+	SDL_Texture* textura_nombre=this->RenderText(mensaje_nombre, "TPTaller/imagenes/Hilarious.ttf", textColor, 40);
+	SDL_Texture* textura_ip=this->RenderText(mensaje_ip, "TPTaller/imagenes/Hilarious.ttf", textColor, 40);
+
+	//Enable text input
+	SDL_StartTextInput();
+
+	//While application is running
+	while( !quit )
+	{
+		//The rerender text flag
+		bool renderText = false;
+
+		//Handle events on queue
+		while( SDL_PollEvent( &e ) != 0 )
+		{
+			//User requests quit
+//			if( e.type == SDLK_x )
+//			{
+//				quit = true;
+//			}
+			//Special key input
+			if( e.type == SDL_KEYDOWN )
+			{
+				//Handle backspace
+				if( e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 )
+				{
+					//lop off character
+					inputText.pop_back();
+					renderText = true;
+				}
+				if( e.key.keysym.sym == SDLK_RETURN )
+							{
+								quit = true;
+							}
+				//Handle copy
+				else if( e.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL )
+				{
+					inputText = SDL_SetClipboardText( inputText.c_str() );
+				}
+				//Handle paste
+				else if( e.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL )
+				{
+					inputText = SDL_GetClipboardText();
+					renderText = true;
+				}
+			}
+			//Special text input event
+			else if( e.type == SDL_TEXTINPUT )
+			{
+				//Not copy or pasting
+				if( !( ( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) && ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) && SDL_GetModState() & KMOD_CTRL ) )
+				{
+					//Append character
+					//printf(" AGREGA UN CARACTER \n");
+					inputText += e.text.text;
+					contador++;
+					renderText = true;
+				}
+			}
+		}
+
+		//Rerender text if needed
+		if( renderText )
+		{
+			//Text is not empty
+			if( inputText != "" )
+			{
+				//Render new text
+
+				ancho_text = this->loadFromRenderedText(Texture, inputText.c_str(), textColor );
+			}
+			//Text is empty
+			else
+			{
+				//Render space texture
+				ancho_text = this->loadFromRenderedText(Texture, " ", textColor );
+			}
+		}
+
+		//Clear screen
+		//SDL_SetRenderDrawColor(  this->renderizador, 0xFF, 0xFF, 0xFF, 0xFF );
+		SDL_RenderClear(  this->renderizador );
+		//char final[90];
+		const char *final = inputText.c_str();
+		SDL_Texture* text_final=this->RenderText(final, "TPTaller/imagenes/Hilarious.ttf", textColor, 40);
+		//Render text textures
+		this->renderTexture(fondo, this->renderizador, 0,0,800,600);
+		this->renderTexture(textura_nombre, this->renderizador, 200,500,150,50);
+		//this->renderTexture(textura_ip, this->renderizador, 200,300,150,50);
+		this->renderTexture(text_final, this->renderizador, 350,500, ancho_text,50);
+		if(text_final) SDL_DestroyTexture(text_final);
+		//gPromptTextTexture.render( ( SCREEN_WIDTH - gPromptTextTexture.getWidth() ) / 2, 0 );
+		//gInputTextTexture.render( ( SCREEN_WIDTH - gInputTextTexture.getWidth() ) / 2, gPromptTextTexture.getHeight() );
+
+		//Update screen
+		SDL_RenderPresent(  this->renderizador );
+	}
+	printf(" EL INPUT TEXT QUEDO: %s \n", inputText.c_str());
+	//Disable text input
+	SDL_StopTextInput();
+	SDL_DestroyTexture(fondo);
+	return inputText.c_str();
+}
+
+
+void Dibujador::mostrarLoading(){
+	SDL_Texture* loading = loadTexture("TPTaller/imagenes/loading", this->renderizador);
+	this->renderTexture(loading, this->renderizador, 0 ,0 ,800,600);// TODO hardcodeado.
+}
+
+
 
 // Retorna: 0- Exito. Negativo- Fracaso.
 int Dibujador::limpiarFondo(){
@@ -512,6 +684,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	renderTexture2(energiatext, this->renderizador,  x+w/3,y-h*1.2, w/2,h/2 );
 	if(vida_roja) SDL_DestroyTexture(vida_roja);
 	if(vida_verde) SDL_DestroyTexture(vida_verde);
+	if(paquete.energia<=0){
+		gusanito = this->texturamuerto;
+	}
 
 	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
 	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
@@ -761,6 +936,9 @@ bool Dibujador::init(){
 	this->textureizquierdaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
 	this->flechitaroja = loadTexture("TPTaller/imagenes/flechitaroja.png", this->renderizador);
 	this->textureexplosion = loadTexture("TPTaller/imagenes/explosion.png", this->renderizador);
+	this->texturamuerto = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
+	//this->texturahundido = loadTexture("TPTaller/imagenes/hundido.png" , this->renderizador);
+
 	return success;
 }
 

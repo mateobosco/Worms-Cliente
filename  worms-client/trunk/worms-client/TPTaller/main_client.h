@@ -13,6 +13,9 @@
 
 extern void abrirLog();
 
+
+
+
 // argv[n]:
 // 			n=0: Nombre del programa
 // 			n=1: Nombre del cliente/jugador
@@ -24,11 +27,22 @@ int mainCliente(int argc, char* argv[]){
 	if(checkCantParametros(argc) == EXIT_FAILURE){
 		return EXIT_FAILURE;
 	}
+	Escalador* escalador_inicio = new Escalador(800,600, 80,60,800,600);
+	Dibujador* dibujador_inicio = new Dibujador(NULL, escalador_inicio);
+	dibujador_inicio->init();
+	const char* nombre = dibujador_inicio->mostrarPantallaPrincial();
+
+	printf(" NOBMRE QUEDO COMO %s \n", nombre);
+
+
+
+
+
 	char* name = new char[MAX_NAME_USER];
 	memset(name,0,MAX_NAME_USER);
-	char* nombre = argv[POS_NAME_USER];
+	//char* nombre = argv[POS_NAME_USER];
 	strcpy(name,nombre);
-
+	delete dibujador_inicio;
 	char* ip_sv = new char[20];
 	memset(ip_sv,0,20);
 	char* ip = argv[POS_IP];
@@ -73,7 +87,12 @@ int mainCliente(int argc, char* argv[]){
 		dibujador->iniciarFondo(agua, pathCielo, pathTierra);
 		dibujador->aplicarExplosiones(paqueteInicial);
 		dibujador->dibujarFondo();
-		SDL_Delay(2000);
+//		int contador_aceptar=0;
+//		while(contador_aceptar<2000){
+//			dibujador->dibujarLoading();
+//			contador_aceptar++;
+//		}
+		//SDL_Delay(2000);
 		int* posicion_mouse_click = (int*)malloc (sizeof(int)*2);
 		memset(posicion_mouse_click,'\0',2);
 		int* posicion_mouse_scroll = (int*)malloc (sizeof(int)*3);
@@ -106,8 +125,12 @@ int mainCliente(int argc, char* argv[]){
 			if(!KEYS[SDLK_z]){
 				escalador->moverVentana(posicion_mouse_movimiento);
 			}
+
 			escalador->hacerZoom(posicion_mouse_scroll);
 			paquete = (structPaquete*) cliente->getPaquete();
+			if(paquete->cantidad_personajes==0){
+				dibujador->mostrarLoading();
+			}
 			if((KEYS[102]==true)){ //agregar condicion cuando esta seleccionado
 				music->playSonido(UP);
 			}

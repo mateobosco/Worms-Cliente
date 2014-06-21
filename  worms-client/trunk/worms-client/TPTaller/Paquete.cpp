@@ -156,6 +156,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 	structEvento* paquete;
 	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE] || KEYS[SDLK_x] || KEYS[SDLK_c] || KEYS[SDLK_v]){ // no es un click, es un movimiento
 		timeval tiempo_actual;
+//		printf(" CREA UN PAQUETE MOVIMIENTO \n");
 		gettimeofday(&tiempo_actual, 0x0);
 		if(aceptarNuevaTecla(tiempo_actual, ultima_vez)){
 			paquete = crearPaqueteMovimiento(KEYS, cliente, disparando);
@@ -167,9 +168,10 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 	} else{
 		if (click[0] != -1){
 			paquete = crearPaqueteClick(click, escalador, cliente, KEYS, disparando);
+//			printf(" CLICK 0 es: %d, CLICK 1 es : %d \n", click[0], click[1]);
 			if(KEYS[SDLK_z]){
 				if (click[0] > 600 &&  click[0] < 700 && click[1] > 100 && click[1] < 200){
-					printf(" SELECCIONA UN BAZOOKA\n");
+//					printf(" SELECCIONA UN BAZOOKA\n");
 					paquete->arma_seleccionada=1;
 				}
 				else if (click[0] > 700  && click[1] > 100 && click[1] <200){

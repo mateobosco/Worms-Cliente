@@ -153,8 +153,8 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				if(numero < 1000){ //todo keys se puede acceder hasta la 321
 					KEYS[numero] = true;
 				}
-				posicion_mouse_click[0]=-1;
-				posicion_mouse_click[1]=-1;
+				//posicion_mouse_click[0]=-1;
+				//posicion_mouse_click[1]=-1;
 				break;
 			}
 			case SDL_KEYUP:
@@ -191,6 +191,7 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				SDL_GetMouseState( &x, &y );
 				posicion_mouse_click[0] = x;
 				posicion_mouse_click[1] = y;
+				printf(" LEE ESTE CLICK %d, %d \n", x,y);
 				break;
 			}
 			case SDL_MOUSEMOTION:
@@ -200,8 +201,8 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				SDL_GetMouseState( &w, &z );
 				posicion_mouse_movimiento[0] = w;
 				posicion_mouse_movimiento[1] = z;
-				posicion_mouse_click[0]=-1;
-				posicion_mouse_click[1]=-1;
+				//posicion_mouse_click[0]=-1;
+				//posicion_mouse_click[1]=-1;
 				break;
 			}
 			case SDL_MOUSEWHEEL:
@@ -215,8 +216,8 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				posicion_mouse_wheel[0] = a;
 				posicion_mouse_wheel[1] = b;
 				posicion_mouse_wheel[2] = d;
-				posicion_mouse_click[0]=-1;
-				posicion_mouse_click[1]=-1;
+				//posicion_mouse_click[0]=-1;
+				//posicion_mouse_click[1]=-1;
 				break;
 			}
 		}

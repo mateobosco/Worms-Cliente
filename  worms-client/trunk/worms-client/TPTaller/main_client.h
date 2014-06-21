@@ -95,6 +95,7 @@ int mainCliente(int argc, char* argv[]){
 
 		bool disparando = false;
 		while(KEYS[SDLK_ESCAPE] == false){
+
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
 			dibujador->dibujarFondo();
@@ -176,7 +177,7 @@ int mainCliente(int argc, char* argv[]){
 			}
 			if(dibujador->dibujar_explosion() == true){
 				if (paquete->tipo_proyectil != 0) dibujador->tipo_explosion = paquete->tipo_proyectil;
-				printf("tipo de proyectil en el paquete %d , tipo de proyectil en el dibujador %d",paquete->tipo_proyectil,dibujador->tipo_explosion);
+				//printf("tipo de proyectil en el paquete %d , tipo de proyectil en el dibujador %d",paquete->tipo_proyectil,dibujador->tipo_explosion);
 				if (dibujador->tipo_explosion == 4){
 					dibujador->dibujarExplosionHoly();
 				}

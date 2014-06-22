@@ -2,8 +2,8 @@
 
 #define BORDE1 100
 #define BORDE2 50
-#define VEL1 3
-#define VEL2 7
+#define VEL1 10
+#define VEL2 20
 #define VELZOOM 5
 
 

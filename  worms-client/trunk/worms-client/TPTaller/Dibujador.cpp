@@ -114,9 +114,25 @@ int Dibujador::loadFromRenderedText(SDL_Texture* texture, std::string textureTex
 }
 
 
+void Dibujador::mostrarImagenPrincipal(){
+	int transparencia=0;
+	SDL_Texture * texturaFondo2 = this->loadTexture("TPTaller/imagenes/nuevainicial.png", this->renderizador);
+	while(transparencia<=255){
+		SDL_RenderClear(  this->renderizador );
+		SDL_SetTextureAlphaMod(texturaFondo2, transparencia);
+		this->renderTexture(texturaFondo2, this->renderizador, 0,0,800,600);
+		transparencia++;
+		SDL_RenderPresent(  this->renderizador );
+
+	}
+}
+
+
 
 const char* Dibujador::mostrarPantallaPrincial(){
 	SDL_Texture* fondo = this->loadTexture("TPTaller/imagenes/principal2.png", this->renderizador);
+	SDL_SetTextureAlphaMod(fondo, 150);
+
 	bool quit = false;
 	SDL_Texture* Texture=NULL;
 	int ancho_text = 0;
@@ -970,7 +986,7 @@ void Dibujador::mostrarCartelTurno(int nro_jugador, char* nombre){
 	sprintf (mensaje, "Es el turno de : %s ", nombre);
 	SDL_Color color = {0,0,0};
 	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
-	renderTexture2(mensaje_final, this->renderizador, (this->escalado_x / 2)*2.5  , 0 , 500, 50 );
+	renderTexture2(mensaje_final, this->renderizador, 100  , 0 , 500, 50 );
 	SDL_DestroyTexture(mensaje_final);
 
 }

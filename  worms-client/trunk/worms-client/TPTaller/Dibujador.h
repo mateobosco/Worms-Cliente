@@ -75,6 +75,8 @@ public:
 	const char* mostrarPantallaPrincial();
 	int loadFromRenderedText(SDL_Texture* texture, std::string textureText, SDL_Color textColor );
 	void mostrarLoading();
+	void mostrarImagenPrincipal();
+
 
 
 	void dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos, double angulo);
@@ -123,6 +125,7 @@ private:
 	SDL_Texture* textureizquierdaNEGRO;
 	SDL_Texture* texturamuerto;
 	SDL_Texture* texturahundido;
+	SDL_Texture* texturaFondo;
 	float32 oscilaragua;
 	int contador_cerrarse;
 	int escalaZoom;

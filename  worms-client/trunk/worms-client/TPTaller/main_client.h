@@ -33,20 +33,12 @@ int mainCliente(int argc, char* argv[]){
 	Musica* musica_inicio = new Musica();
 	musica_inicio->playSonido(START);
 	dibujador_inicio->mostrarImagenPrincipal();
-	const char* nombre = dibujador_inicio->mostrarPantallaPrincial();
+
+	char nombre[MAX_NAME_USER];
+	strcpy(nombre, dibujador_inicio->mostrarPantallaPrincial());
 
 	printf(" NOBMRE QUEDO COMO %s \n", nombre);
-
-
-
-
-
-	char* name = new char[MAX_NAME_USER];
-	memset(name,0,MAX_NAME_USER);
-	//char* nombre = argv[POS_NAME_USER];
-	strcpy(name,nombre);
 	dibujador_inicio->mostrarImagenPrincipal2();
-	delete dibujador_inicio;
 	char* ip_sv = new char[20];
 	memset(ip_sv,0,20);
 	char* ip = argv[POS_IP];
@@ -57,8 +49,8 @@ int mainCliente(int argc, char* argv[]){
 	char* port = argv[POS_PORT];
 	strcpy(puerto,port);
 
-	Cliente* cliente = new Cliente(name, ip_sv, puerto);
-
+	Cliente* cliente = new Cliente(nombre, ip_sv, puerto);
+	delete dibujador_inicio;
 	if(cliente->conectar() != EXIT_SUCCESS){
 		printf("No se ha podido realizar la conexion\n"
 				"El programa se cerrará en 5 segundos.\n");
@@ -241,7 +233,18 @@ int mainCliente(int argc, char* argv[]){
 			}
 
 			if(((structPaquete*) cliente->getPaquete())->ganador[0] != '\0'){
-				char mensaje_ganador[50];
+				char mensaje_ganador[200];
+				if(((structPaquete*) cliente->getPaquete())->resultado == 0){
+					int cant_ganadores = ((structPaquete*) cliente->getPaquete())->cant_ganadores;
+					sprintf(mensaje_ganador, "Empate entre:");
+					while(cant_ganadores > 0){
+						sprintf(mensaje_ganador, " %s,", ((structPaquete*) cliente->getPaquete())->ganador);
+						sprintf(mensaje_ganador, ",");
+					}
+					mensaje_ganador[strlen(mensaje_ganador) - 1] = '\0';
+					dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
+
+				}
 				sprintf(mensaje_ganador, "El ganador es: %s", ((structPaquete*) cliente->getPaquete())->ganador);
 				dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
 			}
@@ -262,7 +265,6 @@ int mainCliente(int argc, char* argv[]){
 		delete music;
 		delete paqueteInicial;
 		delete agua;
-		delete[] name;
 		delete[] ip_sv;
 		delete[] puerto;
 		free(posicion_mouse_click);

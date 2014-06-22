@@ -981,8 +981,8 @@ void Dibujador::mostrarCartelTurno(int nro_jugador, char* nombre){
 	SDL_Texture* mensaje_final = RenderText(mensaje, "TPTaller/imagenes/Hilarious.ttf", color, 60);
 	renderTexture2(mensaje_final, this->renderizador, 100  , 0 , 500, 50 );
 	SDL_DestroyTexture(mensaje_final);
-
 }
+
 void Dibujador::mostrarCartelEsperar(){
 	char mensaje[90];
 	sprintf (mensaje, "Esperando a que se conecten otros jugadores");

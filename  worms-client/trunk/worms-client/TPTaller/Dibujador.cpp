@@ -121,18 +121,28 @@ void Dibujador::mostrarImagenPrincipal(){
 		SDL_RenderClear(  this->renderizador );
 		SDL_SetTextureAlphaMod(texturaFondo2, transparencia);
 		this->renderTexture(texturaFondo2, this->renderizador, 0,0,800,600);
-		transparencia++;
+		transparencia+=2;
+		SDL_RenderPresent(  this->renderizador );
+
+	}
+}
+void Dibujador::mostrarImagenPrincipal2(){
+	int transparencia=255;
+	SDL_Texture * texturaFondo2 = this->loadTexture("TPTaller/imagenes/nuevainicial.png", this->renderizador);
+	while(transparencia>=0){
+		SDL_RenderClear(  this->renderizador );
+		SDL_SetTextureAlphaMod(texturaFondo2, transparencia);
+		this->renderTexture(texturaFondo2, this->renderizador, 0,0,800,600);
+		transparencia-=5;
 		SDL_RenderPresent(  this->renderizador );
 
 	}
 }
 
 
-
 const char* Dibujador::mostrarPantallaPrincial(){
 	SDL_Texture* fondo = this->loadTexture("TPTaller/imagenes/principal2.png", this->renderizador);
 	SDL_SetTextureAlphaMod(fondo, 150);
-
 	bool quit = false;
 	SDL_Texture* Texture=NULL;
 	int ancho_text = 0;
@@ -141,28 +151,23 @@ const char* Dibujador::mostrarPantallaPrincial(){
 	int contador=20;
 	//Set text color as black
 	SDL_Color textColor = { 0, 0, 0, 0xFF };
-
 	//The current input text.
 	std::string inputText = "";
 	char mensaje_nombre[40];
 	char mensaje_ip[40];
-
 	strcpy(mensaje_nombre, "Ingrese su nombre : ");
 	strcpy(mensaje_ip, "Ingrese la ip del servidor : ");
 	//this->mostrarCartel(mensaje_nombre,200,200,100,50 );
 	//this->mostrarCartel(mensaje_ip,200,400,100,50 );
 	SDL_Texture* textura_nombre=this->RenderText(mensaje_nombre, "TPTaller/imagenes/Hilarious.ttf", textColor, 40);
 	SDL_Texture* textura_ip=this->RenderText(mensaje_ip, "TPTaller/imagenes/Hilarious.ttf", textColor, 40);
-
 	//Enable text input
 	SDL_StartTextInput();
-
 	//While application is running
 	while( !quit )
 	{
 		//The rerender text flag
 		bool renderText = false;
-
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
 		{
@@ -625,7 +630,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 	return retorno;
 }
 
-void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux, int potencia){
+void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux, int potencia, int jugador_turno){
 
 	int dir = paquete.direccion;
 	b2Vec2 tam = paquete.tamano;
@@ -672,30 +677,14 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 	renderTexture2(image, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100) ,y - 50 , 80 , 30 );
 	if (image) SDL_DestroyTexture(image);
-	if(paquete.seleccionado[cliente_id] == 1){
+	if(paquete.seleccionado[jugador_turno] == 1 && duenio){
 		this->
 		renderTexture2(flechitaroja, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100), ((y)*aux/100)+(y-140), 80, 80);
 	}
 
 	char energia[10];
 	sprintf(energia,"%d", paquete.energia);
-//	Sint16* vecX = new Sint16();
-//	Sint16* vecY = new Sint16();
-//	Sint16* vecXventanado = this->escalador->aplicarZoomXVector(vecX , 4);
-//	Sint16* vecYventanado = this->escalador->aplicarZoomYVector(vecY , 4);
 	SDL_Texture* energiatext = RenderText(energia, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[0], 15); // despues preguntar el nombre de cada uno
-//	Sint16* vecX = 100;
-//	Sint16* vecY = 100;
-//	vecX[0]=x;
-//	vecX[1]=x;
-//	vecX[2]=2*x;
-//	vecX[3]=2*x;
-//	vecY[0]=y;
-//	vecY[1]=y;
-//	vecY[2]=2*y;
-//	vecY[3]=2*y;
-//	int retorno = filledPolygonRGBA(this->renderizador,vecX, vecY, 4, 255, 0, 0, RECT_OPACIDAD);
-
 	SDL_Texture* vida_roja = loadTexture("TPTaller/imagenes/roja.png", this->renderizador);
 	SDL_Texture* vida_verde = loadTexture("TPTaller/imagenes/verde.png", this->renderizador);
 	renderTexture2(vida_roja, this->renderizador, x-w/2,y-h*2, w*2,h*2);
@@ -712,7 +701,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
 		renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		this->dibujarPotencia(potencia);
+		if(potencia >0){
+			this->dibujarPotencia(potencia);
+		}
 		//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
 		if(bazooka) SDL_DestroyTexture(bazooka);
 		//if(mira) SDL_DestroyTexture(mira);
@@ -722,8 +713,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		int angulo = -90 - (-45 + paquete.angulo_arma);
 		renderTexture3(bazooka, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, angulo, w,h);
 		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		this->dibujarPotencia(potencia);
-
+		if(potencia >0){
+			this->dibujarPotencia(potencia);
+		}
 		if(bazooka) SDL_DestroyTexture(bazooka);
 	}
 	if(paquete.arma_seleccionada == 2 && paquete.direccion ==1){
@@ -731,8 +723,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 			renderTexture3(granada, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
-			this->dibujarPotencia(potencia);
-			if(granada) SDL_DestroyTexture(granada);
+			if(potencia >0){
+				this->dibujarPotencia(potencia);
+			}			if(granada) SDL_DestroyTexture(granada);
 			//if(mira) SDL_DestroyTexture(mira);
 	}
 	if(paquete.arma_seleccionada == 2 && paquete.direccion == -1){
@@ -740,8 +733,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		int angulo = -90 - (-45 + paquete.angulo_arma);
 		renderTexture3(granada, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, angulo, w,h);
 		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		this->dibujarPotencia(potencia);
-		if(granada) SDL_DestroyTexture(granada);
+		if(potencia >0){
+			this->dibujarPotencia(potencia);
+		}		if(granada) SDL_DestroyTexture(granada);
 	}
 
 	if(paquete.arma_seleccionada == 4 && paquete.direccion ==1){
@@ -749,8 +743,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 			renderTexture3(granadaholy, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
-			this->dibujarPotencia(potencia);
-			if(granadaholy) SDL_DestroyTexture(granadaholy);
+			if(potencia >0){
+				this->dibujarPotencia(potencia);
+			}			if(granadaholy) SDL_DestroyTexture(granadaholy);
 			//if(mira) SDL_DestroyTexture(mira);
 	}
 	if(paquete.arma_seleccionada == 4 && paquete.direccion == -1){
@@ -758,8 +753,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		int angulo = -90 - (-45 + paquete.angulo_arma);
 		renderTexture3(granadaholy, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, angulo, w,h);
 		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		this->dibujarPotencia(potencia);
-		if(granadaholy) SDL_DestroyTexture(granadaholy);
+		if(potencia >0){
+			this->dibujarPotencia(potencia);
+		}		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}
 
 	SDL_DestroyTexture(energiatext);
@@ -866,10 +862,10 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 		if (cliente_id == vector1[j].id_jugador){
 			if(paquete->show_proyectil) vector1[j].arma_seleccionada = 0;
 			
-			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux, potencia ); // es propio
+			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux, potencia, paquete->turno_jugador ); // es propio
 		}
 		else{
-			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux, potencia); // no es propio
+			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux, potencia, paquete->turno_jugador); // no es propio
 		}
 	}
 

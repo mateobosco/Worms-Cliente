@@ -45,6 +45,7 @@ int mainCliente(int argc, char* argv[]){
 	memset(name,0,MAX_NAME_USER);
 	//char* nombre = argv[POS_NAME_USER];
 	strcpy(name,nombre);
+	dibujador_inicio->mostrarImagenPrincipal2();
 	delete dibujador_inicio;
 	char* ip_sv = new char[20];
 	memset(ip_sv,0,20);

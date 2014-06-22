@@ -6,6 +6,7 @@
 #include "circulo.h"
 #include "poligono.h"
 #include "rectangulo.h"
+#include "Musica.h"
 #include <sys/time.h>
 
 typedef struct structFigura {
@@ -28,7 +29,7 @@ typedef struct structPersonaje {
 	b2Vec2 tamano;
 	int direccion; // 0 derecha, 1 izquierda
 	int energia;
-	int arma_seleccionada;
+	int arma_seleccionada; //1-Bazooka / 2-Granada / 3-Dinamita / 4-Holy / 5-Kamikaze / 6-Patada
 	int angulo_arma;
 }structPersonaje;
 
@@ -91,7 +92,7 @@ typedef struct structEvento{
 structFigura* crearPaqueteFigura(Figura* figura);
 structPersonaje* crearPaquetePersonaje(Personaje* personaje);
 structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador);
-structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando);
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando, bool &disparar, int& arma, Musica* musica);
 
 void destruirPaqueteFigura(structFigura* paquete);
 void destruirPaquetePersonaje(structPersonaje* paquete);

@@ -30,6 +30,8 @@ int mainCliente(int argc, char* argv[]){
 	Escalador* escalador_inicio = new Escalador(800,600, 80,60,800,600);
 	Dibujador* dibujador_inicio = new Dibujador(NULL, escalador_inicio);
 	dibujador_inicio->init();
+	Musica* musica_inicio = new Musica();
+	musica_inicio->playSonido(START);
 	dibujador_inicio->mostrarImagenPrincipal();
 	const char* nombre = dibujador_inicio->mostrarPantallaPrincial();
 
@@ -112,7 +114,8 @@ int mainCliente(int argc, char* argv[]){
 
 		timeval ultima_vez;
 		gettimeofday(&ultima_vez, 0x0);
-
+ 		bool disparar = false;
+		int arma  = 0;
 		bool disparando = false;
 		while(KEYS[SDLK_ESCAPE] == false){
 
@@ -120,9 +123,6 @@ int mainCliente(int argc, char* argv[]){
 			posicion_mouse_click[1] = -1;
 			dibujador->dibujarFondo();
 			keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
-			if((posicion_mouse_click[0]!=-1)&&(posicion_mouse_click[1]!=-1)){
-				music->playSonido(SELECT);  //Ver para que lo haga una unica vezz cuando recibe el paquete que usa para renderizar la flecha
-			}
 			if(!KEYS[SDLK_z]){
 				escalador->moverVentana(posicion_mouse_movimiento);
 			}
@@ -136,7 +136,12 @@ int mainCliente(int argc, char* argv[]){
 				music->playSonido(UP);
 			}
 			cliente->setID(paquete->id);
-			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando);
+
+
+			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music);
+
+//			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando);
+			if ((evento->direccion == 3)||(evento->direccion == 1)) music->playSonido(WALK);
 			if ((evento)){
 				cliente->actualizarPaquete(evento);
 			}
@@ -153,6 +158,7 @@ int mainCliente(int argc, char* argv[]){
 					break;
 				}
 			}
+
 			char mensaje[90];
 			dibujador->dibujar_agua(agua);
 			if (paquete->comenzar == 1){
@@ -175,7 +181,7 @@ int mainCliente(int argc, char* argv[]){
 				strcpy(mensaje, "Esperando a que se conecten jugadores");
 				dibujador->mostrarCartel(mensaje, -1, 0, 500,50);
 			}
-
+			//Cuando termina partida. La idea es que cuando haya un ganador se pueda resetear el nivel o pasar al siguiente
 			if(paquete->cantidad_personajes == 1 ){
 				printf("Cantidad de personajes = 1 \n");
 				char mensaje[90];
@@ -183,7 +189,6 @@ int mainCliente(int argc, char* argv[]){
 				dibujador->mostrarCartel(mensaje, 30 ,70,600, 50);
 
 			}
-
 			if(KEYS[SDLK_z]){
 				dibujador->mostrarMenuArmas(escalador->getVentanaX()-100,100);
 			}
@@ -199,9 +204,18 @@ int mainCliente(int argc, char* argv[]){
 				cliente->desencolarExplosion();
 				free(paquetecola);
 			}
+			if(disparar) {
+				printf("Disparar...arma seleccionada %d\n", arma);
+				music->playSonido(arma);
+//				if(paquete->tipo_proyectil == 1) music->playSonido(DISPARO);
+//				else if((paquete->tipo_proyectil == 2)&&(paquete->tipo_proyectil == 3)&&(paquete->tipo_proyectil == 4)){
+//					music->playSonido(LANZAR);
+//				}
+			}
 			if(dibujador->dibujar_explosion() == true){
 				if (paquete->tipo_proyectil != 0) dibujador->tipo_explosion = paquete->tipo_proyectil;
-				//printf("tipo de proyectil en el paquete %d , tipo de proyectil en el dibujador %d",paquete->tipo_proyectil,dibujador->tipo_explosion);
+				printf("tipo de proyectil en el paquete %d , tipo de proyectil en el dibujador %d \n",paquete->tipo_proyectil,dibujador->tipo_explosion);
+
 				if (dibujador->tipo_explosion == 4){
 					dibujador->dibujarExplosionHoly();
 				}
@@ -209,7 +223,14 @@ int mainCliente(int argc, char* argv[]){
 					dibujador->dibujarExplosion();
 				}
 				if (play_explotar) {
-					music->playSonido(EXPLOSION);
+					//Ver cual arma está seleccionada y según que arma es el sonido
+					if(paquete->tipo_proyectil == 1) music->playSonido(EXPLOSION_BAZOOKA);
+					else if(paquete->tipo_proyectil == 2) music->playSonido(EXPLOSION_GRANADA);
+					else if(paquete->tipo_proyectil == 3) music->playSonido(EXPLOSION_DINAMITA);
+					else if(paquete->tipo_proyectil == 4) music->playSonido(EXPLOSION_HOLY);
+					else if(paquete->tipo_proyectil == 5) music->playSonido(KAMIKAZE);
+					else if(paquete->tipo_proyectil == 6) music->playSonido(PATADA);
+					//music->playSonido(EXPLOSION);
 					play_explotar = false;
 				}
 			}
@@ -228,6 +249,11 @@ int mainCliente(int argc, char* argv[]){
 			posicion_mouse_scroll[2] = 0;
 			delete[] paquete;
 		}
+		if(KEYS[SDLK_ESCAPE] == true){
+			music->stopMusic();
+			music->playSonido(BYE);
+		}
+		SDL_Delay(1500);
 		delete music;
 		delete paqueteInicial;
 		delete agua;

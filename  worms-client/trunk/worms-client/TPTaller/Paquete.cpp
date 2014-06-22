@@ -71,20 +71,22 @@ void destruirPaquetePersonaje(structPersonaje* paquete){
 	delete paquete;
 }
 
-bool checkDisparando(structEvento *paquete, bool *KEYS, bool &disparando){
+bool checkDisparando(structEvento *paquete, bool *KEYS, bool &disparando, bool &disparar){
 	if(!KEYS[SDLK_v]){
 		if(disparando){
 			disparando = false;
 			paquete->fuerza = 2;
+			disparar = true;
 			return true;
 		} else{
 			paquete->fuerza = 0;
+			disparar = false;
 		}
 	}
 	return false;
 }
 
-structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente, bool *KEYS, bool &disparando){
+structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente, bool *KEYS, bool &disparando, bool &disparar){
 	structEvento* paquete = new structEvento;
 	b2Vec2 posicion(click[0],click[1]);
 	b2Vec2 posicionEscalada = escalador->escalarPosicion(posicion);
@@ -92,11 +94,11 @@ structEvento* crearPaqueteClick(int* click, Escalador* escalador, int cliente, b
 	paquete->direccion = -9; //DIRECION NO VALIDA
 	paquete->nro_jugador = cliente;
 	paquete->aleatorio = random();
-	checkDisparando(paquete, KEYS, disparando);
+	checkDisparando(paquete, KEYS, disparando,disparar);
 	return paquete;
 }
 
-structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador, bool &disparando){
+structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador, bool &disparando, bool &disparar){
 	structEvento* paquete = new structEvento;
 
 	if ((KEYS[102] || KEYS[SDLK_SPACE])){ // para arriba
@@ -132,20 +134,20 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador, bool &disparand
 		disparando = true;
 		paquete->fuerza = 1;
 	}
-	checkDisparando(paquete, KEYS, disparando);
+	checkDisparando(paquete, KEYS, disparando, disparar);
 	paquete->nro_jugador = id_jugador;
 	paquete->click_mouse = b2Vec2( -1, -1 );
 	paquete->aleatorio = random();
 	return paquete;
 }
 
-structEvento* crearPaqueteVacio(bool *KEYS, bool &disparando){
+structEvento* crearPaqueteVacio(bool *KEYS, bool &disparando, bool &disparar){
 	structEvento* paquete = new structEvento;
 	paquete->click_mouse = b2Vec2 (-1,-1);
 	paquete->direccion = -9;
 	paquete->nro_jugador = MAX_CANT_JUGADORES;
 	paquete->aleatorio = random();
-	bool termino_disparando = checkDisparando(paquete, KEYS, disparando);
+	bool termino_disparando = checkDisparando(paquete, KEYS, disparando, disparar);
 	if(termino_disparando)
 		paquete->nro_jugador = -1;
 	else
@@ -158,51 +160,63 @@ bool aceptarNuevaTecla(timeval act_time, timeval key_pressed_time){
 			           + act_time.tv_usec) - key_pressed_time.tv_usec) > 150000);
 }
 
-structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando){
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando, bool &disparar, int& arma, Musica* music){
 	structEvento* paquete;
+	//int arma = 0;
 	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE] || KEYS[SDLK_x] || KEYS[SDLK_c] || KEYS[SDLK_v]){ // no es un click, es un movimiento
 		timeval tiempo_actual;
 //		printf(" CREA UN PAQUETE MOVIMIENTO \n");
 		gettimeofday(&tiempo_actual, 0x0);
 		if(aceptarNuevaTecla(tiempo_actual, ultima_vez)){
-			paquete = crearPaqueteMovimiento(KEYS, cliente, disparando);
+			paquete = crearPaqueteMovimiento(KEYS, cliente, disparando, disparar);
 			gettimeofday(&ultima_vez, 0x0);
 		} else{
-			paquete = crearPaqueteVacio(KEYS, disparando);
+			paquete = crearPaqueteVacio(KEYS, disparando,disparar);
 		}
 
 	} else{
 		if (click[0] != -1){
-			paquete = crearPaqueteClick(click, escalador, cliente, KEYS, disparando);
+			paquete = crearPaqueteClick(click, escalador, cliente, KEYS, disparando,disparar);
 //			printf(" CLICK 0 es: %d, CLICK 1 es : %d \n", click[0], click[1]);
 			if(KEYS[SDLK_z]){
 				if (click[0] > 600 &&  click[0] < 700 && click[1] > 100 && click[1] < 200){
 //					printf(" SELECCIONA UN BAZOOKA\n");
 					paquete->arma_seleccionada=1;
+					arma = LANZAR_BAZOOKA;
+
 				}
 				else if (click[0] > 700  && click[1] > 100 && click[1] <200){
 					paquete->arma_seleccionada=2;
+					arma = LANZAR;
 				}
 				else if (click[0] > 600 &&  click[0] < 700 && click[1] > 200 && click[1] < 300){
 					paquete->arma_seleccionada=3;
+					arma = LANZAR_DINAMITA;
 				}
 				else if (click[0] > 700 && click[1] > 200 && click[1] < 300){
 					paquete->arma_seleccionada=4;
+					arma = LANZAR;
 				}
 				else if (click[0] > 600  && click[0] < 700 && click[1] > 300 && click[1] < 400){
 					paquete->arma_seleccionada=5;
+					arma = KAMIKAZE;
 				}
 				else if (click[0] > 700 && click[1] > 300 && click[1] <400){
 					paquete->arma_seleccionada=6;
+					arma = PATADA;
 				}
+				music->playSonido(SELECT);
 			}
 		}
 		else {
-			paquete = crearPaqueteVacio(KEYS, disparando);
+			paquete = crearPaqueteVacio(KEYS, disparando,disparar);
 		}
 	}
+//	if(disparando){
+//		musica->playSonido(arma);
+//	}
 	if(!paquete){
-		paquete = crearPaqueteVacio(KEYS, disparando);
+		paquete = crearPaqueteVacio(KEYS, disparando,disparar);
 		if(paquete->nro_jugador == -1){
 			delete paquete;
 			paquete = NULL;

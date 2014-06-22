@@ -200,6 +200,7 @@ int Cliente::runRecibirInfo(){
 			this->servidor_conectado = false;
 			loguear();
 			SDL_Delay(11000);
+			loguear();
 			logFile << " Error \t Servidor desconectado, no se puede recibir información " << endl;
 			this->desactivar();
 		}

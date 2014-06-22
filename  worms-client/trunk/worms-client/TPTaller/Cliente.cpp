@@ -189,7 +189,7 @@ int Cliente::runRecibirInfo(){
 			memcpy(this->paquete_recibir, buffer, MAX_PACK);
 			structPaquete* paquete = (structPaquete*)this->paquete_recibir;
 			SDL_UnlockMutex(this->mutex);
-			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1 && paquete->tipo_proyectil!=6){
+			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1 /*&& paquete->tipo_proyectil!=6*/){
 				structPaquete* paqueteencolar = (structPaquete*) malloc (MAX_PACK);
 				memcpy(paqueteencolar, this->paquete_recibir, MAX_PACK);
 				cola_explosiones.push(paqueteencolar);

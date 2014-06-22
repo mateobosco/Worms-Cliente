@@ -52,6 +52,9 @@ class Escalador {
 		int zoomAcercar();
 		int centroX;
 		int centroY;
+		void seguidorPosicion(int x, int y);
+		void pararSeguidor();
+		void ubicarPosicion(b2Vec2 posicion);
 
 	private:
 		int pixelesX;
@@ -64,6 +67,7 @@ class Escalador {
 		int zoom;
 		float32 escalaX;
 		float32 escalaY;
+		int seguidor[2];
 };
 
 #endif /* ESCALADOR_H_ */

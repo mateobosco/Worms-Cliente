@@ -163,7 +163,6 @@ int mainCliente(int argc, char* argv[]){
 					dibujador->mostrarCartel(mensaje, 300 ,0,300, 50);
 				}
 				else{
-					//printf(" RECIBE EL NOMBRE %s \n", paquete->nombre_jugador_actual);
 					dibujador->mostrarCartelTurno(paquete->turno_jugador, paquete->nombre_jugador_actual);
 
 				}
@@ -211,13 +210,11 @@ int mainCliente(int argc, char* argv[]){
 			}
 			if(dibujador->dibujar_explosion() == true){
 				if (paquete->tipo_proyectil != 0) dibujador->tipo_explosion = paquete->tipo_proyectil;
-				printf("tipo de proyectil en el paquete %d , tipo de proyectil en el dibujador %d \n",paquete->tipo_proyectil,dibujador->tipo_explosion);
-
 				if (dibujador->tipo_explosion == 4){
-					dibujador->dibujarExplosionHoly();
+					dibujador->dibujarExplosion(4);
 				}
 				if (dibujador->tipo_explosion != 4) {
-					dibujador->dibujarExplosion();
+					dibujador->dibujarExplosion(dibujador->tipo_explosion);
 				}
 				if (play_explotar) {
 					//Ver cual arma está seleccionada y según que arma es el sonido

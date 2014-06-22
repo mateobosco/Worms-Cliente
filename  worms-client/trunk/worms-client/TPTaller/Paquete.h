@@ -29,7 +29,7 @@ typedef struct structPersonaje {
 	b2Vec2 tamano;
 	int direccion; // 0 derecha, 1 izquierda
 	int energia;
-	int arma_seleccionada; //1-Bazooka / 2-Granada / 3-Dinamita / 4-Holy / 5-Kamikaze / 6-Patada
+	int arma_seleccionada =-1;
 	int angulo_arma;
 }structPersonaje;
 

@@ -22,6 +22,7 @@ class Circulo;
 class Poligono;
 class Rectangulo;
 class Personaje;
+class DibujadorExplosion;
 struct structFigura;
 struct structPersonaje;
 struct structPaquete;
@@ -51,7 +52,7 @@ public:
 	void iniciarFondo(Agua* agua, std::string pathCielo, std::string pathTierra);
 	void dibujarFondo();
 	int dibujarPaqueteFigura(structFigura paquete);
-	void dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux, int potencia, int jugador_turno);
+	void dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux, int potencia, int contador, int jugador_turno);
 	SDL_Texture* RenderText(std::string message, std::string fontFile,  SDL_Color color, int fontSize);
 	bool init();
 	void close();
@@ -85,7 +86,7 @@ public:
 	void setMusica(Musica* musica);
 	//void borrarExplosion(b2Vec2 posicion, float32 radio);
 	SDL_Texture* loadTextureTierra(const std::string &path, SDL_Renderer *ren);
-	void dibujarExplosion();
+	void dibujarExplosion( int tipo);
 	void dibujarExplosionHoly();
 	bool explosion;
 	void setPosicionExplosion(b2Vec2 posicion, int radio);
@@ -133,6 +134,7 @@ private:
 	int radio_explosion;
 	b2Vec2 posicion_explosion;
 	int contador_explosion;
+	DibujadorExplosion* dibujadorExp;
 
 
 };

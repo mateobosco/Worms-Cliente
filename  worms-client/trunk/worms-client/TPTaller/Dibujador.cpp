@@ -4,6 +4,7 @@
 #include "rectangulo.h"
 #include "Personaje.h"
 #include "Paquete.h"
+#include "DibujadorExplosion.h"
 
 #include "Juego.h"
 
@@ -60,6 +61,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 	this->contador_explosion = 0;
 	this->surfaceTierra=NULL;
 
+
 }
 
 Dibujador::~Dibujador(){
@@ -72,7 +74,8 @@ Dibujador::~Dibujador(){
 	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO);
 	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
 
-	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
+//	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
+//	if (this->dibujadorExp) delete this->dibujadorExp;
 	this->close();
 }
 
@@ -579,6 +582,7 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 void Dibujador::dibujarFondo(){
 	this->renderTexture(textureCielo, renderizador,0  , 0 , escalador->getPixelX(), escalador->getPixelY() );
 	this->renderTexture(textureTierra, renderizador, 0 , 0 , escalador->getPixelX() , escalador->getPixelY() );
+	this->dibujadorExp->actualizarExplosion();
 }
 
 void Dibujador::dibujar_agua(Agua* agua){
@@ -630,7 +634,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 	return retorno;
 }
 
-void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux, int potencia, int jugador_turno){
+void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_jugador, bool duenio, int cliente_id, float aux, int potencia, int contador, int jugador_turno){
 
 	int dir = paquete.direccion;
 	b2Vec2 tam = paquete.tamano;
@@ -638,22 +642,26 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	SDL_Texture* gusanito;
 	if (dir ==1){
 		if(paquete.arma_seleccionada == 3) gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_der.png", this->renderizador);
+		else if(paquete.arma_seleccionada == 2) gusanito = loadTexture("TPTaller/imagenes/gusanoGranadaDER.png", this->renderizador);
+		else if(paquete.arma_seleccionada == 4) gusanito = loadTexture("TPTaller/imagenes/gusanoHolyDER.png", this->renderizador);
 		else if(paquete.arma_seleccionada == 5) gusanito = loadTexture("TPTaller/imagenes/suicidader.png", this->renderizador);
 		else if(paquete.arma_seleccionada == 6) gusanito = loadTexture("TPTaller/imagenes/patadaDER.png", this->renderizador);
-		else gusanito = this->texturederecha;
+		else gusanito = loadTexture("TPTaller/imagenes/gusanitoderecha.png", this->renderizador);
 
 	}
 	if (dir == -1){
 		if(paquete.arma_seleccionada == 3) gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_izq.png", this->renderizador);
+		else if(paquete.arma_seleccionada == 2) gusanito = loadTexture("TPTaller/imagenes/gusanoGranadaIZQ.png", this->renderizador);
+		else if(paquete.arma_seleccionada == 4) gusanito = loadTexture("TPTaller/imagenes/gusanoHolyIZQ.png", this->renderizador);
 		else if(paquete.arma_seleccionada == 5) gusanito = loadTexture("TPTaller/imagenes/suicidaizq.png", this->renderizador);
 		else if(paquete.arma_seleccionada == 6) gusanito = loadTexture("TPTaller/imagenes/patadaIZQ.png", this->renderizador);
-		else gusanito = this->textureizquierda;
+		else gusanito = loadTexture("TPTaller/imagenes/gusanitoizquierda.png", this->renderizador);
 	}
 	if (dir ==1 && paquete.conectado == 0){
-		gusanito = this->texturederechaNEGRO;
+		gusanito = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
 	}
 	if (dir == -1 && paquete.conectado == 0){
-		gusanito = this->textureizquierdaNEGRO;
+		gusanito = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
 	}
 
 	b2Vec2 posicion = paquete.posicion;
@@ -680,11 +688,14 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	if(paquete.seleccionado[jugador_turno] == 1 && duenio){
 		this->
 		renderTexture2(flechitaroja, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100), ((y)*aux/100)+(y-140), 80, 80);
+		if (contador < 55) escalador->ubicarPosicion(paquete.posicion);
 	}
 
 	char energia[10];
 	sprintf(energia,"%d", paquete.energia);
+
 	SDL_Texture* energiatext = RenderText(energia, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[0], 15); // despues preguntar el nombre de cada uno
+
 	SDL_Texture* vida_roja = loadTexture("TPTaller/imagenes/roja.png", this->renderizador);
 	SDL_Texture* vida_verde = loadTexture("TPTaller/imagenes/verde.png", this->renderizador);
 	renderTexture2(vida_roja, this->renderizador, x-w/2,y-h*2, w*2,h*2);
@@ -692,11 +703,13 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	renderTexture2(energiatext, this->renderizador,  x+w/3,y-h*1.2, w/2,h/2 );
 	if(vida_roja) SDL_DestroyTexture(vida_roja);
 	if(vida_verde) SDL_DestroyTexture(vida_verde);
-	if(paquete.energia<=0){
-		gusanito = this->texturamuerto;
-	}
+
 
 	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
+	if (gusanito) SDL_DestroyTexture(gusanito);
+	if(paquete.energia<=0){
+		gusanito = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
+	}
 	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
 		renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
@@ -704,58 +717,46 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		if(potencia >0){
 			this->dibujarPotencia(potencia);
 		}
-		//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
 		if(bazooka) SDL_DestroyTexture(bazooka);
 		//if(mira) SDL_DestroyTexture(mira);
 	}
 	if(paquete.arma_seleccionada == 1 && paquete.direccion == -1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazookaizq.png", this->renderizador);
-		int angulo = -90 - (-45 + paquete.angulo_arma);
-		renderTexture3(bazooka, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, angulo, w,h);
-		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		if(potencia >0){
-			this->dibujarPotencia(potencia);
-		}
+		renderTexture3(bazooka, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
+		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		this->dibujarPotencia(potencia);
+
 		if(bazooka) SDL_DestroyTexture(bazooka);
 	}
 	if(paquete.arma_seleccionada == 2 && paquete.direccion ==1){
-			SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadader.png", this->renderizador);
-			renderTexture3(granada, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
-			if(potencia >0){
-				this->dibujarPotencia(potencia);
-			}			if(granada) SDL_DestroyTexture(granada);
-			//if(mira) SDL_DestroyTexture(mira);
+//		SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadader.png", this->renderizador);
+//		renderTexture3(granada, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		this->dibujarPotencia(potencia);
+//		if(granada) SDL_DestroyTexture(granada);
+
 	}
 	if(paquete.arma_seleccionada == 2 && paquete.direccion == -1){
-		SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadaizq.png", this->renderizador);
-		int angulo = -90 - (-45 + paquete.angulo_arma);
-		renderTexture3(granada, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, angulo, w,h);
-		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		if(potencia >0){
-			this->dibujarPotencia(potencia);
-		}		if(granada) SDL_DestroyTexture(granada);
+//		SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadaizq.png", this->renderizador);
+//		renderTexture3(granada, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
+		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		this->dibujarPotencia(potencia);
+//		if(granada) SDL_DestroyTexture(granada);
 	}
 
 	if(paquete.arma_seleccionada == 4 && paquete.direccion ==1){
-			SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyder.png", this->renderizador);
-			renderTexture3(granadaholy, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-			renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-			//renderTexture2(mira, this->renderizador, x + cos(paquete.angulo_arma * PI /180) * escalaZoom + w, y + sin(paquete.angulo_arma * PI /180)*escalaZoom - h,w+5,h+5);
-			if(potencia >0){
-				this->dibujarPotencia(potencia);
-			}			if(granadaholy) SDL_DestroyTexture(granadaholy);
-			//if(mira) SDL_DestroyTexture(mira);
+//		SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyder.png", this->renderizador);
+//		renderTexture3(granadaholy, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		this->dibujarPotencia(potencia);
+//		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}
 	if(paquete.arma_seleccionada == 4 && paquete.direccion == -1){
-		SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyizq.png", this->renderizador);
-		int angulo = -90 - (-45 + paquete.angulo_arma);
-		renderTexture3(granadaholy, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, angulo, w,h);
-		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		if(potencia >0){
-			this->dibujarPotencia(potencia);
-		}		if(granadaholy) SDL_DestroyTexture(granadaholy);
+//		SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyizq.png", this->renderizador);
+//		renderTexture3(granadaholy, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
+		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		this->dibujarPotencia(potencia);
+//		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}
 
 	SDL_DestroyTexture(energiatext);
@@ -770,6 +771,7 @@ void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, 
 		int altoPX = escalador->aplicarZoomY( tamanio.y);
 		int x = posicionVentanada->x - anchoPX/2;
 		int y = posicionVentanada->y - altoPX/2;
+		escalador->seguidorPosicion(x,y);
 		int w = anchoPX;
 		int h = altoPX;
 		SDL_Texture* misil;
@@ -861,18 +863,16 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 	for (int j = 0 ; j < personajes ; j ++){
 		if (cliente_id == vector1[j].id_jugador){
 			if(paquete->show_proyectil) vector1[j].arma_seleccionada = 0;
-			
-			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux, potencia, paquete->turno_jugador ); // es propio
+			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, true, cliente_id, aux, potencia, paquete->reloj, paquete->turno_jugador ); // es propio
 		}
 		else{
-			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux, potencia, paquete->turno_jugador); // no es propio
+			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux, potencia, paquete->reloj, paquete->turno_jugador); // no es propio
 		}
 	}
-
-
 	if(paquete->show_proyectil){
 		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil, paquete->contador_segundos, paquete->angulo);
 	}
+	else escalador->pararSeguidor();
 }
 
 
@@ -939,13 +939,14 @@ bool Dibujador::init(){
 			}
 		}
 	}
-	this->texturederecha = loadTexture("TPTaller/imagenes/gusanitoderecha.png", this->renderizador);
-	this->textureizquierda = loadTexture("TPTaller/imagenes/gusanitoizquierda.png", this->renderizador);
-	this->texturederechaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
-	this->textureizquierdaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
+//	this->texturederecha = loadTexture("TPTaller/imagenes/gusanitoderecha.png", this->renderizador);
+//	this->textureizquierda = loadTexture("TPTaller/imagenes/gusanitoizquierda.png", this->renderizador);
+//	this->texturederechaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
+//	this->textureizquierdaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
 	this->flechitaroja = loadTexture("TPTaller/imagenes/flechitaroja.png", this->renderizador);
 	this->textureexplosion = loadTexture("TPTaller/imagenes/explosion.png", this->renderizador);
-	this->texturamuerto = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
+	this->dibujadorExp = new DibujadorExplosion(this->renderizador,this->escalador);
+//	this->texturamuerto = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
 	//this->texturahundido = loadTexture("TPTaller/imagenes/hundido.png" , this->renderizador);
 
 	return success;
@@ -957,7 +958,6 @@ void Dibujador::close(){
 	Mix_CloseAudio();
 	SDL_Quit();
 }
-
 
 void Dibujador::dibujarMensaje(){
 	char mensaje[90];
@@ -1056,9 +1056,6 @@ void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 }
 
 
-
-
-
 void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 
 	SDL_Surface* surf = this->surfaceTierra;
@@ -1094,16 +1091,9 @@ void Dibujador::borrarExplosion(b2Vec2 posicion, float32 radio){
 
 }
 
-void Dibujador::dibujarExplosion(){
-	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion_explosion);
+void Dibujador::dibujarExplosion(int tipo){
 
-	int x = posicionVentanada->x - 100/2;
-	int y = posicionVentanada->y - 100/2;
-
-//	renderTexture2(textureexplosion, this->renderizador, x, y, escalador->getVentanaX()/8, escalador->getVentanaY()/6 );
-	renderTexture2(textureexplosion, this->renderizador, x-30, y-25, 120 , 100 );
-
-	delete posicionVentanada;
+	this->dibujadorExp->start(tipo,posicion_explosion, (float32) this->radio_explosion);
 
 }
 
@@ -1123,29 +1113,24 @@ void Dibujador::dibujarExplosionHoly(){
 void Dibujador::setPosicionExplosion(b2Vec2 pos, int radio){
 	b2Vec2 posicion_nueva = pos;
 	this->posicion_explosion=posicion_nueva;
-	this->contador_explosion=SDL_GetTicks();
+//	this->contador_explosion=SDL_GetTicks();
+	this->contador_explosion = 1;
 	this->radio_explosion = radio;
 }
 // todo, cuando se LAGEA queda horrible que explote hasta que se termine el contador, xq tarda un monton
 // asi que lo hice intentando que sea en TIEMPO REAL. no sé si está bien hecho.
 // EDIT: Al final lo arregle en main de cliente, para que se ejecute una sola vez. [Nahue.]
 bool Dibujador::dibujar_explosion(){
-	if (contador_explosion == 0) return false;
-	int resultado = SDL_GetTicks() - contador_explosion;
-	if (resultado <= 3000) return true;
-	else return false;
+//	if (contador_explosion == 0) return false;
+//	int resultado = SDL_GetTicks() - contador_explosion;
+//	if (resultado <= 3000) return true;
+//	else return false;
+	if (contador_explosion == 1){
+		contador_explosion = 0;
+		return true;
+	}
+	return false;
 
-//	if(this->contador_explosion > 0){
-//		this->contador_explosion--;
-//		return true;
-//
-//	}
-//	else{
-//
-//		return false;
-//	}
-	//return this->explosion;
-	//contador_explosicion++;
 }
 
 void Dibujador::dibujarViento(float32 viento){

@@ -133,6 +133,8 @@ int mainCliente(int argc, char* argv[]){
 			if(paquete->cantidad_personajes==0){
 				dibujador->mostrarLoading();
 			}
+			if(paquete->show_proyectil && paquete->tipo_proyectil != 3)	bloquearMovimientos();
+
 			if((KEYS[102]==true)){ //agregar condicion cuando esta seleccionado
 				music->playSonido(UP);
 			}
@@ -173,8 +175,8 @@ int mainCliente(int argc, char* argv[]){
 					dibujador->mostrarCartelTurno(paquete->turno_jugador, paquete->nombre_jugador_actual);
 
 				}
-				if((paquete->reloj >= 50*1000) &&(paquete->reloj < 60*1000)){
-					music->stopMusic();
+				if((paquete->reloj >= 50*1000) && (paquete->reloj < 60*1000)){
+//					music->stopMusic(); todo para mí queda mejor que la música siga sonando [Nahue]
 					music->playSonido(TIME);
 				}
 			}
@@ -199,8 +201,10 @@ int mainCliente(int argc, char* argv[]){
 			bool play_explotar = false;
 			if(cliente->getTamanioColaExplosiones() ==1){
 				structPaquete* paquetecola = cliente->getPaqueteColaExplosiones();
-				if (paquetecola->tipo_proyectil != 6) dibujador->borrarExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
-				dibujador->setPosicionExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
+				if(paquetecola->posicion_proyectil.y > 0){
+					if (paquetecola->tipo_proyectil != 6) dibujador->borrarExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
+					dibujador->setPosicionExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
+				}
 				play_explotar = true;
 				cliente->desencolarExplosion();
 				free(paquetecola);

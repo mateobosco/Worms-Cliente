@@ -238,4 +238,11 @@ void showTime(){
 	   char* dt = ctime(&now);
 	   cout << "The local date and time is: " << dt << endl;
 }
+
+void bloquearMovimientos(){
+	KEYS[100] = false;
+	KEYS[101] = false;
+	KEYS[102] = false;
+	KEYS[103] = false;
+}
 #endif /* FUNCIONES_H_ */

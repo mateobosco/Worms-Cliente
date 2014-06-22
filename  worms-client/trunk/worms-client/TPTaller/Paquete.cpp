@@ -117,10 +117,16 @@ structEvento* crearPaqueteMovimiento(bool* KEYS, int id_jugador, bool &disparand
 
 	if(KEYS[SDLK_x]){
 //		printf(" LE MANDO EN EL PAQUETE EL ANGULO con 5 \n");
-		paquete->angulo_arma=5;
+		if((paquete->direccion == 3) || (paquete->direccion == 4))
+			paquete->angulo_arma = 5;
+		else
+			paquete->angulo_arma -= 5;
 	}
 	if(KEYS[SDLK_c]){
-		paquete->angulo_arma=-5;
+		if((paquete->direccion == 3) || (paquete->direccion == 4))
+			paquete->angulo_arma -= 5;
+		else
+			paquete->angulo_arma = 5;
 	}
 	if(KEYS[SDLK_v]){
 		disparando = true;

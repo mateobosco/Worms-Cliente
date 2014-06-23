@@ -114,12 +114,12 @@ int mainCliente(int argc, char* argv[]){
 
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
-			dibujador->dibujarFondo();
+
 			keyboard(event, posicion_mouse_movimiento,posicion_mouse_click,posicion_mouse_scroll);
 			if(!KEYS[SDLK_z]){
 				escalador->moverVentana(posicion_mouse_movimiento);
 			}
-
+			dibujador->dibujarFondo();
 			escalador->hacerZoom(posicion_mouse_scroll);
 			paquete = (structPaquete*) cliente->getPaquete();
 			if(paquete->cantidad_personajes==0){

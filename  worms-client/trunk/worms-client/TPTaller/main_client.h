@@ -231,21 +231,23 @@ int mainCliente(int argc, char* argv[]){
 				}
 			}
 
-			if(((structPaquete*) cliente->getPaquete())->ganador[0] != '\0'){
+			if(paquete->ganador[0] != '\0'){
 				char mensaje_ganador[200];
-				if(((structPaquete*) cliente->getPaquete())->resultado == 0){
-					int cant_ganadores = ((structPaquete*) cliente->getPaquete())->cant_ganadores;
+				if(paquete->resultado == 0){
+					int cant_ganadores = paquete->cant_ganadores;
 					sprintf(mensaje_ganador, "Empate entre:");
 					while(cant_ganadores > 0){
-						sprintf(mensaje_ganador, " %s,", ((structPaquete*) cliente->getPaquete())->ganador);
+						sprintf(mensaje_ganador, " %s,", paquete->ganador);
 						sprintf(mensaje_ganador, ",");
 					}
 					mensaje_ganador[strlen(mensaje_ganador) - 1] = '\0';
 					dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
-
+					printf(mensaje_ganador);
+					SDL_Delay(5000);
+				} else{
+					sprintf(mensaje_ganador, "El ganador es: %s", paquete->ganador);
+					dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
 				}
-				sprintf(mensaje_ganador, "El ganador es: %s", ((structPaquete*) cliente->getPaquete())->ganador);
-				dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
 			}
 
 

@@ -703,13 +703,13 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	renderTexture2(energiatext, this->renderizador,  x+w/3,y-h*1.2, w/2,h/2 );
 	if(vida_roja) SDL_DestroyTexture(vida_roja);
 	if(vida_verde) SDL_DestroyTexture(vida_verde);
-
-
-	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
-	if (gusanito) SDL_DestroyTexture(gusanito);
 	if(paquete.energia<=0){
 		gusanito = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
 	}
+
+	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
+	if (gusanito) SDL_DestroyTexture(gusanito);
+
 	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
 		renderTexture3(bazooka, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);

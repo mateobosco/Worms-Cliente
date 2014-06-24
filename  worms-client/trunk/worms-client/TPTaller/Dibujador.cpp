@@ -722,8 +722,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	}
 	if(paquete.arma_seleccionada == 1 && paquete.direccion == -1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazookaizq.png", this->renderizador);
-		renderTexture3(bazooka, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
-		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		int angulo = -90 - (-45 + paquete.angulo_arma);
+		renderTexture3(bazooka, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, angulo, w,h);
+		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		this->dibujarPotencia(potencia);
 
 		if(bazooka) SDL_DestroyTexture(bazooka);
@@ -731,7 +732,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	if(paquete.arma_seleccionada == 2 && paquete.direccion ==1){
 //		SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadader.png", this->renderizador);
 //		renderTexture3(granada, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		this->dibujarPotencia(potencia);
 //		if(granada) SDL_DestroyTexture(granada);
 
@@ -739,7 +740,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	if(paquete.arma_seleccionada == 2 && paquete.direccion == -1){
 //		SDL_Texture* granada = loadTexture("TPTaller/imagenes/granadaizq.png", this->renderizador);
 //		renderTexture3(granada, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
-		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		this->dibujarPotencia(potencia);
 //		if(granada) SDL_DestroyTexture(granada);
 	}
@@ -747,14 +748,14 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	if(paquete.arma_seleccionada == 4 && paquete.direccion ==1){
 //		SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyder.png", this->renderizador);
 //		renderTexture3(granadaholy, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
-		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture5(mira, this->renderizador,x + anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		this->dibujarPotencia(potencia);
 //		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}
 	if(paquete.arma_seleccionada == 4 && paquete.direccion == -1){
 //		SDL_Texture* granadaholy = loadTexture("TPTaller/imagenes/granadaholyizq.png", this->renderizador);
 //		renderTexture3(granadaholy, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, w,h);
-		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/100),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
+		renderTexture6(mira, this->renderizador,x - anchoPX/((float32)escalador->getZoom()/50),y-5,w+5,h+5, paquete.angulo_arma, 0,h);
 		this->dibujarPotencia(potencia);
 //		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}

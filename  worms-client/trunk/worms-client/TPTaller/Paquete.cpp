@@ -160,7 +160,7 @@ bool aceptarNuevaTecla(timeval act_time, timeval key_pressed_time){
 			           + act_time.tv_usec) - key_pressed_time.tv_usec) > 150000);
 }
 
-structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando, bool &disparar, int& arma, Musica* music){
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando, bool &disparar, int& arma, Musica* music, int cantidad_granadas, int cantidad_dinamitas, int cantidad_holys){
 	structEvento* paquete;
 	//int arma = 0;
 	if ( KEYS[100] || KEYS[101] || KEYS[102] || KEYS[SDLK_SPACE] || KEYS[SDLK_x] || KEYS[SDLK_c] || KEYS[SDLK_v]){ // no es un click, es un movimiento
@@ -185,15 +185,15 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 					arma = LANZAR_BAZOOKA;
 
 				}
-				else if (click[0] > 700  && click[1] > 100 && click[1] <200){
+				else if (click[0] > 700  && click[1] > 100 && click[1] <200 && cantidad_granadas > 0){
 					paquete->arma_seleccionada=2;
 					arma = LANZAR;
 				}
-				else if (click[0] > 600 &&  click[0] < 700 && click[1] > 200 && click[1] < 300){
+				else if (click[0] > 600 &&  click[0] < 700 && click[1] > 200 && click[1] < 300 && cantidad_dinamitas > 0){
 					paquete->arma_seleccionada=3;
 					arma = LANZAR_DINAMITA;
 				}
-				else if (click[0] > 700 && click[1] > 200 && click[1] < 300){
+				else if (click[0] > 700 && click[1] > 200 && click[1] < 300 && cantidad_holys > 0 ){
 					paquete->arma_seleccionada=4;
 					arma = LANZAR;
 				}

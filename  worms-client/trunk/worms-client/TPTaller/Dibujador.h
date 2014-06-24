@@ -63,7 +63,7 @@ public:
 	int getContadorCerrarse();
 	void hacerZoom(int* pos);
 	void alejarZoom(int* pos);
-	void mostrarMenuArmas(int x, int y);
+	void mostrarMenuArmas(int x, int y, int numero_granadas, int numero_dinamitas, int numero_holys);
 	void mostrarCartelTurno(int nro_jugador, char* nombre);
 	void mostrarCartelEsperar();
 	void mostrarCartel(char* mensaje, int posx, int posy, int x, int y);
@@ -78,6 +78,9 @@ public:
 	void mostrarLoading();
 	void mostrarImagenPrincipal();
 	void mostrarImagenPrincipal2();
+	void setDinamitasAgotadas();
+	void setHolysAgotadas();
+	void setGranadasAgotadas();
 
 
 

@@ -94,7 +94,7 @@ typedef struct structEvento{
 structFigura* crearPaqueteFigura(Figura* figura);
 structPersonaje* crearPaquetePersonaje(Personaje* personaje);
 structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador);
-structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando, bool &disparar, int& arma, Musica* musica);
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando, bool &disparar, int& arma, Musica* musica, int cantidad_granadas, int cantidad_dinamitas, int cantidad_holys);
 
 void destruirPaqueteFigura(structFigura* paquete);
 void destruirPaquetePersonaje(structPersonaje* paquete);

@@ -58,6 +58,12 @@ int mainCliente(int argc, char* argv[]){
 		return EXIT_FAILURE;
 	}
 
+	int cantidad_holys=1;
+	int cantidad_dinamitas=4;
+	int cantidad_granadas=6;
+
+
+
 	while (!cliente->getPaqueteInicial());
 
 	structInicial* paqueteInicial = (structInicial*) cliente->getPaqueteInicial();
@@ -132,8 +138,19 @@ int mainCliente(int argc, char* argv[]){
 			}
 			cliente->setID(paquete->id);
 
+			if (cantidad_holys == 0 ){
+				printf("SE AGOTARON LAS HOLYS \n");
+				dibujador->setHolysAgotadas();
+			}
+			if (cantidad_dinamitas == 0 ){
+				printf(" SE AGAOTARON LAS DINAMITAS \n");
+				dibujador->setDinamitasAgotadas();
+			}
+			if (cantidad_granadas == 0 ){
+				dibujador->setGranadasAgotadas();
+			}
 
-			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music);
+			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music, cantidad_granadas, cantidad_dinamitas, cantidad_holys);
 
 //			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando);
 			if ((evento->direccion == 3)||(evento->direccion == 1)) music->playSonido(WALK);
@@ -184,7 +201,7 @@ int mainCliente(int argc, char* argv[]){
 
 			}
 			if(KEYS[SDLK_z]){
-				dibujador->mostrarMenuArmas(escalador->getVentanaX()-100,100);
+				dibujador->mostrarMenuArmas(escalador->getVentanaX()-100,100, cantidad_granadas, cantidad_dinamitas, cantidad_holys);
 			}
 			dibujador->mostrarReloj(paquete->reloj);
 			dibujador->dibujarViento(viento);
@@ -198,6 +215,32 @@ int mainCliente(int argc, char* argv[]){
 					dibujador->tipo_explosion = paquetecola->tipo_proyectil;
 					dibujador->dibujarExplosion(paquetecola->tipo_proyectil);
 				}
+
+
+				printf(" EL TIPO DE PROYECTIL ES %d \n", paquete->tipo_proyectil);
+				printf(" EL RADIO DE EXPLOSION ES %d \n", paquetecola->radio_explosion);
+				printf(" EL CLIENTE ID ES %d \n", cliente->getID());
+				printf(" EL TURNO JUGADOR ES  %d \n", paquetecola->turno_jugador);
+
+
+
+				if(paquete->tipo_proyectil ==2 && paquetecola->turno_jugador == cliente->getID()){
+					printf(" RESTO UNA A LA GRANADA");
+					cantidad_granadas--;
+				}if(paquete->tipo_proyectil == 3 && paquetecola->turno_jugador == cliente->getID()){
+					printf(" RESTO UNA A LA DINAMITA");
+					cantidad_dinamitas--;
+				}
+				if(paquete->tipo_proyectil == 4 && paquetecola->turno_jugador == cliente->getID()){
+					printf(" RESTO UNA A LA HOLY");
+					cantidad_holys--;
+				}
+
+
+
+
+
+
 				play_explotar = true;
 				cliente->desencolarExplosion();
 //				free(paquetecola);
@@ -248,6 +291,11 @@ int mainCliente(int argc, char* argv[]){
 					sprintf(mensaje_ganador, "El ganador es: %s", paquete->ganador);
 					dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
 				}
+//<<<<<<< .mine
+//				sprintf(mensaje_ganador, "El ganador es: %s", paquete->ganador);
+//				dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
+//=======
+//>>>>>>> .r122
 			}
 
 

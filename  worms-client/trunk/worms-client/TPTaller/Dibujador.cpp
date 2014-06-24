@@ -829,12 +829,32 @@ void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, 
 		delete posicionVentanada;
 	}
 }
-void Dibujador::mostrarMenuArmas(int x, int y){
+void Dibujador::mostrarMenuArmas(int x, int y, int numero_granadas, int numero_dinamitas, int numero_holys){
 	//SDL_Texture* menu = loadTexture("TPTaller/imagenes/armas2.png", this->renderizador);
 	renderTexture2(bazooka, this->renderizador, x - 100, y, 100,100);
+	SDL_Color color = {255,255,255};
+	char cant_granada[10];
+	char cant_dinamitas[10];
+	char cant_holys[10];
+
+
+	//strcpy(cant_granada, "x");
+	sprintf (cant_granada, "x%d ", numero_granadas);
+	sprintf (cant_dinamitas, "x%d ", numero_dinamitas);
+	sprintf (cant_holys, "x%d ", numero_holys);
+
 	renderTexture2(granada, this->renderizador, x  , y, 100,100);
+	SDL_Texture* cant_grand = RenderText(cant_granada, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
+	renderTexture2(cant_grand, this->renderizador, x , y+10 , 50, 20 );
+	SDL_DestroyTexture(cant_grand);
 	renderTexture2(dinamita, this->renderizador, x - 100, y + 100, 100,100);
+	SDL_Texture* cant_din = RenderText(cant_dinamitas, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
+	renderTexture2(cant_din, this->renderizador, x - 100 , y + 110 , 50, 20 );
+	SDL_DestroyTexture(cant_din);
 	renderTexture2(holy, this->renderizador, x , y +  100, 100,100);
+	SDL_Texture* cant_holy = RenderText(cant_holys, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
+	renderTexture2(cant_holy, this->renderizador, x , y+110 , 50, 20 );
+	SDL_DestroyTexture(cant_holy);
 	renderTexture2(kamikaze, this->renderizador, x - 100 , y + 200, 100,100);
 	renderTexture2(patada, this->renderizador, x , y +200, 100,100);
 }
@@ -1166,4 +1186,21 @@ void Dibujador::aplicarExplosiones(structInicial* paqueteInicial){
 		structExplosion explosion = paqueteInicial->explosiones[i];
 		this->borrarExplosion(explosion.posicion,explosion.radio);
 	}
+}
+
+
+
+void Dibujador::setGranadasAgotadas(){
+	SDL_SetTextureAlphaMod(this->granada, 150);
+}
+
+void Dibujador::setHolysAgotadas(){
+	SDL_SetTextureAlphaMod(this->holy, 150);
+
+
+}
+
+void Dibujador::setDinamitasAgotadas(){
+	SDL_SetTextureAlphaMod(this->dinamita, 150);
+
 }

@@ -18,7 +18,7 @@ DibujadorExplosion::DibujadorExplosion(SDL_Renderer* renderer, Escalador* escala
 	this->tipo = -1;
 	this->textureExplosion = NULL;
 	this->surfaceExplosion = NULL;
-	this->pathExplosion = '\0';
+//	this->pathExplosion = '\0';
 }
 
 DibujadorExplosion::~DibujadorExplosion() {

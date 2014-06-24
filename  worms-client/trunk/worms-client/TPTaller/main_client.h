@@ -116,7 +116,9 @@ int mainCliente(int argc, char* argv[]){
  		bool disparar = false;
 		int arma  = 0;
 		bool disparando = false;
+		int contador = -1;
 		while(KEYS[SDLK_ESCAPE] == false){
+
 
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
@@ -298,14 +300,19 @@ int mainCliente(int argc, char* argv[]){
 //>>>>>>> .r122
 			}
 
-
 			if (cliente->resetearNivel){
-				char mensaje[100];
-				strcpy(mensaje,"reseteando el nivel hijo de puta");
-				dibujador->mostrarCartel(mensaje, 250,250,300,100);
-//				SDL_Delay(3000);
 				dibujador->resetearEscenario(pathTierra);
 				cliente->resetearNivel = false;
+				contador = 1;
+
+			}
+			if (contador > 0){
+				char mensaje[100];
+				strcpy(mensaje,"Se resetea el nivel");
+				dibujador->mostrarCartel(mensaje, 250,250,300,100);
+				contador ++;
+				if (contador == 50) contador = -1;
+
 			}
 			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca
 

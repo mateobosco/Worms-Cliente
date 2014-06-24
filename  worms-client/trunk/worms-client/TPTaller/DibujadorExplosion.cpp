@@ -16,17 +16,21 @@ DibujadorExplosion::DibujadorExplosion(SDL_Renderer* renderer, Escalador* escala
 	this->pos = b2Vec2(-1,-1);
 	this->radio = 0;
 	this->tipo = -1;
+	this->textureExplosion = NULL;
+	this->surfaceExplosion = NULL;
+	this->pathExplosion = '\0';
 }
 
 DibujadorExplosion::~DibujadorExplosion() {
-	SDL_DestroyTexture(this->textureExplosion);
-	SDL_FreeSurface(this->surfaceExplosion);
+	if (this->textureExplosion) SDL_DestroyTexture(this->textureExplosion);
+	if (this->textureExplosion) SDL_FreeSurface(this->surfaceExplosion);
 }
 
 void DibujadorExplosion::actualizarExplosion(){
 	if (this->tipo == 1) this->actualizarExplosionBazooka();
 	if (this->tipo == 4) this->actualizarExplosionHoly();
-	if (this->tipo == 2 || this->tipo == 3 || this->tipo == 5 || this->tipo == 6) this->actualizarExplosionGranada();
+	if (this->tipo == 2 || this->tipo == 3 || this->tipo == 5) this->actualizarExplosionGranada();
+	if (this->tipo == 6) this->actualizarExplosionPatada();
 }
 
 void DibujadorExplosion::actualizarExplosionHoly(){
@@ -158,6 +162,9 @@ void DibujadorExplosion::start(int tipo, b2Vec2 pos, float32 radio){
 	this->radio = radio;
 	this->actual = 1;
 
+	if (this->surfaceExplosion) SDL_FreeSurface(this->surfaceExplosion);
+	if (this->textureExplosion) SDL_DestroyTexture(this->textureExplosion);
+
 	if (this->tipo == 1){
 		this->pathExplosion = "TPTaller/imagenes/explosionBazooka.png";
 		this->surfaceExplosion = IMG_Load(this->pathExplosion);
@@ -174,17 +181,22 @@ void DibujadorExplosion::start(int tipo, b2Vec2 pos, float32 radio){
 		this->surfaceExplosion = IMG_Load(this->pathExplosion);
 		this->textureExplosion = SDL_CreateTextureFromSurface(this->renderizador,this->surfaceExplosion);
 	}
+	if (this->tipo == 6 ){
+		this->pathExplosion = "TPTaller/imagenes/patadaKapow.png";
+		this->surfaceExplosion = IMG_Load(this->pathExplosion);
+		this->textureExplosion = SDL_CreateTextureFromSurface(this->renderizador,this->surfaceExplosion);
+	}
 
 }
 
 void DibujadorExplosion::actualizarExplosionBazooka(){
 	if (this->actual < 0) return;
-	if (this->actual > 60){
+	if (this->actual > 40){
 		this->actual = -1;
 		this->tipo = -1;
 		return;
 	}
-	int numero = this->actual/3 -1;
+	int numero = this->actual/2 -1;
 
 	int indiceX = numero % 5 ;
 	int indiceY = (numero - indiceX) / 5;
@@ -206,8 +218,8 @@ void DibujadorExplosion::actualizarExplosionBazooka(){
 	posicion.y = (int) posPix->y - posicion.h/2;
 
 	int cantidadMov = 20;
-	if (this->actual > 50) cantidadMov = 3;
-	if (this->actual > 30) cantidadMov = 10;
+	if (this->actual > 30) cantidadMov = 0;
+	if (this->actual > 25) cantidadMov = 10;
 	if (this->actual % 2 == 1) escalador->moverDerecha(cantidadMov);
 	if (this->actual % 2 == 0) escalador->moverIzquierda(cantidadMov);
 
@@ -261,4 +273,26 @@ void DibujadorExplosion::actualizarExplosionGranada(){
 }
 
 
+void DibujadorExplosion::actualizarExplosionPatada(){
+	if (this->actual < 0) return;
+	if (this->actual > 15){
+		this->actual = -1;
+		this->tipo = -1;
+		return;
+	}
+
+	if (this->actual == 1 ||this->actual == 3) escalador->moverDerecha(5);
+	if (this->actual == 2 ||this->actual == 4) escalador->moverIzquierda(5);
+	SDL_Rect posicion;
+	b2Vec2* posPix = escalador->aplicarZoomPosicion(pos);
+	posicion.w = this->surfaceExplosion->w * escalador->getZoom()/100;
+	posicion.h = this->surfaceExplosion->h * escalador->getZoom()/100;
+	posicion.x = (int) posPix->x - posicion.w/2;
+	posicion.y = (int) posPix->y - posicion.h/2;
+	delete posPix;
+
+	SDL_RenderCopy(this->renderizador,this->textureExplosion,NULL,&posicion);
+
+	this->actual ++;
+}
 

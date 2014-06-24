@@ -195,6 +195,8 @@ int mainCliente(int argc, char* argv[]){
 				if(paquetecola->posicion_proyectil.y > 0){
 					if (paquetecola->tipo_proyectil != 6) dibujador->borrarExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
 					dibujador->setPosicionExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
+					dibujador->tipo_explosion = paquetecola->tipo_proyectil;
+					dibujador->dibujarExplosion(paquetecola->tipo_proyectil);
 				}
 				play_explotar = true;
 				cliente->desencolarExplosion();
@@ -211,10 +213,10 @@ int mainCliente(int argc, char* argv[]){
 			if(dibujador->dibujar_explosion() == true){
 				if (paquete->tipo_proyectil != 0) dibujador->tipo_explosion = paquete->tipo_proyectil;
 				if (dibujador->tipo_explosion == 4){
-					dibujador->dibujarExplosion(4);
+//					dibujador->dibujarExplosion(4);
 				}
 				if (dibujador->tipo_explosion != 4) {
-					dibujador->dibujarExplosion(dibujador->tipo_explosion);
+//					dibujador->dibujarExplosion(dibujador->tipo_explosion);
 				}
 				if (play_explotar) {
 					//Ver cual arma está seleccionada y según que arma es el sonido

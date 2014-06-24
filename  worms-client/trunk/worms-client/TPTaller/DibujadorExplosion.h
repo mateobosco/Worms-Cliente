@@ -18,6 +18,7 @@ public:
 	void actualizarExplosionBazooka();
 	void actualizarExplosionGranada();
 	void actualizarExplosionHoly();
+	void actualizarExplosionPatada();
 	void start(int tipo,b2Vec2 pos, float32 radio);
 
 private:

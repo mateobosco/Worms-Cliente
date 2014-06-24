@@ -125,7 +125,7 @@ int Servidor::aceptarConexiones(){
 					}
 					this->setAceptado(true);
 					cliente->activar();
-					if (this->runEnviarInfoInicial(cliente) <= 0 ){} /*log Error todo */
+					if (this->runEnviarInfoInicial(cliente) <= 0 ){}
 					conexion_t par;
 					par.cliente = cliente;
 					par.servidor = this;

@@ -194,6 +194,7 @@ int Cliente::runRecibirInfo(){
 			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1 /*&& paquete->tipo_proyectil!=6*/){
 				structPaquete* paqueteencolar = (structPaquete*) malloc (MAX_PACK);
 				memcpy(paqueteencolar, this->paquete_recibir, MAX_PACK);
+				printf("LLEGA UNA EXPLOSION en %f,%f \n", paquete->posicion_proyectil.x,paquete->posicion_proyectil.y);
 				cola_explosiones.push(paqueteencolar);
 			}
 			if (paquete->resetear) this->resetearNivel = true;

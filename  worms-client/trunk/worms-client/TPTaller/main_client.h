@@ -190,7 +190,7 @@ int mainCliente(int argc, char* argv[]){
 			dibujador->dibujarViento(viento);
 
 			bool play_explotar = false;
-			if(cliente->getTamanioColaExplosiones() ==1){
+			if(cliente->getTamanioColaExplosiones() >=1){
 				structPaquete* paquetecola = cliente->getPaqueteColaExplosiones();
 				if(paquetecola->posicion_proyectil.y > 0){
 					if (paquetecola->tipo_proyectil != 6) dibujador->borrarExplosion(paquetecola->posicion_proyectil, paquetecola->radio_explosion);
@@ -198,10 +198,10 @@ int mainCliente(int argc, char* argv[]){
 				}
 				play_explotar = true;
 				cliente->desencolarExplosion();
-				free(paquetecola);
+//				free(paquetecola);
 			}
 			if(disparar) {
-				printf("Disparar...arma seleccionada %d\n", arma);
+//				printf("Disparar...arma seleccionada %d\n", arma);
 				music->playSonido(arma);
 //				if(paquete->tipo_proyectil == 1) music->playSonido(DISPARO);
 //				else if((paquete->tipo_proyectil == 2)&&(paquete->tipo_proyectil == 3)&&(paquete->tipo_proyectil == 4)){
@@ -246,11 +246,17 @@ int mainCliente(int argc, char* argv[]){
 				dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
 			}
 
-			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca
+
 			if (cliente->resetearNivel){
+				char mensaje[100];
+				strcpy(mensaje,"reseteando el nivel hijo de puta");
+				dibujador->mostrarCartel(mensaje, 250,250,300,100);
+//				SDL_Delay(3000);
 				dibujador->resetearEscenario(pathTierra);
 				cliente->resetearNivel = false;
 			}
+			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca
+
 			posicion_mouse_scroll[2] = 0;
 			delete[] paquete;
 		}

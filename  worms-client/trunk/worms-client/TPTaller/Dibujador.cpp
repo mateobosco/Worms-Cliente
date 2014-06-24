@@ -144,7 +144,7 @@ void Dibujador::mostrarImagenPrincipal2(){
 
 
 const char* Dibujador::mostrarPantallaPrincial(){
-	SDL_Texture* fondo = this->loadTexture("TPTaller/imagenes/principal2.png", this->renderizador);
+	SDL_Texture* fondo = this->loadTexture("TPTaller/imagenes/nuevainicial.png", this->renderizador);
 	SDL_SetTextureAlphaMod(fondo, 150);
 	bool quit = false;
 	SDL_Texture* Texture=NULL;
@@ -1150,8 +1150,14 @@ void Dibujador::dibujarViento(float32 viento){
 }
 
 void Dibujador::resetearEscenario(std::string pathTierra){
-	SDL_FreeSurface(this->surfaceTierra);
-	this->dibujar_tierra(escalador,pathTierra);
+////	SDL_FreeSurface(this->surfaceTierra);
+	printf(" ENTRA EN RESETEAR ESCENARIO (DIBUJADOR) \n");
+//	SDL_DestroyTexture(this->textureTierra);
+//	this->textureTierra = this->dibujar_tierra(escalador,pathTierra);
+	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
+	this->surfaceTierra = IMG_Load(pathTierra.c_str());
+	if (this->textureTierra) SDL_DestroyTexture(this->textureTierra);
+	this->textureTierra = SDL_CreateTextureFromSurface(this->renderizador, this->surfaceTierra);
 }
 
 void Dibujador::aplicarExplosiones(structInicial* paqueteInicial){

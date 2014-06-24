@@ -20,6 +20,7 @@ Cliente::Cliente(int fd){
 	this->hilos.recibir = NULL;
 	this->jugador = NULL;
 	this->dibujador = NULL;
+	this->resetearNivel = false;
 }
 
 Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
@@ -41,6 +42,7 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->servidor_conectado = true;
 	this->jugador = NULL;
 	this->dibujador = NULL;
+	this->resetearNivel = false;
 }
 
 Cliente::~Cliente(){

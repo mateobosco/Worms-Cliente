@@ -191,7 +191,6 @@ void keyboard(SDL_Event event , int* posicion_mouse_movimiento, int* posicion_mo
 				SDL_GetMouseState( &x, &y );
 				posicion_mouse_click[0] = x;
 				posicion_mouse_click[1] = y;
-				printf(" LEE ESTE CLICK %d, %d \n", x,y);
 				break;
 			}
 			case SDL_MOUSEMOTION:

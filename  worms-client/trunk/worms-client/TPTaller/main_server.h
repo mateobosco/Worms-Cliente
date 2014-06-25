@@ -49,7 +49,7 @@ int main_server(int argc,char* argv[]){
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
 	structPaquete* paqueteCiclo /*= crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), juego->getJugadorActual())*/;
-	structFigura* vector = paqueteCiclo->vector_figuras;
+//	structFigura* vector = paqueteCiclo->vector_figuras;
 	servidor->actualizarPaquete((char*)paqueteCiclo);
 	juego->getMundo()->step(0.1,1,1);
 

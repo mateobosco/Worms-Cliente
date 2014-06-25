@@ -235,14 +235,14 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int nro_jugador){
 		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
 		destruirPaquetePersonaje(paquetito);
 	}
-	Figura** vector_figuras = mundo->getFiguras();
-	int cantidad_figuras = mundo->getCantidadFiguras();
-	for (int i=0 ; i<cantidad_figuras; i++){
-		structFigura* paquetito = crearPaqueteFigura(vector_figuras[i]);
-		memcpy(&paquete->vector_figuras[i],paquetito,sizeof(structFigura));
-		destruirPaqueteFigura(paquetito);
-	}
-	paquete->cantidad_figuras = cantidad_figuras;
+//	Figura** vector_figuras = mundo->getFiguras();
+//	int cantidad_figuras = mundo->getCantidadFiguras();
+//	for (int i=0 ; i<cantidad_figuras; i++){
+//		structFigura* paquetito = crearPaqueteFigura(vector_figuras[i]);
+//		memcpy(&paquete->vector_figuras[i],paquetito,sizeof(structFigura));
+//		destruirPaqueteFigura(paquetito);
+//	}
+//	paquete->cantidad_figuras = cantidad_figuras;
 	paquete->cantidad_personajes = cantidad_personajes;
 	if (mensaje != NULL){
 		strcpy(paquete->mensaje_mostrar, mensaje);

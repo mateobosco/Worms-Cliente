@@ -39,8 +39,8 @@ typedef struct structPersonaje {
 typedef struct structPaquete{
 	int comenzar;
 	int tipo = 0;
-	structFigura vector_figuras[10];
-	int cantidad_figuras = 0;
+//	structFigura vector_figuras[10];
+//	int cantidad_figuras = 0;
 	structPersonaje vector_personajes[20];
 	int cantidad_personajes = 0;
 	int id;

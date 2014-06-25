@@ -60,9 +60,6 @@ int mainCliente(int argc, char* argv[]){
 	int cantidad_holys=1;
 	int cantidad_dinamitas=4;
 	int cantidad_granadas=6;
-
-
-
 	while (!cliente->getPaqueteInicial());
 
 	structInicial* paqueteInicial = (structInicial*) cliente->getPaqueteInicial();
@@ -325,6 +322,9 @@ int mainCliente(int argc, char* argv[]){
 				//dibujador->resetearEscenario(pathTierra);
 				cliente->resetearNivel = false;
 				printf("resetear nivel \n");
+				cantidad_holys=1;
+				cantidad_dinamitas=4;
+				cantidad_granadas=6;
 				dibujador->resetearEscenario(pathTierra);
 				contador = 1;
 				strcpy(mensaje_reset,"Se resetea el nivel");

@@ -8,7 +8,6 @@
 
 #include "Juego.h"
 
-
 #include "SDL2/SDL_ttf.h"
 #include <stdio.h>
 #include <string>
@@ -394,7 +393,7 @@ void Dibujador::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 
 	if(SDL_RenderCopy(ren, tex, NULL, &dst)!=0){
 		loguear();
-		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+		logFile <<"    Error    " <<"\t RenderCopy falló renderTexture " << endl;
 	}
 }
 
@@ -407,7 +406,7 @@ void Dibujador::renderTexture2(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 
 	if(SDL_RenderCopy(ren, tex, NULL, &dst)!=0){
 		loguear();
-		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+		logFile <<"    Error    " <<"\t RenderCopy falló renderTexture2 " << endl;
 	}
 }
 
@@ -422,7 +421,7 @@ void Dibujador::renderTexture3(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 	point.y=punto2;
 	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, (angulo + 15), &point,SDL_FLIP_NONE)!=0){
 		loguear();
-		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+		logFile <<"    Error    " <<"\t RenderCopy falló renderTexture3" << endl;
 	}
 }
 
@@ -434,7 +433,7 @@ void Dibujador::renderTextureCenter(SDL_Texture *tex, SDL_Renderer *ren, int x, 
 	dst.h = h;
 	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, NULL, SDL_FLIP_NONE)!=0){
 		loguear();
-		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+		logFile <<"    Error    " <<"\t RenderCopy falló renderTextureCenter " << endl;
 	}
 }
 
@@ -449,7 +448,7 @@ void Dibujador::renderTexture5(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 	point.y=punto2;
 	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, &point,SDL_FLIP_NONE)!=0){
 		loguear();
-		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+		logFile <<"    Error    " <<"\t RenderCopy falló renderTexture5 " << endl;
 	}
 }
 
@@ -467,7 +466,7 @@ void Dibujador::renderTexture6(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 	point.y=punto2;
 	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, &point,SDL_FLIP_NONE)!=0){
 		loguear();
-		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+		logFile <<"    Error    " <<"\t RenderCopy falló  renderTexture6" << endl;
 	}
 }
 
@@ -482,7 +481,7 @@ void Dibujador::renderTexture4(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 	point.y=h/2;
 	if(SDL_RenderCopyEx(ren, tex, NULL, &dst, angulo, &point,SDL_FLIP_NONE)!=0){
 		loguear();
-		logFile <<"    Error    " <<"\t RenderCopy falló " << endl;
+		logFile <<"    Error    " <<"\t RenderCopy falló renderTexture4" << endl;
 	}
 }
 
@@ -759,12 +758,16 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 		this->dibujarPotencia(potencia);
 //		if(granadaholy) SDL_DestroyTexture(granadaholy);
 	}
+	if(paquete.salto) this->music->playSonido(UP);
+	if(paquete.movio) this->music->playSonido(WALK);
+	if(paquete.perdioVida) this->music->playSonido(VIDA);
 
 	SDL_DestroyTexture(energiatext);
 	delete posicionVentanada;
 }
 
-void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos, double angulo){
+void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos, double angulo, bool* sonido_timer){
+
 	if(tipo_proyectil){
 		b2Vec2 posicion = posicion_proyectil;
 		b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion);
@@ -780,16 +783,69 @@ void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, 
 
 		if((tipo_proyectil == 2) || (tipo_proyectil == 3) || (tipo_proyectil == 4)){
 			switch (contador_segundos){
-				case 5:	segundos = loadTexture("TPTaller/imagenes/segundo_cinco.png", this->renderizador); break;
-				case 4:	segundos = loadTexture("TPTaller/imagenes/segundo_cuatro.png", this->renderizador); break;
-				case 3:	segundos = loadTexture("TPTaller/imagenes/segundo_tres.png", this->renderizador); break;
-				case 2: segundos = loadTexture("TPTaller/imagenes/segundo_dos.png", this->renderizador); break;
-				case 1: segundos = loadTexture("TPTaller/imagenes/segundo_uno.png", this->renderizador); break;
-				case 0: segundos = loadTexture("TPTaller/imagenes/segundo_cero.png", this->renderizador); break;
-				default: segundos = loadTexture("TPTaller/imagenes/segundo_cero.png", this->renderizador); break;
+				case 5:	{
+					segundos = loadTexture("TPTaller/imagenes/segundo_cinco.png", this->renderizador);
+					if(!sonido_timer[5]){
+						this->music->playSonido(TICK);
+						printf("Contador segundos 5: %d \n", contador_segundos);
+						sonido_timer[5] = true;
+					}
+					break;
+				}
+
+				case 4:	{
+					segundos = loadTexture("TPTaller/imagenes/segundo_cuatro.png", this->renderizador);
+					if(!sonido_timer[4]){
+						this->music->playSonido(TICK);
+						printf("Contador segundos 4: %d \n", contador_segundos);
+						sonido_timer[4] = true;
+					}
+					break;
+				}
+				case 3: {
+					segundos = loadTexture("TPTaller/imagenes/segundo_tres.png", this->renderizador);
+					if(!sonido_timer[3]){
+						this->music->playSonido(TICK);
+						printf("Contador segundos 3: %d \n", contador_segundos);
+						sonido_timer[3] = true;
+					}
+					break;
+				}
+				case 2: {
+					segundos = loadTexture("TPTaller/imagenes/segundo_dos.png", this->renderizador);
+					if(!sonido_timer[2]){
+						this->music->playSonido(TICK);
+						printf("Contador segundos 2: %d \n", contador_segundos);
+						sonido_timer[2] = true;
+					}
+					break;
+				}
+				case 1: {
+					segundos = loadTexture("TPTaller/imagenes/segundo_uno.png", this->renderizador);
+					if(!sonido_timer[1]){
+						this->music->playSonido(TICK);
+						printf("Contador segundos 1: %d \n", contador_segundos);
+						sonido_timer[1] = true;
+					}
+					break;
+				}
+				case 0: {
+					segundos = loadTexture("TPTaller/imagenes/segundo_cero.png", this->renderizador);
+					if(!sonido_timer[0]){
+						this->music->playSonido(TICK);
+						printf("Contador segundos 0: %d \n", contador_segundos);
+						sonido_timer[0] = true;
+					}
+					break;
+				}
+				default: {
+					segundos = loadTexture("TPTaller/imagenes/segundo_cero.png", this->renderizador);
+					this->music->playSonido(TICK);
+					printf("Contador default %d \n", contador_segundos);
+					break;
+				}
 			}
 		}
-
 		if(tipo_proyectil==1){
 			float32 angulo_aux = atan2( direccion_proyectil.y, direccion_proyectil.x );
 			angulo = angulo_aux * 180/PI;
@@ -860,7 +916,7 @@ void Dibujador::mostrarMenuArmas(int x, int y, int numero_granadas, int numero_d
 	renderTexture2(patada, this->renderizador, x , y +200, 100,100);
 }
 
-void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int cliente_id, float aux){
+void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int cliente_id, float aux, bool* sonido_timer){
 	int figuras = paquete->cantidad_figuras;
 	int personajes = paquete->cantidad_personajes;
 	for (int i = 0 ; i < figuras ; i++ ){
@@ -891,7 +947,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 		}
 	}
 	if(paquete->show_proyectil){
-		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil, paquete->contador_segundos, paquete->angulo);
+		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil, paquete->contador_segundos, paquete->angulo, sonido_timer);
 	}
 	else escalador->pararSeguidor();
 }

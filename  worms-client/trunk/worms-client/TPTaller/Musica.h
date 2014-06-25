@@ -21,11 +21,14 @@
 #define SELECT 11
 #define TIME 12
 #define START 13
-#define LANZAR_BAZOOKA 14
+#define DISPARO 14
 #define LANZAR_DINAMITA 16
+#define MECHA_DINAMITA 20
 #define LANZAR 15
 #define BYE 17
 #define WALK 18
+#define TICK 19
+#define VIDA 21
 
 #define EXPLOSION_BAZOOKA 1
 #define EXPLOSION_GRANADA 2
@@ -40,13 +43,14 @@ using namespace std;
 class Musica {
 private:
 	Mix_Music *musica = NULL;
-
+	Mix_Music *inicio = NULL;
 	Mix_Chunk *s_select = NULL;
 	Mix_Chunk *s_jump = NULL;
 
 	Mix_Chunk *s_lanzar = NULL;
 	Mix_Chunk *s_disparo = NULL;
 	Mix_Chunk *s_dinamita = NULL;
+	Mix_Chunk *s_mecha = NULL;
 
 	Mix_Chunk *s_eGranada = NULL;
 	Mix_Chunk *s_eBazooka = NULL;
@@ -60,6 +64,8 @@ private:
 	Mix_Chunk* s_start = NULL;
 	Mix_Chunk* s_bye = NULL;
 	Mix_Chunk* s_walk = NULL;
+	Mix_Chunk* s_tick = NULL;
+	Mix_Chunk* s_vida = NULL;
 
 
 public:
@@ -68,6 +74,7 @@ public:
 	 ~Musica();
 	Mix_Music* getMusica();
 	void playMusic();
+	void playMusicaInicio();
 	void stopMusic();
 	void playSonido(int id);
 };

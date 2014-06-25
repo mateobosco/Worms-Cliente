@@ -182,7 +182,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 				if (click[0] > 600 &&  click[0] < 700 && click[1] > 100 && click[1] < 200){
 //					printf(" SELECCIONA UN BAZOOKA\n");
 					paquete->arma_seleccionada=1;
-					arma = LANZAR_BAZOOKA;
+					arma = DISPARO;
 
 				}
 				else if (click[0] > 700  && click[1] > 100 && click[1] <200 && cantidad_granadas > 0){
@@ -191,7 +191,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 				}
 				else if (click[0] > 600 &&  click[0] < 700 && click[1] > 200 && click[1] < 300 && cantidad_dinamitas > 0){
 					paquete->arma_seleccionada=3;
-					arma = LANZAR_DINAMITA;
+					arma = LANZAR_DINAMITA; //MECHA_DINAMITA
 				}
 				else if (click[0] > 700 && click[1] > 200 && click[1] < 300 && cantidad_holys > 0 ){
 					paquete->arma_seleccionada=4;
@@ -212,9 +212,7 @@ structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, i
 			paquete = crearPaqueteVacio(KEYS, disparando,disparar);
 		}
 	}
-//	if(disparando){
-//		musica->playSonido(arma);
-//	}
+
 	if(!paquete){
 		paquete = crearPaqueteVacio(KEYS, disparando,disparar);
 		if(paquete->nro_jugador == -1){
@@ -233,6 +231,7 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int nro_jugador){
 	int cantidad_personajes = mundo->getCantidadPersonajes();
 	for (int i=0 ; i<cantidad_personajes; i++){
 		structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[i]);
+
 		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
 		destruirPaquetePersonaje(paquetito);
 	}
@@ -258,3 +257,4 @@ void destruirPaqueteCiclo(structPaquete* paquete){
 bool estaVacio(structEvento* paquete){
 	return (paquete->nro_jugador == MAX_CANT_JUGADORES);
 }
+

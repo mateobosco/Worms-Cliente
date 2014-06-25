@@ -12,10 +12,6 @@
 #include "Musica.h"
 
 extern void abrirLog();
-
-
-
-
 // argv[n]:
 // 			n=0: Nombre del programa
 // 			n=1: Nombre del cliente/jugador
@@ -32,6 +28,7 @@ int mainCliente(int argc, char* argv[]){
 	dibujador_inicio->init();
 	Musica* musica_inicio = new Musica();
 	musica_inicio->playSonido(START);
+	//musica_inicio->playMusicaInicio();
 	dibujador_inicio->mostrarImagenPrincipal();
 
 	char nombre[MAX_NAME_USER];
@@ -76,6 +73,7 @@ int mainCliente(int argc, char* argv[]){
 		dibujador->init();
 		Musica* music = new Musica();
 		dibujador->setMusica(music);
+		Mix_AllocateChannels(3);
 		SDL_Event event;
 		for(int i = 0; i < 322; i++) { // inicializa todas en falso
 		   KEYS[i] = false;
@@ -116,9 +114,16 @@ int mainCliente(int argc, char* argv[]){
  		bool disparar = false;
 		int arma  = 0;
 		bool disparando = false;
+
+		bool sonido_timer[6];
+		for(int i=0;i<6;i++){
+			sonido_timer[i] = false;
+		}
+		//bool one = false;
+
 		int contador = -1;
 		while(KEYS[SDLK_ESCAPE] == false){
-
+		//	if(!one)music->playSonido(VIDA); one = true;
 
 			posicion_mouse_click[0] = -1;
 			posicion_mouse_click[1] = -1;
@@ -130,14 +135,9 @@ int mainCliente(int argc, char* argv[]){
 			dibujador->dibujarFondo();
 			escalador->hacerZoom(posicion_mouse_scroll);
 			paquete = (structPaquete*) cliente->getPaquete();
-			if(paquete->cantidad_personajes==0){
-				dibujador->mostrarLoading();
-			}
+
 			if(paquete->show_proyectil && paquete->tipo_proyectil != 3)	bloquearMovimientos();
 
-			if((KEYS[102]==true)){ //agregar condicion cuando esta seleccionado
-				music->playSonido(UP);
-			}
 			cliente->setID(paquete->id);
 
 			if (cantidad_holys == 0 ){
@@ -149,8 +149,11 @@ int mainCliente(int argc, char* argv[]){
 			if (cantidad_granadas == 0 ){
 				dibujador->setGranadasAgotadas();
 			}
+
+//			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music,);
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music, cantidad_granadas, cantidad_dinamitas, cantidad_holys);
 			if ((evento->direccion == 3)||(evento->direccion == 1)) music->playSonido(WALK);
+
 			if ((evento)){
 				cliente->actualizarPaquete(evento);
 			}
@@ -160,7 +163,10 @@ int mainCliente(int argc, char* argv[]){
 			float aux=cos(aux2);
 			aux2+=0.1;
 			if (aux2==360) aux2=0;
-			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux);
+
+			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux,sonido_timer);
+	//		printf("paquet: Nombre: %s, num turno:%d \n",paquete->nombre_jugador_actual, paquete->turno_jugador);
+
 			if(!cliente->getServidorConectado()){
 				cliente->dibujarMensajeDesconexion();
 				if(cliente->getContadorCerrarse() == -1){
@@ -226,31 +232,51 @@ int mainCliente(int argc, char* argv[]){
 //				free(paquetecola);
 			}
 			if(disparar) {
-//				printf("Disparar...arma seleccionada %d\n", arma);
 				music->playSonido(arma);
-//				if(paquete->tipo_proyectil == 1) music->playSonido(DISPARO);
-//				else if((paquete->tipo_proyectil == 2)&&(paquete->tipo_proyectil == 3)&&(paquete->tipo_proyectil == 4)){
-//					music->playSonido(LANZAR);
-//				}
+				printf("Arma disparar: %d \n",arma);
 			}
 			if(dibujador->dibujar_explosion() == true){
+				printf("DIbujar_explosion == true\n");
 				if (paquete->tipo_proyectil != 0) dibujador->tipo_explosion = paquete->tipo_proyectil;
 				if (dibujador->tipo_explosion == 4){
 //					dibujador->dibujarExplosion(4);
+					printf("dibuja exploson de 4\n");
 				}
 				if (dibujador->tipo_explosion != 4) {
 //					dibujador->dibujarExplosion(dibujador->tipo_explosion);
+					printf("dibuja exploson distinta de 4\n");
 				}
 				if (play_explotar) {
-					//Ver cual arma está seleccionada y según que arma es el sonido
-					if(paquete->tipo_proyectil == 1) music->playSonido(EXPLOSION_BAZOOKA);
-					else if(paquete->tipo_proyectil == 2) music->playSonido(EXPLOSION_GRANADA);
-					else if(paquete->tipo_proyectil == 3) music->playSonido(EXPLOSION_DINAMITA);
-					else if(paquete->tipo_proyectil == 4) music->playSonido(EXPLOSION_HOLY);
-					else if(paquete->tipo_proyectil == 5) music->playSonido(KAMIKAZE);
-					else if(paquete->tipo_proyectil == 6) music->playSonido(PATADA);
+					if(paquete->tipo_proyectil == 1) {
+						printf("sonido 1 EXPLOSION BAZOOKA: %d", EXPLOSION_BAZOOKA);
+						music->playSonido(EXPLOSION_BAZOOKA);
+					}
+					else if(paquete->tipo_proyectil == 2){
+						printf("sonido 2 EXPLOSION GRANADA: %d", EXPLOSION_GRANADA);
+						music->playSonido(EXPLOSION_GRANADA);
+					}
+					else if(paquete->tipo_proyectil == 3){
+						printf("sonido 3 EXPLOSIONDINAMITA: %d", EXPLOSION_DINAMITA);
+						music->playSonido(EXPLOSION_DINAMITA);
+					}
+					else if(paquete->tipo_proyectil == 4){
+						printf("sonido 4 EXPLOSION HOLY: %d", EXPLOSION_HOLY);
+						music->playSonido(EXPLOSION_HOLY);
+					}
+					else if(paquete->tipo_proyectil == 5) {
+						printf("sonido 5 KAMIKAZE: %d", KAMIKAZE);
+						music->playSonido(KAMIKAZE);
+					}
+					else if(paquete->tipo_proyectil == 6){
+						printf("sonido 6 PATADA: %d", PATADA);
+						music->playSonido(PATADA);
+					}
 					//music->playSonido(EXPLOSION);
 					play_explotar = false;
+					arma = 0;
+					for(int i=0;i<6;i++){
+						sonido_timer[i] = false;
+					}
 				}
 			}
 			char mensaje_ganador[200];
@@ -275,8 +301,9 @@ int mainCliente(int argc, char* argv[]){
 			char mensaje_ganadores[100];
 			char mensaje_reset[100];
 			if (cliente->resetearNivel){
-				dibujador->resetearEscenario(pathTierra);
+				//dibujador->resetearEscenario(pathTierra);
 				cliente->resetearNivel = false;
+				printf("resetear nivel \n");
 				contador = 1;
 				strcpy(mensaje_reset,"Se resetea el nivel");
 				if (cliente->cant_ganadores>1){
@@ -311,6 +338,7 @@ int mainCliente(int argc, char* argv[]){
 		}
 		SDL_Delay(1500);
 		delete music;
+		delete musica_inicio;
 		delete paqueteInicial;
 		delete agua;
 		delete[] ip_sv;

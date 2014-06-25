@@ -1,5 +1,5 @@
 /*
- * Musica.cpp
+  * Musica.cpp
  *
  *  Created on: 27/05/2014
  *      Author: sami
@@ -49,10 +49,20 @@ Musica::~Musica() {
 
 void Musica::playMusic(){
 	  if( Mix_PlayingMusic() == 0 ) {
-	     //Play the music
-	     Mix_PlayMusic( this->musica, -1 );
+		Mix_VolumeMusic(50);
+	    Mix_PlayMusic( this->musica, -1 );
 	  }
 }
+
+
+void Musica::playMusicaInicio(){
+	if( this->inicio == NULL ) this->inicio = Mix_LoadMUS( "TPTaller/sonido/inicio.wav" );
+	  if( Mix_PlayingMusic() == 0 ) {
+	     //Play the music
+	     Mix_PlayMusic( this->inicio, -1 );
+	  }
+}
+
 
 void Musica::stopMusic(){
 	if( Mix_PlayingMusic() != 0 ) {
@@ -66,7 +76,6 @@ Mix_Music* Musica::getMusica(){
 }
 
 void Musica::playSonido(int id){
-
 	switch(id){
 		case SELECT: {
 
@@ -81,14 +90,16 @@ void Musica::playSonido(int id){
 			break;
 		}
 		case UP: {
-			if( !this->s_jump ) this->s_jump = Mix_LoadWAV("TPTaller/sonido/Jump1.wav");
+			if( !this->s_jump ) this->s_jump = Mix_LoadWAV("TPTaller/sonido/JUMP1.WAV");
 			if(this->s_jump == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
 				printf("No cargó WAV, %s\n", Mix_GetError());
 				return;
 			}
-			Mix_PlayChannel(-1, this->s_jump, 0);
+			//Mix_VolumeChunk(this->s_jump, 100);
+			Mix_PlayChannelTimed(-1, this->s_jump, 0, 1000);
+			//Mix_PlayChannel(-1, this->s_jump, 0);
 			break;
 		}
 		case TIME: {
@@ -99,6 +110,7 @@ void Musica::playSonido(int id){
 				printf("No cargó WAV, %s\n", Mix_GetError());
 				return;
 			}
+			Mix_VolumeChunk(this->s_time, 100);
 			Mix_PlayChannelTimed(-1, this->s_time, 0, 10000);
 			//Mix_PlayChannel(-1, this->s_time, 0);
 			break;
@@ -116,15 +128,19 @@ void Musica::playSonido(int id){
 		}
 
 		//Caso Lanzar TIpo disparo
-		case LANZAR_BAZOOKA: {
-			if( !this->s_disparo ) this->s_disparo = Mix_LoadWAV("TPTaller/sonido/disparo.wav");
+		case DISPARO: {
+			if( !this->s_disparo ) this->s_disparo = Mix_LoadWAV("TPTaller/sonido/gunFire.wav");
 			if(this->s_disparo == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
 				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
+			printf("disparo\n");
+			Mix_VolumeChunk(this->s_disparo, 100);
+			//Mix_PlayChannelTimed(-1, this->s_disparo, 0, 500);
 			Mix_PlayChannel(-1, this->s_disparo, 0);
+			break;
 		}
 		case LANZAR_DINAMITA: {
 			if( !this->s_dinamita ) this->s_dinamita = Mix_LoadWAV("TPTaller/sonido/dinamita.wav");
@@ -134,9 +150,25 @@ void Musica::playSonido(int id){
 				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
-			Mix_PlayChannel(-1, this->s_dinamita, 0);
+			printf("Sonido Lanzar dinamita\n");
+			Mix_VolumeChunk(this->s_dinamita, 100);
+			//Mix_PlayChannel(1, this->s_dinamita, 0);
+			Mix_PlayChannelTimed(-1, this->s_dinamita, -1, 4500);
+			break;
 		}
 
+		case MECHA_DINAMITA: {
+			if( !this->s_mecha ) this->s_mecha = Mix_LoadWAV("TPTaller/sonido/mechadinamita.WAV");
+			if(this->s_mecha == NULL){
+				loguear();
+				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
+				printf("No cargó WAV, %s", Mix_GetError());
+				return;
+			}
+			printf("sonido mecha dinamita\n");
+			Mix_PlayChannelTimed(-1, this->s_mecha, -1, 4500);
+			break;
+		}
 		//Lanzar no disparo
 		case LANZAR:{
 			if( !this->s_lanzar ) this->s_lanzar = Mix_LoadWAV("TPTaller/sonido/lanzar4.wav");
@@ -147,6 +179,7 @@ void Musica::playSonido(int id){
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_lanzar, 0);
+			break;
 
 		}
 		//EXPLOSIONES
@@ -247,9 +280,35 @@ void Musica::playSonido(int id){
 				printf("No cargó WAV, %s\n", Mix_GetError());
 				return;
 			}
+			//Mix_PlayChannelTimed(1, this->s_walk, 0, 500);
 			Mix_PlayChannel(-1, this->s_walk, 0);
 			break;
 		}
+		case TICK: {
+			if( !this->s_tick ) this->s_tick = Mix_LoadWAV("TPTaller/sonido/tick.WAV");
+			if(this->s_tick == NULL){
+				loguear();
+				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
+				printf("No cargó WAV, %s\n", Mix_GetError());
+				return;
+			}
+			Mix_VolumeChunk(this->s_tick, 128);
+			Mix_PlayChannelTimed(-1, this->s_tick, 0, 1000);
 
+			//Mix_PlayChannel(0, this->s_tick, 0);
+			break;
+		}
+		case VIDA:{
+			if( !this->s_vida ) this->s_vida = Mix_LoadWAV("TPTaller/sonido/OUCH.WAV");
+			if(this->s_vida == NULL){
+				loguear();
+				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
+				printf("No cargó WAV, %s", Mix_GetError());
+				return;
+			}
+			printf("Pierde vida\n");
+			Mix_PlayChannel(-1, this->s_vida, 0);
+			break;
+		}
 	}
 }

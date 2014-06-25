@@ -31,6 +31,9 @@ typedef struct structPersonaje {
 	int energia;
 	int arma_seleccionada =-1;
 	int angulo_arma;
+	int perdioVida = 0;
+	int movio = 0;
+	int salto = 0;
 }structPersonaje;
 
 typedef struct structPaquete{
@@ -41,7 +44,6 @@ typedef struct structPaquete{
 	structPersonaje vector_personajes[20];
 	int cantidad_personajes = 0;
 	int id;
-	int id_ganador;
 	char mensaje_mostrar[MAX_MENSAJE];
 	int turno_jugador;
 	int reloj;

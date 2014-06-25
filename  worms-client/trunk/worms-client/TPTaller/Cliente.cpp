@@ -244,6 +244,7 @@ int Cliente::enviarNombre(){
 
 void Cliente::activar(){
 	this->activo = true;
+	printf("CLiente %s conectado-> this.activo = true \n", this->name_client);
 }
 
 void Cliente::desactivar(){

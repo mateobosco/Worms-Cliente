@@ -57,7 +57,7 @@ public:
 	bool init();
 	void close();
 	void actualizar();
-	void dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int id_cliente, float aux);
+	void dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int id_cliente, float aux,bool* sonido_timer);
 	void dibujarMensaje();
 	void dibujar_agua(Agua* agua);
 	int getContadorCerrarse();
@@ -84,7 +84,7 @@ public:
 
 
 
-	void dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos, double angulo);
+	void dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos, double angulo, bool* sonido_timer);
 	void renderTextureCenter(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, double angulo);
 	void setMusica(Musica* musica);
 	//void borrarExplosion(b2Vec2 posicion, float32 radio);

@@ -85,6 +85,8 @@ int Dibujador::loadFromRenderedText(SDL_Texture* texture, std::string textureTex
 	//Render text surface
 	TTF_Font* gFont = TTF_OpenFont( "TPTaller/imagenes/Hilarious.ttf", 28 );
 	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
+	int mWeight = 0;
+	int mHeight = 0;
 	if( textSurface != NULL )
 	{
 		//Create texture from surface pixels
@@ -96,8 +98,8 @@ int Dibujador::loadFromRenderedText(SDL_Texture* texture, std::string textureTex
 		else
 		{
 			//Get image dimensions
-			int mWeight = textSurface->w;
-			int mHeight = textSurface->h;
+			mWeight = textSurface->w;
+			mHeight = textSurface->h;
 		}
 
 		//Get rid of old surface
@@ -108,7 +110,7 @@ int Dibujador::loadFromRenderedText(SDL_Texture* texture, std::string textureTex
 		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
 	}
 
-	return textSurface->w;
+	return mWeight;
 	//Return success
 	//return texture != NULL;
 }

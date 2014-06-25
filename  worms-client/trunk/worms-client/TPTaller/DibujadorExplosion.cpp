@@ -220,8 +220,9 @@ void DibujadorExplosion::actualizarExplosionBazooka(){
 	posicion.y = (int) posPix->y - posicion.h/2;
 
 	int cantidadMov = 20;
-	if (this->actual > 20) cantidadMov = 0;
+
 	if (this->actual > 12) cantidadMov = 10;
+	if (this->actual > 20) cantidadMov = 0;
 	if (this->actual % 2 == 1) escalador->moverDerecha(cantidadMov);
 	if (this->actual % 2 == 0) escalador->moverIzquierda(cantidadMov);
 
@@ -262,9 +263,11 @@ void DibujadorExplosion::actualizarExplosionGranada(){
 	posicion.y = (int) posPix->y - posicion.h/2;
 
 	int cantidadMov = 20;
-	if (this->actual > 17) cantidadMov = 0;
-	if (this->actual > 10) cantidadMov = 3;
+
+
 	if (this->actual > 5) cantidadMov = 10;
+	if (this->actual > 10) cantidadMov = 3;
+	if (this->actual > 17) cantidadMov = 0;
 	if (this->actual % 2 == 1) escalador->moverDerecha(cantidadMov);
 	if (this->actual % 2 == 0) escalador->moverIzquierda(cantidadMov);
 

@@ -110,7 +110,7 @@ int Dibujador::loadFromRenderedText(SDL_Texture* texture, std::string textureTex
 	{
 		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
 	}
-
+	TTF_CloseFont(gFont);
 	return mWeight;
 	//Return success
 	//return texture != NULL;

@@ -169,19 +169,19 @@ void DibujadorExplosion::start(int tipo, b2Vec2 pos, float32 radio){
 		this->pathExplosion = "TPTaller/imagenes/explosionBazooka.png";
 		this->surfaceExplosion = IMG_Load(this->pathExplosion);
 		this->textureExplosion = SDL_CreateTextureFromSurface(this->renderizador,this->surfaceExplosion);
-		printf("LLega acá %d \n", this->tipo);
+//		printf("LLega acá %d \n", this->tipo);
 	}
 	if (this->tipo == 4){
 		this->pathExplosion = "TPTaller/imagenes/explosionHoly.png";
 		this->surfaceExplosion = IMG_Load(this->pathExplosion);
 		this->textureExplosion = SDL_CreateTextureFromSurface(this->renderizador,this->surfaceExplosion);
-		printf("LLega acá %d \n", this->tipo);
+//		printf("LLega acá %d \n", this->tipo);
 	}
 	if (this->tipo == 2 || this->tipo == 3 || this->tipo == 5){
 		this->pathExplosion = "TPTaller/imagenes/explosionGranada.png";
 		this->surfaceExplosion = IMG_Load(this->pathExplosion);
 		this->textureExplosion = SDL_CreateTextureFromSurface(this->renderizador,this->surfaceExplosion);
-		printf("LLega acá %d \n", this->tipo);
+//		printf("LLega acá %d \n", this->tipo);
 	}
 	if (this->tipo == 6 ){
 		this->pathExplosion = "TPTaller/imagenes/patadaKapow.png";

@@ -122,6 +122,8 @@ private:
 	SDL_Texture* patada;
 	SDL_Texture* mira;
 	SDL_Texture* textureexplosion;
+	SDL_Texture* vidaRoja;
+	SDL_Texture* vidaVerde;
 	//SDL_Surface* surfaceTierra;
 	SDL_Window* window;
 	SDL_Texture* texturederecha;

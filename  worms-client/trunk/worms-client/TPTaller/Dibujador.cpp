@@ -32,12 +32,7 @@ Dibujador::Dibujador(){
 	this->contador_cerrarse = 10;
 	this->oscilaragua = 0;
 	this->escalaZoom = 100;
-	bazooka = loadTexture("TPTaller/imagenes/bazooka", this->renderizador);
-	granada = loadTexture("TPTaller/imagenes/granada", this->renderizador);
-	dinamita = loadTexture("TPTaller/imagenes/dinamita", this->renderizador);
-	holy = loadTexture("TPTaller/imagenes/holy", this->renderizador);
-	kamikaze = loadTexture("TPTaller/imagenes/kamikaze", this->renderizador);
-	patada = loadTexture("TPTaller/imagenes/patada", this->renderizador);
+
 }
 
 Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
@@ -72,6 +67,8 @@ Dibujador::~Dibujador(){
 	if (this->textureizquierda) SDL_DestroyTexture(textureizquierda);
 	if (this->texturederechaNEGRO) SDL_DestroyTexture(texturederechaNEGRO);
 	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
+	if (this->vidaRoja) SDL_DestroyTexture(this->vidaRoja);
+	if (this->vidaVerde) SDL_DestroyTexture(this->vidaVerde);
 
 //	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
 //	if (this->dibujadorExp) delete this->dibujadorExp;
@@ -575,6 +572,8 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 	this->dibujar_tierra(escalador, pathTierra);
 	this->dibujarAgua(escalador, agua);
 	this->dibujar_cielo(escalador, pathCielo, nivelAgua);
+	this->vidaRoja = loadTexture("TPTaller/imagenes/roja.png", this->renderizador);
+	this->vidaVerde = loadTexture("TPTaller/imagenes/verde.png", this->renderizador);
 
 }
 
@@ -695,13 +694,10 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 
 	SDL_Texture* energiatext = RenderText(energia, "TPTaller/imagenes/Hilarious.ttf", vectorcolores[0], 15); // despues preguntar el nombre de cada uno
 
-	SDL_Texture* vida_roja = loadTexture("TPTaller/imagenes/roja.png", this->renderizador);
-	SDL_Texture* vida_verde = loadTexture("TPTaller/imagenes/verde.png", this->renderizador);
-	renderTexture2(vida_roja, this->renderizador, x-w/2,y-h*2, w*2,h*2);
-	renderTexture2(vida_verde, this->renderizador, x-w/2, y-h*2, w*2 * paquete.energia/100 ,h*2);
+
+	renderTexture2(vidaRoja, this->renderizador, x-w/2,y-h*2, w*2,h*2);
+	renderTexture2(vidaVerde, this->renderizador, x-w/2, y-h*2, w*2 * paquete.energia/100 ,h*2);
 	renderTexture2(energiatext, this->renderizador,  x+w/3,y-h*1.2, w/2,h/2 );
-	if(vida_roja) SDL_DestroyTexture(vida_roja);
-	if(vida_verde) SDL_DestroyTexture(vida_verde);
 	if(paquete.energia<=0){
 		gusanito = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
 	}
@@ -1021,10 +1017,11 @@ bool Dibujador::init(){
 //	this->texturederechaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
 //	this->textureizquierdaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
 	this->flechitaroja = loadTexture("TPTaller/imagenes/flechitaroja.png", this->renderizador);
-	this->textureexplosion = loadTexture("TPTaller/imagenes/explosion.png", this->renderizador);
+//	this->textureexplosion = loadTexture("TPTaller/imagenes/explosion.png", this->renderizador);
 	this->dibujadorExp = new DibujadorExplosion(this->renderizador,this->escalador);
 //	this->texturamuerto = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
 	//this->texturahundido = loadTexture("TPTaller/imagenes/hundido.png" , this->renderizador);
+
 
 	return success;
 }
@@ -1180,7 +1177,7 @@ void Dibujador::dibujarExplosionHoly(){
 	int y = posicionVentanada->y - 100/2;
 
 //	renderTexture2(textureexplosion, this->renderizador, x, y, escalador->getVentanaX()/4, escalador->getVentanaY()/3 );
-	renderTexture2(textureexplosion, this->renderizador, x-60, y-50, 240, 200 );
+//	renderTexture2(textureexplosion, this->renderizador, x-60, y-50, 240, 200 );
 
 	delete posicionVentanada;
 

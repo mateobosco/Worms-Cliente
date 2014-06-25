@@ -574,6 +574,11 @@ void Dibujador::iniciarFondo(Agua* agua, std::string pathCielo, std::string path
 	this->dibujar_cielo(escalador, pathCielo, nivelAgua);
 	this->vidaRoja = loadTexture("TPTaller/imagenes/roja.png", this->renderizador);
 	this->vidaVerde = loadTexture("TPTaller/imagenes/verde.png", this->renderizador);
+	this->texturamuerto = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
+	this->texturederecha = loadTexture("TPTaller/imagenes/gusanitoderecha.png", this->renderizador);
+	this->textureizquierda = loadTexture("TPTaller/imagenes/gusanitoizquierda.png", this->renderizador);
+	this->texturederechaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
+	this->textureizquierdaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
 
 }
 
@@ -637,30 +642,61 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	int dir = paquete.direccion;
 	b2Vec2 tam = paquete.tamano;
 
+	bool cargo = false;
 	SDL_Texture* gusanito;
 	if (dir ==1){
-		if(paquete.arma_seleccionada == 3) gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_der.png", this->renderizador);
-		else if(paquete.arma_seleccionada == 2) gusanito = loadTexture("TPTaller/imagenes/gusanoGranadaDER.png", this->renderizador);
-		else if(paquete.arma_seleccionada == 4) gusanito = loadTexture("TPTaller/imagenes/gusanoHolyDER.png", this->renderizador);
-		else if(paquete.arma_seleccionada == 5) gusanito = loadTexture("TPTaller/imagenes/suicidader.png", this->renderizador);
-		else if(paquete.arma_seleccionada == 6) gusanito = loadTexture("TPTaller/imagenes/patadaDER.png", this->renderizador);
-		else gusanito = loadTexture("TPTaller/imagenes/gusanitoderecha.png", this->renderizador);
+		if(paquete.arma_seleccionada == 3){
+			gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_der.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.arma_seleccionada == 2){
+			gusanito = loadTexture("TPTaller/imagenes/gusanoGranadaDER.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.arma_seleccionada == 4){
+			gusanito = loadTexture("TPTaller/imagenes/gusanoHolyDER.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.arma_seleccionada == 5){
+			gusanito = loadTexture("TPTaller/imagenes/suicidader.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.arma_seleccionada == 6){
+			gusanito = loadTexture("TPTaller/imagenes/patadaDER.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.energia<=0) gusanito = this->texturamuerto;
+		else if (paquete.conectado == 0) gusanito = this->texturederechaNEGRO;
+		else gusanito = this->texturederecha;
 
 	}
 	if (dir == -1){
-		if(paquete.arma_seleccionada == 3) gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_izq.png", this->renderizador);
-		else if(paquete.arma_seleccionada == 2) gusanito = loadTexture("TPTaller/imagenes/gusanoGranadaIZQ.png", this->renderizador);
-		else if(paquete.arma_seleccionada == 4) gusanito = loadTexture("TPTaller/imagenes/gusanoHolyIZQ.png", this->renderizador);
-		else if(paquete.arma_seleccionada == 5) gusanito = loadTexture("TPTaller/imagenes/suicidaizq.png", this->renderizador);
-		else if(paquete.arma_seleccionada == 6) gusanito = loadTexture("TPTaller/imagenes/patadaIZQ.png", this->renderizador);
-		else gusanito = loadTexture("TPTaller/imagenes/gusanitoizquierda.png", this->renderizador);
+		if(paquete.arma_seleccionada == 3){
+			gusanito = loadTexture("TPTaller/imagenes/gusano_tnt_izq.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.arma_seleccionada == 2){
+			gusanito = loadTexture("TPTaller/imagenes/gusanoGranadaIZQ.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.arma_seleccionada == 4){
+			gusanito = loadTexture("TPTaller/imagenes/gusanoHolyIZQ.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.arma_seleccionada == 5){
+			gusanito = loadTexture("TPTaller/imagenes/suicidaizq.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.arma_seleccionada == 6){
+			gusanito = loadTexture("TPTaller/imagenes/patadaIZQ.png", this->renderizador);
+			cargo = true;
+		}
+		else if(paquete.energia<=0) gusanito = this->texturamuerto;
+		else if (paquete.conectado == 0) gusanito = this->textureizquierdaNEGRO;
+		else gusanito = this->textureizquierda;
 	}
-	if (dir ==1 && paquete.conectado == 0){
-		gusanito = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
-	}
-	if (dir == -1 && paquete.conectado == 0){
-		gusanito = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
-	}
+
+
 
 	b2Vec2 posicion = paquete.posicion;
 	b2Vec2* posicionVentanada = escalador->aplicarZoomPosicion(posicion);
@@ -670,6 +706,9 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	int y = posicionVentanada->y - altoPX/2;
 	int w = anchoPX;
 	int h = altoPX;
+
+	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
+	if (cargo) SDL_DestroyTexture(gusanito);
 
 	SDL_Texture *image;
 	SDL_Color vectorcolores[4];
@@ -698,12 +737,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	renderTexture2(vidaRoja, this->renderizador, x-w/2,y-h*2, w*2,h*2);
 	renderTexture2(vidaVerde, this->renderizador, x-w/2, y-h*2, w*2 * paquete.energia/100 ,h*2);
 	renderTexture2(energiatext, this->renderizador,  x+w/3,y-h*1.2, w/2,h/2 );
-	if(paquete.energia<=0){
-		gusanito = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
-	}
 
-	renderTexture2(gusanito, this->renderizador,x,y ,w , h  );
-	if (gusanito) SDL_DestroyTexture(gusanito);
 
 	if(paquete.arma_seleccionada == 1 && paquete.direccion ==1){
 		SDL_Texture* bazooka = loadTexture("TPTaller/imagenes/bazooka2.png", this->renderizador);
@@ -1012,15 +1046,11 @@ bool Dibujador::init(){
 			}
 		}
 	}
-//	this->texturederecha = loadTexture("TPTaller/imagenes/gusanitoderecha.png", this->renderizador);
-//	this->textureizquierda = loadTexture("TPTaller/imagenes/gusanitoizquierda.png", this->renderizador);
-//	this->texturederechaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroder.png", this->renderizador);
-//	this->textureizquierdaNEGRO = loadTexture("TPTaller/imagenes/gusanitonegroizq.png" , this->renderizador);
+
 	this->flechitaroja = loadTexture("TPTaller/imagenes/flechitaroja.png", this->renderizador);
 //	this->textureexplosion = loadTexture("TPTaller/imagenes/explosion.png", this->renderizador);
 	this->dibujadorExp = new DibujadorExplosion(this->renderizador,this->escalador);
-//	this->texturamuerto = loadTexture("TPTaller/imagenes/muerto.png" , this->renderizador);
-	//this->texturahundido = loadTexture("TPTaller/imagenes/hundido.png" , this->renderizador);
+
 
 
 	return success;

@@ -131,7 +131,6 @@ private:
 	SDL_Texture* texturederechaNEGRO;
 	SDL_Texture* textureizquierdaNEGRO;
 	SDL_Texture* texturamuerto;
-	SDL_Texture* texturahundido;
 	SDL_Texture* texturaFondo;
 	float32 oscilaragua;
 	int contador_cerrarse;

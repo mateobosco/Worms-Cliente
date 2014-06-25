@@ -69,6 +69,7 @@ Dibujador::~Dibujador(){
 	if (this->textureizquierdaNEGRO) SDL_DestroyTexture(textureizquierdaNEGRO);
 	if (this->vidaRoja) SDL_DestroyTexture(this->vidaRoja);
 	if (this->vidaVerde) SDL_DestroyTexture(this->vidaVerde);
+	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
 
 //	if (this->surfaceTierra) SDL_FreeSurface(this->surfaceTierra);
 //	if (this->dibujadorExp) delete this->dibujadorExp;

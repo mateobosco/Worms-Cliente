@@ -231,7 +231,6 @@ structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int nro_jugador){
 	int cantidad_personajes = mundo->getCantidadPersonajes();
 	for (int i=0 ; i<cantidad_personajes; i++){
 		structPersonaje* paquetito = crearPaquetePersonaje(vector_personajes[i]);
-
 		memcpy(&paquete->vector_personajes[i], paquetito, sizeof(structPersonaje));
 		destruirPaquetePersonaje(paquetito);
 	}

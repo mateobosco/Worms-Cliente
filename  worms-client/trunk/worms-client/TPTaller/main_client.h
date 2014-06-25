@@ -152,7 +152,7 @@ int mainCliente(int argc, char* argv[]){
 
 //			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music,);
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music, cantidad_granadas, cantidad_dinamitas, cantidad_holys);
-//			if ((evento->direccion == 3)||(evento->direccion == 1)) music->playSonido(WALK);
+
 
 			if ((evento)){
 				cliente->actualizarPaquete(evento);
@@ -163,7 +163,7 @@ int mainCliente(int argc, char* argv[]){
 			float aux=cos(aux2);
 			aux2+=0.1;
 			if (aux2==360) aux2=0;
-
+			//if(paquete->comenzar>1) continue;
 			dibujador->dibujarPaquete(paquete, cliente->getNombre(), cliente->getID(), aux,sonido_timer);
 	//		printf("paquet: Nombre: %s, num turno:%d \n",paquete->nombre_jugador_actual, paquete->turno_jugador);
 

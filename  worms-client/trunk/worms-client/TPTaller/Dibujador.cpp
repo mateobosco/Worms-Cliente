@@ -956,6 +956,7 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 //		structFigura* vector = paquete->vector_figuras;
 //		this->dibujarPaqueteFigura(vector[i]);
 //	}
+
 	SDL_Color color = {0,0,0};
 	SDL_Texture* nombre = RenderText(nombre_cliente, "TPTaller/imagenes/Hilarious.ttf", color, 20); // despues preguntar el nombre de cada uno
 	renderTexture2(nombre, this->renderizador, 0 , 0 , 100, 30 );
@@ -979,6 +980,8 @@ void Dibujador::dibujarPaquete(structPaquete* paquete, char* nombre_cliente, int
 			this->dibujarPaquetePersonaje(vector1[j], nombre_cliente, false, cliente_id, aux, potencia, paquete->reloj, paquete->turno_jugador); // no es propio
 		}
 	}
+	//if(paquete->salto) this->music->playSonido(UP);
+	//if(paquete->movio) this->music->playSonido(WALK);
 	if(paquete->show_proyectil){
 		this->dibujarProyectil(paquete->tipo_proyectil, paquete->posicion_proyectil, paquete->direccion_proyectil, paquete->tamanio_proyectil, paquete->contador_segundos, paquete->angulo, sonido_timer);
 	}
@@ -1063,6 +1066,7 @@ void Dibujador::close(){
 	SDL_DestroyRenderer(renderizador);
 	SDL_DestroyWindow(window);
 	Mix_CloseAudio();
+	Mix_Quit();
 	SDL_Quit();
 }
 

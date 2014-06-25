@@ -45,7 +45,30 @@ Musica::~Musica() {
 	this->s_explosion = NULL;
 	Mix_FreeChunk(this->s_start);
 	this->s_start = NULL;
+	Mix_FreeChunk(this->s_lanzar);
+	this->s_lanzar = NULL;
+	Mix_FreeChunk(this->s_disparo);
+	this->s_disparo = NULL;
+	Mix_FreeChunk(this->s_dinamita);
+	this->s_dinamita = NULL;
+	Mix_FreeChunk(this->s_mecha);
+	this->s_mecha = NULL;
+	Mix_FreeChunk(this->s_time);
+	this->s_time = NULL;
+	Mix_FreeChunk(this->s_bye);
+	this->s_bye = NULL;
+	Mix_FreeChunk(this->s_walk);
+	this->s_walk = NULL;
+	Mix_FreeChunk(this->s_tick);
+	this->s_tick = NULL;
+	Mix_FreeChunk(this->s_vida);
+	this->s_vida = NULL;
 }
+
+
+
+
+
 
 void Musica::playMusic(){
 	  if( Mix_PlayingMusic() == 0 ) {
@@ -83,7 +106,6 @@ void Musica::playSonido(int id){
 			if(this->s_select == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_select, 0);
@@ -94,7 +116,6 @@ void Musica::playSonido(int id){
 			if(this->s_jump == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s\n", Mix_GetError());
 				return;
 			}
 			//Mix_VolumeChunk(this->s_jump, 100);
@@ -107,10 +128,9 @@ void Musica::playSonido(int id){
 			if(this->s_time == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s\n", Mix_GetError());
 				return;
 			}
-			Mix_VolumeChunk(this->s_time, 100);
+			Mix_VolumeChunk(this->s_time, 128);
 			Mix_PlayChannelTimed(-1, this->s_time, 0, 10000);
 			//Mix_PlayChannel(-1, this->s_time, 0);
 			break;
@@ -120,7 +140,6 @@ void Musica::playSonido(int id){
 			if(this->s_start == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_start, 0);
@@ -133,24 +152,22 @@ void Musica::playSonido(int id){
 			if(this->s_disparo == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
-			printf("disparo\n");
+			//printf("disparo\n");
 			Mix_VolumeChunk(this->s_disparo, 100);
 			//Mix_PlayChannelTimed(-1, this->s_disparo, 0, 500);
 			Mix_PlayChannel(-1, this->s_disparo, 0);
 			break;
 		}
 		case LANZAR_DINAMITA: {
-			if( !this->s_dinamita ) this->s_dinamita = Mix_LoadWAV("TPTaller/sonido/dinamita.wav");
+			if( !this->s_dinamita ) this->s_dinamita = Mix_LoadWAV("TPTaller/sonido/export (1).wav");//dinamita.wav
 			if(this->s_dinamita == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
-			printf("Sonido Lanzar dinamita\n");
+			//printf("Sonido Lanzar dinamita\n");
 			Mix_VolumeChunk(this->s_dinamita, 100);
 			//Mix_PlayChannel(1, this->s_dinamita, 0);
 			Mix_PlayChannelTimed(-1, this->s_dinamita, -1, 4500);
@@ -162,10 +179,9 @@ void Musica::playSonido(int id){
 			if(this->s_mecha == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
-			printf("sonido mecha dinamita\n");
+			//printf("sonido mecha dinamita\n");
 			Mix_PlayChannelTimed(-1, this->s_mecha, -1, 4500);
 			break;
 		}
@@ -175,7 +191,6 @@ void Musica::playSonido(int id){
 			if(this->s_lanzar == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_lanzar, 0);
@@ -188,7 +203,6 @@ void Musica::playSonido(int id){
 			if(this->s_eBazooka == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_eBazooka, 0);
@@ -200,7 +214,6 @@ void Musica::playSonido(int id){
 			if(this->s_eGranada == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_eGranada, 0);
@@ -211,7 +224,6 @@ void Musica::playSonido(int id){
 			if(this->s_eDinamita == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_eDinamita, 0);
@@ -222,7 +234,6 @@ void Musica::playSonido(int id){
 			if(this->s_eHoly == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_eHoly, 0);
@@ -233,7 +244,6 @@ void Musica::playSonido(int id){
 			if(this->s_kamikaze == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_kamikaze, 0);
@@ -244,7 +254,6 @@ void Musica::playSonido(int id){
 			if(this->s_patada == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_patada, 0);
@@ -255,7 +264,6 @@ void Musica::playSonido(int id){
 			if(this->s_explosion == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s\n", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_explosion, 0);
@@ -266,7 +274,6 @@ void Musica::playSonido(int id){
 			if(this->s_bye == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s\n", Mix_GetError());
 				return;
 			}
 			Mix_PlayChannel(-1, this->s_bye, 0);
@@ -277,7 +284,6 @@ void Musica::playSonido(int id){
 			if(this->s_walk == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s\n", Mix_GetError());
 				return;
 			}
 			//Mix_PlayChannelTimed(1, this->s_walk, 0, 500);
@@ -289,7 +295,6 @@ void Musica::playSonido(int id){
 			if(this->s_tick == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s\n", Mix_GetError());
 				return;
 			}
 			Mix_VolumeChunk(this->s_tick, 128);
@@ -303,10 +308,9 @@ void Musica::playSonido(int id){
 			if(this->s_vida == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
-				printf("No cargó WAV, %s", Mix_GetError());
 				return;
 			}
-			printf("Pierde vida\n");
+			//printf("Pierde vida\n");
 			Mix_PlayChannel(-1, this->s_vida, 0);
 			break;
 		}

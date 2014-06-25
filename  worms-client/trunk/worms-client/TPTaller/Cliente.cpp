@@ -182,7 +182,7 @@ int Cliente::enviar(char* mensaje, size_t longData){
 
 int Cliente::runRecibirInfo(){
 	while(this->activo){
-		SDL_Delay(15);
+		SDL_Delay(15); 
 		char buffer[MAX_PACK];
 		memset(buffer, 0, MAX_PACK);
 		int recibidos = this->socket_cl->recibir(buffer, MAX_PACK);

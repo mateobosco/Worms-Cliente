@@ -197,7 +197,11 @@ int Cliente::runRecibirInfo(){
 				printf("LLEGA UNA EXPLOSION en %f,%f \n", paquete->posicion_proyectil.x,paquete->posicion_proyectil.y);
 				cola_explosiones.push(paqueteencolar);
 			}
-			if (paquete->resetear) this->resetearNivel = true;
+			if (paquete->resetear){
+				this->resetearNivel = true;
+				strcpy(this->ganador,paquete->ganador);
+				this->cant_ganadores = paquete->cant_ganadores;
+			}
 		}
 		else if(recibidos ==0){
 			this->servidor_conectado = false;

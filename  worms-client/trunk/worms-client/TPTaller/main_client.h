@@ -141,20 +141,15 @@ int mainCliente(int argc, char* argv[]){
 			cliente->setID(paquete->id);
 
 			if (cantidad_holys == 0 ){
-				printf("SE AGOTARON LAS HOLYS \n");
 				dibujador->setHolysAgotadas();
 			}
 			if (cantidad_dinamitas == 0 ){
-				printf(" SE AGAOTARON LAS DINAMITAS \n");
 				dibujador->setDinamitasAgotadas();
 			}
 			if (cantidad_granadas == 0 ){
 				dibujador->setGranadasAgotadas();
 			}
-
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music, cantidad_granadas, cantidad_dinamitas, cantidad_holys);
-
-//			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando);
 			if ((evento->direccion == 3)||(evento->direccion == 1)) music->playSonido(WALK);
 			if ((evento)){
 				cliente->actualizarPaquete(evento);
@@ -217,31 +212,14 @@ int mainCliente(int argc, char* argv[]){
 					dibujador->tipo_explosion = paquetecola->tipo_proyectil;
 					dibujador->dibujarExplosion(paquetecola->tipo_proyectil);
 				}
-
-
-				printf(" EL TIPO DE PROYECTIL ES %d \n", paquete->tipo_proyectil);
-				printf(" EL RADIO DE EXPLOSION ES %d \n", paquetecola->radio_explosion);
-				printf(" EL CLIENTE ID ES %d \n", cliente->getID());
-				printf(" EL TURNO JUGADOR ES  %d \n", paquetecola->turno_jugador);
-
-
-
 				if(paquete->tipo_proyectil ==2 && paquetecola->turno_jugador == cliente->getID()){
-					printf(" RESTO UNA A LA GRANADA");
 					cantidad_granadas--;
 				}if(paquete->tipo_proyectil == 3 && paquetecola->turno_jugador == cliente->getID()){
-					printf(" RESTO UNA A LA DINAMITA");
 					cantidad_dinamitas--;
 				}
 				if(paquete->tipo_proyectil == 4 && paquetecola->turno_jugador == cliente->getID()){
-					printf(" RESTO UNA A LA HOLY");
 					cantidad_holys--;
 				}
-
-
-
-
-
 
 				play_explotar = true;
 				cliente->desencolarExplosion();
@@ -275,9 +253,9 @@ int mainCliente(int argc, char* argv[]){
 					play_explotar = false;
 				}
 			}
+			char mensaje_ganador[200];
 
 			if(paquete->ganador[0] != '\0'){
-				char mensaje_ganador[200];
 				if(paquete->resultado == 0){
 					int cant_ganadores = paquete->cant_ganadores;
 					sprintf(mensaje_ganador, "Empate entre:");
@@ -286,30 +264,38 @@ int mainCliente(int argc, char* argv[]){
 						sprintf(mensaje_ganador, ",");
 					}
 					mensaje_ganador[strlen(mensaje_ganador) - 1] = '\0';
-					dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
+//					dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
 					printf(mensaje_ganador);
-					SDL_Delay(5000);
+//					SDL_Delay(5000);
 				} else{
 					sprintf(mensaje_ganador, "El ganador es: %s", paquete->ganador);
-					dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
+//					dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
 				}
-//<<<<<<< .mine
-//				sprintf(mensaje_ganador, "El ganador es: %s", paquete->ganador);
-//				dibujador->mostrarCartel(mensaje_ganador, 250, 250, 300, 100);
-//=======
-//>>>>>>> .r122
 			}
-
+			char mensaje_ganadores[100];
+			char mensaje_reset[100];
 			if (cliente->resetearNivel){
 				dibujador->resetearEscenario(pathTierra);
 				cliente->resetearNivel = false;
 				contador = 1;
+				strcpy(mensaje_reset,"Se resetea el nivel");
+				if (cliente->cant_ganadores>1){
+					sprintf(mensaje_ganadores,"Empate entre: %s", cliente->ganador);
+				}
+				if (cliente->cant_ganadores == 1){
+					sprintf(mensaje_ganadores, "Gano: %s ", cliente->ganador);
+				}
 
 			}
 			if (contador > 0){
-				char mensaje[100];
-				strcpy(mensaje,"Se resetea el nivel");
-				dibujador->mostrarCartel(mensaje, 250,250,300,100);
+
+				dibujador->mostrarCartel(mensaje_ganadores,250, 150,300,100);
+				printf("%s \n", mensaje_ganadores);
+				printf("%s y la cantidad de ganadores es %d  \n", cliente->ganador, cliente->cant_ganadores);
+
+
+				dibujador->mostrarCartel(mensaje_reset, 250,250,300,100);
+
 				contador ++;
 				if (contador == 50) contador = -1;
 

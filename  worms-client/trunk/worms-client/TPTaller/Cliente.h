@@ -51,6 +51,7 @@ class Cliente{
 
 
 
+
 	public:
 		Cliente(const char *name, const char *ip_sv, const char* puerto);
 		Cliente(int fd);
@@ -91,6 +92,8 @@ class Cliente{
 		size_t getTamanioColaExplosiones();
 		structPaquete* getPaqueteColaExplosiones();
 		bool resetearNivel;
+		char ganador[MAX_NAME_USER*5];
+		int cant_ganadores;
 
 };
 

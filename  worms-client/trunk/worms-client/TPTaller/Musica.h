@@ -36,7 +36,7 @@
 #define EXPLOSION_HOLY 4
 #define KAMIKAZE 5
 #define PATADA 6
-#define EXPLOSION 7
+#define FUEGO 7
 
 
 using namespace std;
@@ -60,7 +60,7 @@ private:
 	Mix_Chunk* s_patada = NULL;
 
 	Mix_Chunk* s_time = NULL;
-	Mix_Chunk* s_explosion = NULL;
+	Mix_Chunk* s_fuego = NULL;
 	Mix_Chunk* s_start = NULL;
 	Mix_Chunk* s_bye = NULL;
 	Mix_Chunk* s_walk = NULL;

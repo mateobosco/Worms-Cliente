@@ -47,10 +47,10 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 
 Cliente::~Cliente(){
 	this->activo = false;
-	delete[] this->name_client;
+	if(this->name_client) delete[] this->name_client;
 	SDL_WaitThread(this->hilos.enviar, 0);
 	SDL_WaitThread(this->hilos.recibir, 0);
-	delete this->socket_cl;
+	if(this->socket_cl)delete this->socket_cl;
 	SDL_DestroyMutex(mutex);
 	Cliente::cant_clientes--;
 }

@@ -28,7 +28,7 @@ Servidor::~Servidor() {
 	this->finalizar = true;
 	SDL_WaitThread(this->escuchar, 0);
 	SDL_WaitThread(this->aceptar, 0);
-	delete this->listener;
+	if(this->listener)delete this->listener; listener = NULL;
 	SDL_DestroyMutex(mutex);
 }
 
@@ -119,7 +119,7 @@ int Servidor::aceptarConexiones(){
 						cliente->setJugador(cliente_viejo->getJugador());
 						cliente->getJugador()->conectar();
 						cliente->setID(cliente_viejo->getID());
-						delete cliente_viejo;
+						if(cliente_viejo) delete cliente_viejo;
 					} else{
 						this->cantClientes++;
 					}
@@ -149,7 +149,7 @@ int Servidor::aceptarConexiones(){
 					this->setAceptado(false);
 					printf("Cliente Rechazado\n");
 					if (this->runEnviarInfoInicial(cliente) <= 0 ){} /*log Error todo */
-					delete cliente;
+					if(cliente) delete cliente; cliente = NULL;
 					return EXIT_FAILURE;
 				}
 			} else{
@@ -159,7 +159,7 @@ int Servidor::aceptarConexiones(){
 				if(this->runEnviarInfoInicial(cliente)<=0)	return EXIT_FAILURE;
 			}
 		}else {
-			delete cliente;
+			if(cliente) delete cliente; cliente = NULL;
 			return EXIT_FAILURE;
 		}
 	}else{

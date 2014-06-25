@@ -30,19 +30,19 @@ Juego::~Juego(){
 	for(size_t i= 0; i < cantidad_figuras ; i++){
 		if (figuras != NULL){
 			if(figuras[i] != NULL){
-				delete figuras[i];
+				if(figuras[i]) delete figuras[i];
 			}
 		}
 	}
-	delete[] figuras;
-	delete agua;
-	delete lector;
-	delete mundo;
-	delete manejador;
-	delete escalador;
+	if(figuras) delete[] figuras;
+	if(agua) delete agua;
+	if(lector) delete lector;
+	if(mundo) delete mundo;
+	if(manejador) delete manejador;
+	if(escalador) delete escalador;
 	for(Uint8 i = 0; i < cantidad_jugadores; i++){
 		if(jugadores[i] != NULL){
-			delete jugadores[i];
+			if(jugadores[i]) delete jugadores[i];
 		}
 	}
 }
@@ -89,8 +89,8 @@ void Juego::cargar() {
 	Node *nodo_escenario = this->cargaInicial(cargador);
 	this->cargaPrincipal(cargador, *nodo_escenario);
 	inicial = cargador->getPaqueteInicial();
-	delete nodo_escenario;
-	delete cargador;
+	if(nodo_escenario) delete nodo_escenario;
+	if(cargador) delete cargador;
 }
 
 
@@ -110,7 +110,7 @@ Node* Juego::cargaInicial(Cargador* cargador){
 			(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"Escenario"))||(cargador->getNodo(cargador->getNodo(),*nodo_escenario,"Esc")))){
 		loguear();
 		logFile << "    Error   " << "\t No se encuentra el escenario. Se carga escenario por defecto."<<endl;
-		delete cargador;
+		if(cargador) delete cargador;
 		cargador = new Cargador(pathDefEs.c_str());
 		(*nodo_escenario) = cargador->getNodo()["escenario"];
 	}
@@ -199,7 +199,7 @@ void Juego::cargaPrincipal(Cargador *cargador, Node nodo_escenario){
 	cargarCielo(cargador, nodo_escenario);
 	cargarLector(tierra);
 	if(this->lector == NULL){
-		delete this->mundo;
+		if(this->mundo) delete this->mundo;
 		this->mundo = NULL;
 	}
 	generarTierra();

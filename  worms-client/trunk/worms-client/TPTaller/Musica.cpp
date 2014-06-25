@@ -21,47 +21,47 @@ Musica::Musica() {
 }
 
 Musica::~Musica() {
-	Mix_FreeMusic( this->musica );
+	if(this->musica) Mix_FreeMusic( this->musica );
 	this->musica = NULL;
 
-	Mix_FreeChunk(this->s_eBazooka);
+	if(this->s_eBazooka) Mix_FreeChunk(this->s_eBazooka);
 	this->s_eBazooka = NULL;
-	Mix_FreeChunk(this->s_eGranada);
+	if(this->s_eGranada)Mix_FreeChunk(this->s_eGranada);
 	this->s_eGranada = NULL;
-	Mix_FreeChunk(this->s_eDinamita);
+	if(this->s_eDinamita)Mix_FreeChunk(this->s_eDinamita);
 	this->s_eDinamita = NULL;
-	Mix_FreeChunk(this->s_eHoly);
+	if(this->s_eHoly)Mix_FreeChunk(this->s_eHoly);
 	this->s_eHoly = NULL;
-	Mix_FreeChunk(this->s_kamikaze);
+	if(this->s_kamikaze) Mix_FreeChunk(this->s_kamikaze);
 	this->s_kamikaze = NULL;
-	Mix_FreeChunk(this->s_patada);
+	if(this->s_patada) Mix_FreeChunk(this->s_patada);
 	this->s_patada = NULL;
 
-	Mix_FreeChunk(this->s_select);
+	if(this->s_select) Mix_FreeChunk(this->s_select);
 	this->s_select = NULL;
-	Mix_FreeChunk(this->s_jump);
+	if(this->s_jump) Mix_FreeChunk(this->s_jump);
 	this->s_jump = NULL;
-	Mix_FreeChunk(this->s_explosion);
-	this->s_explosion = NULL;
-	Mix_FreeChunk(this->s_start);
+	if(this->s_fuego) Mix_FreeChunk(this->s_fuego);
+	this->s_fuego = NULL;
+	if(this->s_start)Mix_FreeChunk(this->s_start);
 	this->s_start = NULL;
-	Mix_FreeChunk(this->s_lanzar);
+	if(this->s_lanzar) Mix_FreeChunk(this->s_lanzar);
 	this->s_lanzar = NULL;
-	Mix_FreeChunk(this->s_disparo);
+	if(this->s_disparo) Mix_FreeChunk(this->s_disparo);
 	this->s_disparo = NULL;
-	Mix_FreeChunk(this->s_dinamita);
+	if(this->s_dinamita) Mix_FreeChunk(this->s_dinamita);
 	this->s_dinamita = NULL;
-	Mix_FreeChunk(this->s_mecha);
+	if(this->s_mecha) Mix_FreeChunk(this->s_mecha);
 	this->s_mecha = NULL;
-	Mix_FreeChunk(this->s_time);
+	if(this->s_time) Mix_FreeChunk(this->s_time);
 	this->s_time = NULL;
-	Mix_FreeChunk(this->s_bye);
+	if(this->s_bye) Mix_FreeChunk(this->s_bye);
 	this->s_bye = NULL;
-	Mix_FreeChunk(this->s_walk);
+	if(this->s_walk) Mix_FreeChunk(this->s_walk);
 	this->s_walk = NULL;
-	Mix_FreeChunk(this->s_tick);
+	if(this->s_tick) Mix_FreeChunk(this->s_tick);
 	this->s_tick = NULL;
-	Mix_FreeChunk(this->s_vida);
+	if(this->s_vida) Mix_FreeChunk(this->s_vida);
 	this->s_vida = NULL;
 }
 
@@ -131,7 +131,7 @@ void Musica::playSonido(int id){
 				return;
 			}
 			Mix_VolumeChunk(this->s_time, 128);
-			Mix_PlayChannelTimed(-1, this->s_time, 0, 10000);
+			Mix_PlayChannelTimed(-1, this->s_time, -1, 10000);
 			//Mix_PlayChannel(-1, this->s_time, 0);
 			break;
 		}
@@ -168,9 +168,9 @@ void Musica::playSonido(int id){
 				return;
 			}
 			//printf("Sonido Lanzar dinamita\n");
-			Mix_VolumeChunk(this->s_dinamita, 100);
-			//Mix_PlayChannel(1, this->s_dinamita, 0);
-			Mix_PlayChannelTimed(-1, this->s_dinamita, -1, 4500);
+			Mix_VolumeChunk(this->s_dinamita, 80);
+			Mix_PlayChannel(1, this->s_dinamita, 0);
+			//Mix_PlayChannelTimed(-1, this->s_dinamita, -1, 4500);
 			break;
 		}
 
@@ -259,14 +259,14 @@ void Musica::playSonido(int id){
 			Mix_PlayChannel(-1, this->s_patada, 0);
 			break;
 		}
-		case EXPLOSION:{
-			if( !this->s_explosion ) this->s_explosion = Mix_LoadWAV("TPTaller/sonido/Explosion2.wav");
-			if(this->s_explosion == NULL){
+		case FUEGO:{
+			if( !this->s_fuego ) this->s_fuego = Mix_LoadWAV("TPTaller/sonido/fuego.WAV");
+			if(this->s_fuego == NULL){
 				loguear();
 				logFile << "No se pudo cargar sonido: %s" << Mix_GetError() << endl;
 				return;
 			}
-			Mix_PlayChannel(-1, this->s_explosion, 0);
+			Mix_PlayChannel(-1, this->s_fuego, 0);
 			break;
 		}
 		case BYE:{

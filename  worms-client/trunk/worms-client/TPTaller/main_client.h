@@ -49,7 +49,7 @@ int mainCliente(int argc, char* argv[]){
 	strcpy(puerto,port);
 
 	Cliente* cliente = new Cliente(nombre, ip_sv, puerto);
-	delete dibujador_inicio;
+	if(dibujador_inicio) delete dibujador_inicio;
 	if(cliente->conectar() != EXIT_SUCCESS){
 		printf("No se ha podido realizar la conexion\n"
 				"El programa se cerrará en 5 segundos.\n");
@@ -252,6 +252,7 @@ int mainCliente(int argc, char* argv[]){
 //				free(paquetecola);
 			}
 			if(disparar) {
+				music->playSonido(FUEGO);
 				music->playSonido(arma);
 //				printf("Arma disparar: %d \n",arma);
 			}
@@ -351,19 +352,19 @@ int mainCliente(int argc, char* argv[]){
 			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca
 
 			posicion_mouse_scroll[2] = 0;
-			delete[] paquete;
+			if(paquete) delete[] paquete;
 		}
 		if(KEYS[SDLK_ESCAPE] == true){
 			music->stopMusic();
 			music->playSonido(BYE);
 		}
 		SDL_Delay(1500);
-		delete music;
-		delete musica_inicio;
-		delete paqueteInicial;
-		delete agua;
-		delete[] ip_sv;
-		delete[] puerto;
+		if(music)delete music;
+		if(musica_inicio) delete musica_inicio;
+		if(paqueteInicial) delete paqueteInicial;
+		if(agua) delete agua; agua = NULL;
+		if(ip_sv) delete[] ip_sv; ip_sv = NULL;
+		if(puerto) delete[] puerto; puerto = NULL;
 		free(posicion_mouse_click);
 		free(posicion_mouse_scroll);
 		free(posicion_mouse_movimiento);

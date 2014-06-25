@@ -101,11 +101,11 @@ void generarFechaYHora(char* fecha, char* hora){
 	strcat(hora,":");
 	strcat(hora, minutos);
 
-	delete[] anio;
-	delete[] mes;
-	delete[] dia;
-	delete[] horas;
-	delete[] minutos;
+	if(anio) delete[] anio;
+	if(mes) delete[] mes;
+	if(dia) delete[] dia;
+	if(horas) delete[] horas;
+	if(minutos) delete[] minutos;
 }
 
 void loguear(){
@@ -113,8 +113,8 @@ void loguear(){
 	char* hora = new char[8];
 	generarFechaYHora(fecha,hora);
 	logFile << fecha << " " << hora ;
-	delete[] fecha;
-	delete[] hora;
+	if(fecha) delete[] fecha;
+	if(hora) delete[] hora;
 }
 
 void abrirLog(){

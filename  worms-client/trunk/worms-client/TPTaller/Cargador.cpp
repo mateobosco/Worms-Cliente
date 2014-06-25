@@ -39,7 +39,7 @@ Cargador::~Cargador(){
 		logFile << "    Warning" << "\t El archivo de escenario no se pudo cerrar." << endl;
 	}
 	this->nodo_inicial = NULL;
-	delete this->datos; //todo
+	if(this->datos) delete this->datos; //todo
 }
 
 Node Cargador::getNodo(){
@@ -262,7 +262,7 @@ Rectangulo* Cargador::loadRectangulo(Node nodo, Mundo* mundo, Escalador *escalad
 	if (mundo->checkOverlap(rect, escalador,i)){
 		return rect;
 	} else{
-		delete rect;
+		if(rect) delete rect;
 		return NULL;
 	}
 }
@@ -278,7 +278,7 @@ Circulo* Cargador::loadCirculo (Node nodo, Mundo* mundo, Escalador *escalador,si
 	if (mundo->checkOverlap(circulo, escalador,i)){
 		return circulo;
 	} else{
-		delete circulo;
+		if(circulo) delete circulo;
 		return NULL;
 	}
 }
@@ -295,7 +295,7 @@ Poligono* Cargador::loadPoligono (Node nodo, Mundo* mundo, Escalador *escalador,
 	if (mundo->checkOverlap(poligono, escalador,i)){
 		return poligono;
 	} else{
-		delete poligono;
+		if(poligono) delete poligono;
 		return NULL;
 	}
 }

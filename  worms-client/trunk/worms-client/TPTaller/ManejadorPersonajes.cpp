@@ -13,7 +13,7 @@ ManejadorPersonajes::ManejadorPersonajes() {
 
 ManejadorPersonajes::~ManejadorPersonajes() {
 	//Es responsabilidad de cada Jugador borrar sus personajes
-	delete[] this->vector_personajes;
+	if(this->vector_personajes)delete[] this->vector_personajes;
 }
 
 void ManejadorPersonajes::seleccionarPersonaje(b2Vec2 posicion, int id_jugador){

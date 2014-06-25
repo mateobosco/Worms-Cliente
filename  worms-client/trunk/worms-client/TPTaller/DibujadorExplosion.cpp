@@ -152,7 +152,7 @@ void DibujadorExplosion::actualizarExplosionHoly(){
 	recta.h = puntos.h;
 	SDL_RenderCopy(this->renderizador,this->textureExplosion,&puntos,&recta);
 
-	delete posPix;
+	if(posPix) delete posPix;
 	this->actual++;
 }
 
@@ -231,7 +231,7 @@ void DibujadorExplosion::actualizarExplosionBazooka(){
 	SDL_RenderCopy(this->renderizador,this->textureExplosion,&src,&posicion);
 
 	this->actual ++;
-	delete posPix;
+	if(posPix) delete posPix;
 }
 
 void DibujadorExplosion::actualizarExplosionGranada(){
@@ -274,7 +274,7 @@ void DibujadorExplosion::actualizarExplosionGranada(){
 	SDL_RenderCopy(this->renderizador,this->textureExplosion,&src,&posicion);
 
 	this->actual ++;
-	delete posPix;
+	if(posPix) delete posPix;
 
 }
 
@@ -295,7 +295,7 @@ void DibujadorExplosion::actualizarExplosionPatada(){
 	posicion.h = this->surfaceExplosion->h * escalador->getZoom()/100;
 	posicion.x = (int) posPix->x - posicion.w/2;
 	posicion.y = (int) posPix->y - posicion.h/2;
-	delete posPix;
+	if(posPix) delete posPix;
 
 	SDL_RenderCopy(this->renderizador,this->textureExplosion,NULL,&posicion);
 

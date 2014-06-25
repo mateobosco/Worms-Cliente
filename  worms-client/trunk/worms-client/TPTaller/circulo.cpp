@@ -31,7 +31,7 @@ Circulo::Circulo(Mundo *mundo,  b2Vec2 posicion, float32 escala,  bool estatico,
 	fd.shape = shape; // le pongo el shape creado
 	body->CreateFixture(&fd); // al body le pongo la fixture creada
 	rotacion_inicial = body->GetAngle();
-	delete shape;
+	if(shape) delete shape;
 }
 
 Circulo::~Circulo(){

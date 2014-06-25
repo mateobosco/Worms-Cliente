@@ -59,7 +59,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 }
 
 Dibujador::~Dibujador(){
-	delete this->escalador;
+	if(this->escalador) delete this->escalador;
 	delete this->dibujadorExp;
 	if(this->textureAgua) SDL_DestroyTexture(this->textureAgua);
 	if(this->textureCielo) SDL_DestroyTexture(this->textureCielo);
@@ -301,7 +301,7 @@ int Dibujador::dibujarCirculo(Circulo* circulo){
 
 	int retorno = filledEllipseRGBA( renderizador, posicionVentanada->x, posicionVentanada->y,
 								rad_pix_x, rad_pix_y, color.r, color.g, color.b, CIRC_OPACIDAD);
-	delete posicionVentanada;
+	if(posicionVentanada) delete posicionVentanada;
 	return retorno;
 }
 
@@ -314,10 +314,10 @@ int Dibujador::dibujarPoligono(Poligono* poligono){
 	Sint16* vecYventanado = this->escalador->aplicarZoomYVector(vecY,cantidad_lados);
 	int retorno =  filledPolygonRGBA(this->renderizador, vecXventanado, vecYventanado, cantidad_lados,
 									color.r, color.g, color.b, POLI_OPACIDAD);
-	delete[] vecX;
-	delete[] vecY;
-	delete[] vecYventanado;
-	delete[] vecXventanado;
+	if(vecX) delete[] vecX;
+	if(vecY) delete[] vecY;
+	if(vecYventanado) delete[] vecYventanado;
+	if(vecXventanado) delete[] vecXventanado;
 	return retorno;
 }
 
@@ -329,10 +329,10 @@ int Dibujador::dibujarRectangulo(Rectangulo* rectangulo){
 	Sint16* vecYventanado = this->escalador->aplicarZoomYVector(vecY , 4);
 	int retorno = filledPolygonRGBA(this->renderizador, vecXventanado, vecYventanado, 4,
 									color.r, color.g, color.b, RECT_OPACIDAD);
-	delete[] vecX;
-	delete[] vecY;
-	delete[] vecYventanado;
-	delete[] vecXventanado;
+	if(vecX) delete[] vecX;
+	if(vecY) delete[] vecY;
+	if(vecYventanado) delete[] vecYventanado;
+	if(vecXventanado) delete[] vecXventanado;
 	return retorno;
 }
 
@@ -347,7 +347,7 @@ SDL_Texture* Dibujador::RenderText(std::string message, std::string fontFile,
         throw std::runtime_error("Error al cargar font: " + fontFile + TTF_GetError());
     SDL_Surface* surf = TTF_RenderText_Blended(font, message.c_str(), color);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(this->renderizador, surf);
-    SDL_FreeSurface(surf);
+    if(surf) SDL_FreeSurface(surf);
     TTF_CloseFont(font);
     return texture;
 }
@@ -375,7 +375,7 @@ SDL_Texture* Dibujador::dibujarPersonaje2(Personaje* personaje){
 		if (image) SDL_DestroyTexture(image);
 	}
 	renderTexture2(gusanito, this->renderizador, x ,y ,w , h );
-	delete posicionVentanada;
+	if(posicionVentanada) delete posicionVentanada;
 	if (gusanito) SDL_DestroyTexture(gusanito);
 	return gusanito;
 }
@@ -616,7 +616,7 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 		b2Vec2* posicionVentanada = this->escalador->aplicarZoomPosicion(posicion);
 		retorno = filledEllipseRGBA( renderizador, posicionVentanada->x, posicionVentanada->y,
 										rad_pix_x, rad_pix_y, color.r, color.g, color.b, CIRC_OPACIDAD);
-		delete posicionVentanada;
+		if(posicionVentanada) delete posicionVentanada;
 
 	}
 	if (cantidad > 2){
@@ -633,10 +633,10 @@ int Dibujador::dibujarPaqueteFigura(structFigura figura){
 		retorno =  filledPolygonRGBA(this->renderizador, vecXventanado, vecYventanado, cantidad_lados,
 										color.r, color.g, color.b, POLI_OPACIDAD);
 
-		delete[] vecX;
-		delete[] vecY;
-		delete[] vecYventanado;
-		delete[] vecXventanado;
+		if(vecX) delete[] vecX;
+		if(vecY) delete[] vecY;
+		if(vecYventanado) delete[] vecYventanado;
+		if(vecXventanado) delete[] vecXventanado;
 	}
 	return retorno;
 }
@@ -796,8 +796,8 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	if(paquete.movio) this->music->playSonido(WALK);
 	if(paquete.perdioVida) this->music->playSonido(VIDA);
 
-	SDL_DestroyTexture(energiatext);
-	delete posicionVentanada;
+	if(energiatext) SDL_DestroyTexture(energiatext);
+	if(posicionVentanada) delete posicionVentanada;
 }
 
 void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, b2Vec2 direccion_proyectil, b2Vec2 tamanio, int contador_segundos, double angulo, bool* sonido_timer){
@@ -917,7 +917,7 @@ void Dibujador::dibujarProyectil(int tipo_proyectil, b2Vec2 posicion_proyectil, 
 			if(misil) SDL_DestroyTexture(misil);
 			if(segundos) SDL_DestroyTexture(segundos);
 		}
-		delete posicionVentanada;
+		if(posicionVentanada) delete posicionVentanada;
 	}
 }
 void Dibujador::mostrarMenuArmas(int x, int y, int numero_granadas, int numero_dinamitas, int numero_holys){
@@ -1217,7 +1217,7 @@ void Dibujador::dibujarExplosionHoly(){
 //	renderTexture2(textureexplosion, this->renderizador, x, y, escalador->getVentanaX()/4, escalador->getVentanaY()/3 );
 //	renderTexture2(textureexplosion, this->renderizador, x-60, y-50, 240, 200 );
 
-	delete posicionVentanada;
+	if(posicionVentanada) delete posicionVentanada;
 
 }
 

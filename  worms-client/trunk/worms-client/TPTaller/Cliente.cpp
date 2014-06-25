@@ -204,7 +204,7 @@ int Cliente::runRecibirInfo(){
 				cola_explosiones.push(paqueteencolar);
 			}
 			if (paquete->resetear){
-				printf("RECIBE UN RESET EN CLIENTE\n");
+				printf("RECIBE UN RESET EN CLIENTE y el ganador es %s\n", paquete->ganador);
 				this->resetearNivel = true;
 				strcpy(this->ganador,paquete->ganador);
 				this->cant_ganadores = paquete->cant_ganadores;

@@ -133,23 +133,25 @@ int Cliente::conectar(){
 
 int Cliente::runEnviarInfo(){
 	struct timeval timeout;
-	timeout.tv_sec = 10;
+	timeout.tv_sec = 5;
 	timeout.tv_usec = 0;
-	uint32 inicio = SDL_GetTicks();
-	uint32 limite = (timeout.tv_sec - 5) * 1000;
-	uint32 diferencia;
+//	uint32 inicio = SDL_GetTicks();
+//	uint32 limite = (timeout.tv_sec - 5) * 1000;
+//	uint32 diferencia;
 	while(this->activo){
 		SDL_Delay(15);
 		if ( enviarpaquete == true){
 			char buffer[MAX_PACK];
 			memset(buffer,0,MAX_PACK);
+			SDL_LockMutex(this->mutex);
 			memcpy(buffer, this->paquete_enviar, MAX_PACK);
+			SDL_UnlockMutex(this->mutex);
 		    if (setsockopt (this->getSocket()->getFD(), SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
 		        sizeof(timeout)) < 0) 	return ERROR;
-			structEvento* evento = (structEvento*) buffer;
-			diferencia = SDL_GetTicks() - inicio;
-			if ( ((evento == NULL) || estaVacio(evento)) && (diferencia < limite) )	continue;
-			inicio = SDL_GetTicks();
+//			structEvento* evento = (structEvento*) buffer;
+//			diferencia = SDL_GetTicks() - inicio;
+//			if ( ((evento == NULL) || estaVacio(evento)) && (diferencia < limite) )	continue;
+//			inicio = SDL_GetTicks();
 			int enviados = this->enviar(buffer, MAX_PACK); //todo
 			if (enviados > 0){
 				enviarpaquete = false;
@@ -181,6 +183,7 @@ int Cliente::enviar(char* mensaje, size_t longData){
 
 
 int Cliente::runRecibirInfo(){
+	int contador=0;
 	while(this->activo){
 		SDL_Delay(15); 
 		char buffer[MAX_PACK];
@@ -191,19 +194,26 @@ int Cliente::runRecibirInfo(){
 			memcpy(this->paquete_recibir, buffer, MAX_PACK);
 			structPaquete* paquete = (structPaquete*)this->paquete_recibir;
 			SDL_UnlockMutex(this->mutex);
+//			whileRecibir ++;
+//			if (paqueteValido(paquete) == false) continue;
+			contador++;
+//			printf("CONTADOR del recibir de cliente va por %d \n", contador);
 			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1 /*&& paquete->tipo_proyectil!=6*/){
 				structPaquete* paqueteencolar = (structPaquete*) malloc (sizeof(structPaquete));
 				memcpy(paqueteencolar, this->paquete_recibir, sizeof(structPaquete));
 				cola_explosiones.push(paqueteencolar);
 			}
 			if (paquete->resetear){
+				printf("RECIBE UN RESET EN CLIENTE\n");
 				this->resetearNivel = true;
 				strcpy(this->ganador,paquete->ganador);
 				this->cant_ganadores = paquete->cant_ganadores;
 			}
 			if (contieneSonido(paquete)){
 				structPaquete* paqueteSonido = (structPaquete*) malloc (sizeof(structPaquete));
+				SDL_LockMutex(this->mutex);
 				memcpy(paqueteSonido, this->paquete_recibir, sizeof(structPaquete));
+				SDL_UnlockMutex(this->mutex);
 				this->cola_sonidos.push(paqueteSonido);
 			}
 		}

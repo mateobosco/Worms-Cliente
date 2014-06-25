@@ -729,7 +729,7 @@ void Dibujador::dibujarPaquetePersonaje(structPersonaje paquete, char* nombre_ju
 	if(paquete.seleccionado[jugador_turno] == 1 && duenio){
 		this->
 		renderTexture2(flechitaroja, this->renderizador, x - anchoPX/((float32)escalador->getZoom()/100), ((y)*aux/100)+(y-140), 80, 80);
-		if (contador < 55) escalador->ubicarPosicion(paquete.posicion);
+//		if (contador < 55) escalador->ubicarPosicion(paquete.posicion);
 	}
 
 	char energia[10];

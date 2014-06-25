@@ -45,7 +45,7 @@ void DibujadorExplosion::actualizarExplosionHoly(){
 
 	int cantidadMov = 4;
 
-	int aux = 3;
+	int aux = 2;
 	if ((this->actual >= 1) && (this->actual <= aux)) {
 		puntos.x = 0;
 		puntos.y = 0;
@@ -114,7 +114,7 @@ void DibujadorExplosion::actualizarExplosionHoly(){
 
 		recta.x -= 130;
 		recta.y -= (680-460);
-		escalador->moverDerecha(cantidadMov-2);
+		escalador->moverDerecha(cantidadMov-4);
 	}
 	if ((this->actual >= 1+aux*7) && (this->actual <= aux*8)) {
 		puntos.x = 264;
@@ -124,7 +124,7 @@ void DibujadorExplosion::actualizarExplosionHoly(){
 
 		recta.x -= (410-264);
 		recta.y -= (680-460);
-		escalador->moverIzquierda(cantidadMov-2);
+		escalador->moverIzquierda(cantidadMov-4);
 	}
 	if ((this->actual >= 1+aux*8) && (this->actual <= aux*9)) {
 		puntos.x = 550;
@@ -134,7 +134,7 @@ void DibujadorExplosion::actualizarExplosionHoly(){
 
 		recta.x -= (680-550);
 		recta.y -= (680-460);
-		escalador->moverDerecha(cantidadMov-2);
+		escalador->moverDerecha(cantidadMov-4);
 	}
 	if ((this->actual >= 1+aux*9) && (this->actual <= aux*10)) {
 		puntos.x = 264;
@@ -220,8 +220,8 @@ void DibujadorExplosion::actualizarExplosionBazooka(){
 	posicion.y = (int) posPix->y - posicion.h/2;
 
 	int cantidadMov = 20;
-	if (this->actual > 30) cantidadMov = 0;
-	if (this->actual > 25) cantidadMov = 10;
+	if (this->actual > 20) cantidadMov = 0;
+	if (this->actual > 12) cantidadMov = 10;
 	if (this->actual % 2 == 1) escalador->moverDerecha(cantidadMov);
 	if (this->actual % 2 == 0) escalador->moverIzquierda(cantidadMov);
 
@@ -262,8 +262,9 @@ void DibujadorExplosion::actualizarExplosionGranada(){
 	posicion.y = (int) posPix->y - posicion.h/2;
 
 	int cantidadMov = 20;
-	if (this->actual > 15) cantidadMov = 3;
-	if (this->actual > 10) cantidadMov = 10;
+	if (this->actual > 17) cantidadMov = 0;
+	if (this->actual > 10) cantidadMov = 3;
+	if (this->actual > 5) cantidadMov = 10;
 	if (this->actual % 2 == 1) escalador->moverDerecha(cantidadMov);
 	if (this->actual % 2 == 0) escalador->moverIzquierda(cantidadMov);
 

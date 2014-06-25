@@ -183,6 +183,7 @@ int mainCliente(int argc, char* argv[]){
 					if (personaje.salto == 1) music->playSonido(UP);
 					if (personaje.perdioVida == 1) music->playSonido(VIDA);
 				}
+				free(paqueteSonido);
 			}
 
 
@@ -241,6 +242,7 @@ int mainCliente(int argc, char* argv[]){
 
 				play_explotar = true;
 				cliente->desencolarExplosion();
+				free(paquetecola);
 //				free(paquetecola);
 			}
 			if(disparar) {

@@ -192,8 +192,8 @@ int Cliente::runRecibirInfo(){
 			structPaquete* paquete = (structPaquete*)this->paquete_recibir;
 			SDL_UnlockMutex(this->mutex);
 			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1 /*&& paquete->tipo_proyectil!=6*/){
-				structPaquete* paqueteencolar = (structPaquete*) malloc (MAX_PACK);
-				memcpy(paqueteencolar, this->paquete_recibir, MAX_PACK);
+				structPaquete* paqueteencolar = (structPaquete*) malloc (sizeof(structPaquete));
+				memcpy(paqueteencolar, this->paquete_recibir, sizeof(structPaquete));
 				cola_explosiones.push(paqueteencolar);
 			}
 			if (paquete->resetear){
@@ -202,8 +202,8 @@ int Cliente::runRecibirInfo(){
 				this->cant_ganadores = paquete->cant_ganadores;
 			}
 			if (contieneSonido(paquete)){
-				structPaquete* paqueteSonido = (structPaquete*) malloc (MAX_PACK);
-				memcpy(paqueteSonido, this->paquete_recibir, MAX_PACK);
+				structPaquete* paqueteSonido = (structPaquete*) malloc (sizeof(structPaquete));
+				memcpy(paqueteSonido, this->paquete_recibir, sizeof(structPaquete));
 				this->cola_sonidos.push(paqueteSonido);
 			}
 		}

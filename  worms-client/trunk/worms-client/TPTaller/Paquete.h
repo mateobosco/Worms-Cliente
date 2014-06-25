@@ -104,5 +104,6 @@ void destruirPaqueteCiclo(structPaquete* paquete);
 bool estaVacio(structEvento* paquete);
 void resetBoolPersonaje(Personaje* personaje);
 bool contieneSonido(structPaquete* paqueteCiclo);
+bool paqueteValido(structPaquete* paquete);
 
 #endif /* PAQUETE_H_ */

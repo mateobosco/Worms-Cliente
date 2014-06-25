@@ -60,6 +60,7 @@ Dibujador::Dibujador(SDL_Renderer* renderer, Escalador* esc){
 
 Dibujador::~Dibujador(){
 	delete this->escalador;
+	delete this->dibujadorExp;
 	if(this->textureAgua) SDL_DestroyTexture(this->textureAgua);
 	if(this->textureCielo) SDL_DestroyTexture(this->textureCielo);
 	if (this->textureTierra) SDL_DestroyTexture(textureTierra);

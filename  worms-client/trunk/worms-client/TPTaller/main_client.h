@@ -11,6 +11,8 @@
 #include <netinet/tcp.h>
 #include "Musica.h"
 
+
+
 extern void abrirLog();
 // argv[n]:
 // 			n=0: Nombre del programa
@@ -122,7 +124,11 @@ int mainCliente(int argc, char* argv[]){
 		//bool one = false;
 
 		int contador = -1;
+		int aux = 0;
 		while(KEYS[SDLK_ESCAPE] == false){
+
+			aux ++;
+//			printf("CICLO Nro %d en el main cliente \n",aux );
 		//	if(!one)music->playSonido(VIDA); one = true;
 
 			posicion_mouse_click[0] = -1;

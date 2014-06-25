@@ -271,3 +271,11 @@ bool contieneSonido(structPaquete* paqueteCiclo){
 	}
 	return false;
 }
+
+bool paqueteValido(structPaquete* paquete){
+	if (paquete->cantidad_personajes>20) return false;
+	if (paquete->reloj > 61) return false;
+	if (paquete->tipo_proyectil > 6 ) return false;
+
+	return true;
+}

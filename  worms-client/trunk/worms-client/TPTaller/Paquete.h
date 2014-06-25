@@ -94,13 +94,15 @@ typedef struct structEvento{
 } structEvento;
 
 structFigura* crearPaqueteFigura(Figura* figura);
-structPersonaje* crearPaquetePersonaje(Personaje* personaje);
-structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador);
-structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando, bool &disparar, int& arma, Musica* musica, int cantidad_granadas, int cantidad_dinamitas, int cantidad_holys);
+structPersonaje* crearPaquetePersonaje(Personaje* personaje, int nro_arma);
+structPaquete* crearPaqueteCiclo(Mundo* mundo, char* mensaje, int turno_jugador, int empezar_juego, int tiempo_ronda, char* nombre, char* winner, int cant_winners, bool resetear);
+structEvento* crearPaqueteEvento(int* click, bool* KEYS, Escalador* escalador, int cliente, timeval &ultima_vez, bool &disparando, bool &disparar, int& arma, Musica* music, int cantidad_granadas, int cantidad_dinamitas, int cantidad_holys);
 
 void destruirPaqueteFigura(structFigura* paquete);
 void destruirPaquetePersonaje(structPersonaje* paquete);
 void destruirPaqueteCiclo(structPaquete* paquete);
 bool estaVacio(structEvento* paquete);
+void resetBoolPersonaje(Personaje* personaje);
+bool contieneSonido(structPaquete* paqueteCiclo);
 
 #endif /* PAQUETE_H_ */

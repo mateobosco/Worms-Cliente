@@ -194,13 +194,17 @@ int Cliente::runRecibirInfo(){
 			if(paquete->radio_explosion !=0 && paquete->radio_explosion != -1 /*&& paquete->tipo_proyectil!=6*/){
 				structPaquete* paqueteencolar = (structPaquete*) malloc (MAX_PACK);
 				memcpy(paqueteencolar, this->paquete_recibir, MAX_PACK);
-				printf("LLEGA UNA EXPLOSION en %f,%f \n", paquete->posicion_proyectil.x,paquete->posicion_proyectil.y);
 				cola_explosiones.push(paqueteencolar);
 			}
 			if (paquete->resetear){
 				this->resetearNivel = true;
 				strcpy(this->ganador,paquete->ganador);
 				this->cant_ganadores = paquete->cant_ganadores;
+			}
+			if (contieneSonido(paquete)){
+				structPaquete* paqueteSonido = (structPaquete*) malloc (MAX_PACK);
+				memcpy(paqueteSonido, this->paquete_recibir, MAX_PACK);
+				this->cola_sonidos.push(paqueteSonido);
 			}
 		}
 		else if(recibidos ==0){
@@ -316,9 +320,24 @@ structPaquete* Cliente::getPaqueteColaExplosiones(){
 	return paquete;
 
 }
+structPaquete* Cliente::getPaqueteColaSonidos(){
+	structPaquete* paquete;
+	paquete = this->cola_sonidos.front();
+	//cola_sonidos.pop();
+	return paquete;
+
+}
 
 void Cliente::desencolarExplosion(){
 	cola_explosiones.pop();
 }
+
+void Cliente::desencolarSonido(){
+	cola_sonidos.pop();
+}
+size_t Cliente::getTamanioColaSonidos(){
+	return cola_sonidos.size();
+}
+
 
 

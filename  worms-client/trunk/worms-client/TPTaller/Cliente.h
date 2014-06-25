@@ -84,13 +84,17 @@ class Cliente{
 		void setHilos(comThreads hilos_server);
 		comThreads getHilos();
 		queue<structPaquete*> cola_explosiones;
+		queue<structPaquete*> cola_sonidos;
 		int recibirConfiguracion();
 		void desencolarExplosion();
+		void desencolarSonido();
 		SDL_mutex* getMutex();
 		void setJugador(Jugador* jug);
 		int getContadorCerrarse();
 		size_t getTamanioColaExplosiones();
+		size_t getTamanioColaSonidos();
 		structPaquete* getPaqueteColaExplosiones();
+		structPaquete* getPaqueteColaSonidos();
 		bool resetearNivel;
 		char ganador[MAX_NAME_USER*5];
 		int cant_ganadores;

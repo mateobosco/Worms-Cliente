@@ -152,7 +152,7 @@ int mainCliente(int argc, char* argv[]){
 
 //			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music,);
 			structEvento* evento = crearPaqueteEvento(posicion_mouse_click, KEYS, escalador, cliente->getID(), ultima_vez, disparando,disparar,arma, music, cantidad_granadas, cantidad_dinamitas, cantidad_holys);
-			if ((evento->direccion == 3)||(evento->direccion == 1)) music->playSonido(WALK);
+//			if ((evento->direccion == 3)||(evento->direccion == 1)) music->playSonido(WALK);
 
 			if ((evento)){
 				cliente->actualizarPaquete(evento);
@@ -173,6 +173,18 @@ int mainCliente(int argc, char* argv[]){
 					break;
 				}
 			}
+
+			if (cliente->getTamanioColaSonidos() >= 1){
+				structPaquete* paqueteSonido = cliente->getPaqueteColaSonidos();
+				cliente->desencolarSonido();
+				for (int k = 0 ; k<paqueteSonido->cantidad_personajes;k++){
+					structPersonaje personaje = paqueteSonido->vector_personajes[k];
+					if (personaje.movio == 1) music->playSonido(WALK);
+					if (personaje.salto == 1) music->playSonido(UP);
+					if (personaje.perdioVida == 1) music->playSonido(VIDA);
+				}
+			}
+
 
 			char mensaje[90];
 			dibujador->dibujar_agua(agua);
@@ -233,42 +245,42 @@ int mainCliente(int argc, char* argv[]){
 			}
 			if(disparar) {
 				music->playSonido(arma);
-				printf("Arma disparar: %d \n",arma);
+//				printf("Arma disparar: %d \n",arma);
 			}
 			if(dibujador->dibujar_explosion() == true){
-				printf("DIbujar_explosion == true\n");
+//				printf("DIbujar_explosion == true\n");
 				if (paquete->tipo_proyectil != 0) dibujador->tipo_explosion = paquete->tipo_proyectil;
 				if (dibujador->tipo_explosion == 4){
 //					dibujador->dibujarExplosion(4);
-					printf("dibuja exploson de 4\n");
+//					printf("dibuja exploson de 4\n");
 				}
 				if (dibujador->tipo_explosion != 4) {
 //					dibujador->dibujarExplosion(dibujador->tipo_explosion);
-					printf("dibuja exploson distinta de 4\n");
+//					printf("dibuja exploson distinta de 4\n");
 				}
 				if (play_explotar) {
 					if(paquete->tipo_proyectil == 1) {
-						printf("sonido 1 EXPLOSION BAZOOKA: %d", EXPLOSION_BAZOOKA);
+//						printf("sonido 1 EXPLOSION BAZOOKA: %d", EXPLOSION_BAZOOKA);
 						music->playSonido(EXPLOSION_BAZOOKA);
 					}
 					else if(paquete->tipo_proyectil == 2){
-						printf("sonido 2 EXPLOSION GRANADA: %d", EXPLOSION_GRANADA);
+//						printf("sonido 2 EXPLOSION GRANADA: %d", EXPLOSION_GRANADA);
 						music->playSonido(EXPLOSION_GRANADA);
 					}
 					else if(paquete->tipo_proyectil == 3){
-						printf("sonido 3 EXPLOSIONDINAMITA: %d", EXPLOSION_DINAMITA);
+//						printf("sonido 3 EXPLOSIONDINAMITA: %d", EXPLOSION_DINAMITA);
 						music->playSonido(EXPLOSION_DINAMITA);
 					}
 					else if(paquete->tipo_proyectil == 4){
-						printf("sonido 4 EXPLOSION HOLY: %d", EXPLOSION_HOLY);
+//						printf("sonido 4 EXPLOSION HOLY: %d", EXPLOSION_HOLY);
 						music->playSonido(EXPLOSION_HOLY);
 					}
 					else if(paquete->tipo_proyectil == 5) {
-						printf("sonido 5 KAMIKAZE: %d", KAMIKAZE);
+//						printf("sonido 5 KAMIKAZE: %d", KAMIKAZE);
 						music->playSonido(KAMIKAZE);
 					}
 					else if(paquete->tipo_proyectil == 6){
-						printf("sonido 6 PATADA: %d", PATADA);
+//						printf("sonido 6 PATADA: %d", PATADA);
 						music->playSonido(PATADA);
 					}
 					//music->playSonido(EXPLOSION);
@@ -304,6 +316,7 @@ int mainCliente(int argc, char* argv[]){
 				//dibujador->resetearEscenario(pathTierra);
 				cliente->resetearNivel = false;
 				printf("resetear nivel \n");
+				dibujador->resetearEscenario(pathTierra);
 				contador = 1;
 				strcpy(mensaje_reset,"Se resetea el nivel");
 				if (cliente->cant_ganadores>1){
@@ -317,8 +330,8 @@ int mainCliente(int argc, char* argv[]){
 			if (contador > 0){
 
 				dibujador->mostrarCartel(mensaje_ganadores,250, 150,300,100);
-				printf("%s \n", mensaje_ganadores);
-				printf("%s y la cantidad de ganadores es %d  \n", cliente->ganador, cliente->cant_ganadores);
+//				printf("%s \n", mensaje_ganadores);
+//				printf("%s y la cantidad de ganadores es %d  \n", cliente->ganador, cliente->cant_ganadores);
 
 
 				dibujador->mostrarCartel(mensaje_reset, 250,250,300,100);

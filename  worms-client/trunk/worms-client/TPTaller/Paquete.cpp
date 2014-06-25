@@ -258,3 +258,17 @@ bool estaVacio(structEvento* paquete){
 	return (paquete->nro_jugador == MAX_CANT_JUGADORES);
 }
 
+void resetBoolPersonaje(Personaje* personaje){
+	personaje->setMovio(0);
+	personaje->setSalto(0);
+}
+
+bool contieneSonido(structPaquete* paqueteCiclo){
+	structPersonaje* personajes = paqueteCiclo->vector_personajes;
+	for(int i = 0;i< paqueteCiclo->cantidad_personajes;i++){
+		if((personajes[i].perdioVida ==1) || (personajes[i].movio ==1)||(personajes[i].salto==1)){
+			return true;
+		}
+	}
+	return false;
+}

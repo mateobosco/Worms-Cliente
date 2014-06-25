@@ -23,7 +23,7 @@ public:
 	void leermovimiento(int direccion, int id_jugador);
 	void setSeleccionado(bool seleccion, int id_jugador);
 	b2Vec2 getPosition();
-	char* getDirImagen();
+	const char* getDirImagen();
 	void setMuerto();
 	bool getMuerto();
 	void setConectado(int estado);
@@ -43,10 +43,22 @@ public:
 	int getNrojugador();
 	virtual ~Personaje();
 	bool* getSeleccion();
+	int getEnergia();
+	void setArmaSeleccionada(int nro_arma);
+	int getArmaSeleccionada();
+	int getAnguloArma();
+	void setAnguloArma(int angulo);
 	void quitarEnergia(int descontar);
+	bool getDaniadoTurnoActual();
+	void setDaniadoTurnoActual(bool estado);
+	int getSalto();
+	int getMovio();
+
+	void setSalto(int estado);
+	void setMovio(int estado);
 
 private:
-	char* dir_imagen;
+	const char* dir_imagen;
 	char* nombre_cliente;
 	b2Body* body;
 	b2PolygonShape* shape;
@@ -58,10 +70,15 @@ private:
 	bool muerto;
 	int conectado;
 	int orientacion;
+	int arma_seleccionada;
+	int energia;
+	int angulo_arma;
+	int salto;
+	int movio;
 
 	b2CircleShape* shape2;
 	float32 radio;
-	int energia;
+	bool daniado_turno_actual;
 };
 
 #endif /* PERSONAJE_H_ */

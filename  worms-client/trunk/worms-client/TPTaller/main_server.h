@@ -48,7 +48,7 @@ int main_server(int argc,char* argv[]){
 	juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 	juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
 
-	structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), juego->getJugadorActual());
+	structPaquete* paqueteCiclo /*= crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), juego->getJugadorActual())*/;
 	structFigura* vector = paqueteCiclo->vector_figuras;
 	servidor->actualizarPaquete((char*)paqueteCiclo);
 	juego->getMundo()->step(0.1,1,1);
@@ -70,7 +70,7 @@ int main_server(int argc,char* argv[]){
 		}
 		juego->getMundo()->setVectorPersonajes(manejador_personajes->getPersonajes(), manejador_personajes->getCantidadPersonajes(), manejador_personajes->getCantidadJugadores());
 		juego->getMundo()->setFiguras(juego->getFiguras(), juego->getCantidadFiguras());
-		structPaquete* paqueteCiclo = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), juego->getJugadorActual());
+		structPaquete* paqueteCiclo/* = crearPaqueteCiclo(juego->getMundo(), servidor->getMensajeMostrar(), juego->getJugadorActual())*/;
 
 		servidor->actualizarPaquete((char*)paqueteCiclo);
 

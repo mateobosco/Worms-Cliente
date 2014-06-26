@@ -1274,9 +1274,11 @@ void Dibujador::resetearEscenario(std::string pathTierra){
 
 void Dibujador::aplicarExplosiones(structInicial* paqueteInicial){
 	int cantidad = paqueteInicial->cantidadExplosiones;
+	printf("cantidad explosiones:%d \n", cantidad);
 	for (int i = 0; i< cantidad; i++){
 		structExplosion explosion = paqueteInicial->explosiones[i];
 		this->borrarExplosion(explosion.posicion,explosion.radio);
+		printf("aplica explosion inical\n");
 	}
 }
 

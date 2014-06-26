@@ -82,8 +82,11 @@ int main_server(int argc,char* argv[]){
 
 	    if(evento!=NULL) {
 	    	juego->aplicarPaquete(evento);
-	    	free(evento);
+
+	    	//if(evento->arma_seleccionada <= 6) free(evento);
+	    	evento = NULL;
 	    }
+	    printf("Después de free(evento)\n");
 	    SDL_Delay(5);
 		juego->getMundo()->step(0.01,100,100);
 		juego->getMundo()->comprobar_nivel_agua();

@@ -38,7 +38,7 @@ Cliente::Cliente(const char *name, const char *ip_sv, const char *puerto){
 	this->activo = false;
 	this->hilos.enviar = NULL;
 	this->hilos.recibir = NULL;
-	this->enviarpaquete = true;
+	this->enviarpaquete = false;
 	this->servidor_conectado = true;
 	this->jugador = NULL;
 	this->dibujador = NULL;

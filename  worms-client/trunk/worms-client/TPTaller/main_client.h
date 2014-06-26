@@ -346,7 +346,7 @@ int mainCliente(int argc, char* argv[]){
 				dibujador->mostrarCartel(mensaje_reset, 250,250,300,100);
 
 				contador ++;
-				if (contador == 100) contador = -1;
+				if (contador == 150) contador = -1;
 
 			}
 			dibujador->actualizar(); //todo si todos los personajes mueren queda trabado aca

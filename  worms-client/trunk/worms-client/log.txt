@@ -1,6 +1,0 @@
-Log File. Ejecución Worms
-   Fecha  | Hora |  Gravedad  | 	 Mensaje 
-25/06/2014 16:08Error   	 Mix_Init: %s Mixer not built with MP3 support
-25/06/2014 16:08Error   	 Mix_Init: %s Mixer not built with MP3 support
-25/06/2014 16:08  Warning 	 Imagen de agua no fue cargada. Path incorrecto. Por defecto se carga imagen de agua de:TPTaller/imagenes/aguaAzul.png
-25/06/2014 16:1025/06/2014 16:10	 Error al enviar información del cliente hola al servidor. 

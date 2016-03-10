@@ -407,7 +407,7 @@ void Dibujador::renderTexture2(SDL_Texture *tex, SDL_Renderer *ren, int x, int y
 
 	if(SDL_RenderCopy(ren, tex, NULL, &dst)!=0){
 		loguear();
-		logFile <<"    Error    " <<"\t RenderCopy falló renderTexture2 " << endl;
+		logFile <<"    Error    " <<"\t RenderCopy falló renderTexture2 "<< SDL_GetError() << endl;
 	}
 }
 
@@ -534,12 +534,12 @@ SDL_Texture* Dibujador::loadTexture(const std::string &path, SDL_Renderer *ren){
     SDL_Surface* loadedSurface = IMG_Load(path.c_str());
     if(loadedSurface == NULL){
         loguear();
-        logFile << "No se pudo cargar la imagen: " << path.c_str() << "! SDL_image Error: " <<  IMG_GetError() << endl;
+        logFile << "No se pudo cargar la imagen en loadTexture: " << path.c_str() << "! SDL_image Error: " <<  IMG_GetError() << endl;
     } else{
         newTexture = SDL_CreateTextureFromSurface(ren, loadedSurface);
         if(newTexture == NULL){
         	loguear();
-        	logFile << "No se pudo crear textura de: " << path.c_str() << "! SDL Error: " <<  SDL_GetError() << endl;
+        	logFile << "No se pudo crear textura de en loadTexture: " << path.c_str() << "! SDL Error: " <<  SDL_GetError() << endl;
         }
         SDL_FreeSurface(loadedSurface);
     }
@@ -548,17 +548,18 @@ SDL_Texture* Dibujador::loadTexture(const std::string &path, SDL_Renderer *ren){
 
 SDL_Texture* Dibujador::loadTextureTierra(const std::string &path, SDL_Renderer *ren){
     SDL_Texture* newTexture = NULL;
-    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+//    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+    SDL_Surface* loadedSurface = IMG_Load("/home/mateo/git/Worms-Cliente/ worms-client/trunk/worms-client/TPTaller/imagenes/tierranuevaa.png");
     this->surfaceTierra = loadedSurface;
 
     if(loadedSurface == NULL){
         loguear();
-        logFile << "No se pudo cargar la imagen: " << path.c_str() << "! SDL_image Error: " <<  IMG_GetError() << endl;
+        logFile << "No se pudo cargar la imagen  en loadTextureTierra: " << path.c_str() << "! SDL_image Error: " <<  SDL_GetError() << endl;
     } else{
         newTexture = SDL_CreateTextureFromSurface(ren, loadedSurface);
         if(newTexture == NULL){
         	loguear();
-        	logFile << "No se pudo crear textura de: " << path.c_str() << "! SDL Error: " <<  SDL_GetError() << endl;
+        	logFile << "No se pudo crear textura de en loadTextureTierra: " << path.c_str() << "! SDL Error: " <<  SDL_GetError() << endl;
         }
     }
     return newTexture;

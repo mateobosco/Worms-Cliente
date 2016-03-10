@@ -22,9 +22,9 @@ extern void abrirLog();
 int mainCliente(int argc, char* argv[]){
 	abrirLog();
 
-	if(checkCantParametros(argc) == EXIT_FAILURE){
-		return EXIT_FAILURE;
-	}
+//	if(checkCantParametros(argc) == EXIT_FAILURE){
+//		return EXIT_FAILURE;
+//	}
 	Escalador* escalador_inicio = new Escalador(800,600, 80,60,800,600);
 	Dibujador* dibujador_inicio = new Dibujador(NULL, escalador_inicio);
 	dibujador_inicio->init();

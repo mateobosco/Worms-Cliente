@@ -12,7 +12,7 @@ Agua::Agua(float32 nivel_agua, string &origen){
 	this->surface = IMG_Load( origen.c_str() );
 	if(this->surface == NULL){
 		loguear();
-		logFile << "  Warning " <<"\t Imagen de agua no fue cargada. Path incorrecto. Por defecto se carga imagen de agua de:" << pathDefAgua << endl;
+		logFile << "  Warning " <<"\t Imagen de agua no fue cargada. Path incorrecto. Por defecto se carga imagen de agua de:" << pathDefAgua<< SDL_GetError() << endl;
 		this->path = pathDefAgua;
 	}else{
 		this->path = origen;
